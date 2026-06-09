@@ -41,7 +41,6 @@
     /* ── NAVBAR BOCZNY ── */
     .nav-sidebar {
       position: fixed;
-      left: 2.5rem;
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
@@ -50,6 +49,9 @@
       gap: 1.5rem;
       animation: fadeInNav 1s 0.3s ease both;
     }
+
+    .nav-left { left: 2.5rem; }
+    .nav-right { right: 2.5rem; text-align: right; }
 
     @keyframes fadeInNav {
       from { opacity: 0; }
@@ -104,6 +106,41 @@
       box-shadow: 0 0 8px var(--color-accent);
     }
 
+    /* ── PRAWY PANEL: APLIKACJE ── */
+    .app-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(230, 237, 243, 0.3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeInRight 0.5s ease forwards;
+      position: relative;
+      padding-right: 1.2rem;
+    }
+    .app-label:nth-child(1) { animation-delay: 0.5s; }
+    .app-label:nth-child(2) { animation-delay: 0.75s; }
+    .app-label:nth-child(3) { animation-delay: 1.0s; }
+    .app-label:nth-child(4) { animation-delay: 1.25s; }
+
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .app-label::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(230, 237, 243, 0.15);
+    }
+
     /* ── HERO ── */
     .hero {
       display: flex;
@@ -145,7 +182,7 @@
 
     /* ── TELEFON W PIONIE: navbar na dole ── */
     @media (max-width: 900px) and (min-height: 500px) {
-      .nav-sidebar {
+      .nav-left {
         position: fixed;
         left: 0;
         right: 0;
@@ -163,6 +200,7 @@
         width: 100vw;
         box-sizing: border-box;
       }
+      .nav-right { display: none; }
       .nav-link {
         font-size: 0.65rem;
         padding-left: 0;
@@ -185,14 +223,14 @@
     /* ── TELEFON W POZIOMIE: sidebar z lewej, wieksza czcionka ── */
     @media (max-width: 900px) and (max-height: 500px) {
       .hero {
-        justify-content: center;
         justify-content: flex-start;
         padding-left: 25vw;
       }
-      .nav-sidebar {
+      .nav-left {
         left: 1rem;
         gap: 1.5rem;
       }
+      .nav-right { display: none; }
       .nav-link {
         font-size: 2.2rem;
         padding-left: 2.2rem;
@@ -204,12 +242,19 @@
   </style>
 </head>
 <body>
-  <nav class="nav-sidebar">
+  <nav class="nav-sidebar nav-left">
     <a href="#projekty" class="nav-link">Projekty</a>
     <a href="#artykuly" class="nav-link">Artykuły</a>
     <a href="#o-mnie" class="nav-link">O mnie</a>
     <a href="#pomysly" class="nav-link">Pomysły</a>
   </nav>
+
+  <aside class="nav-sidebar nav-right">
+    <span class="app-label">TMK Platform</span>
+    <span class="app-label">PC2 Symulator</span>
+    <span class="app-label">Komparator</span>
+    <span class="app-label">Downloader</span>
+  </aside>
 
   <div class="hero">
     <div class="logo-container">
