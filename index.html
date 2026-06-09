@@ -143,6 +143,26 @@
       transform: translateY(-2px);
     }
 
+    /* Kropki pod ikonami */
+    .app-dots {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(230, 237, 243, 0.2);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dot.active {
+      background: var(--color-accent);
+      box-shadow: 0 0 6px var(--color-accent);
+    }
+
     /* Panel opisu */
     .app-desc {
       margin-top: 1.5rem;
@@ -212,6 +232,7 @@
       position: relative;
       z-index: 1;
       animation: fadeInScale 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      margin-right: 20%;
     }
 
     @keyframes fadeInScale {
@@ -318,6 +339,13 @@
       </div>
     </div>
 
+    <div class="app-dots" id="appDots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
     <div class="app-desc" id="appDesc">
       <strong></strong>
       <span class="desc-body"></span>
@@ -339,6 +367,7 @@
   <script>
     (function() {
       var items = document.querySelectorAll('.app-item');
+      var dots = document.querySelectorAll('.dot');
       var descPanel = document.getElementById('appDesc');
       var descStrong = descPanel.querySelector('strong');
       var descSpan = descPanel.querySelector('.desc-body');
@@ -349,7 +378,9 @@
 
       function showItem(i) {
         items.forEach(function(el) { el.classList.remove('active'); });
+        dots.forEach(function(d) { d.classList.remove('active'); });
         items[i].classList.add('active');
+        dots[i].classList.add('active');
         descStrong.textContent = items[i].dataset.name;
         descSpan.textContent = items[i].dataset.desc;
         descPanel.classList.add('visible');
