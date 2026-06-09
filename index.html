@@ -109,54 +109,69 @@
     .app-showcase {
       position: fixed;
       right: 2.5rem;
-      top: 3rem;
+      top: 2.5rem;
       z-index: 10;
+      display: flex;
+      gap: 1.2rem;
       animation: fadeInNav 1s 0.5s ease both;
     }
 
     .app-item {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: rgba(230, 237, 243, 0.5);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.5rem 0;
       cursor: default;
       position: relative;
-      transition: color 0.3s ease;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      opacity: 0.5;
+      filter: grayscale(0.5);
     }
 
-    .app-item::after {
-      content: '';
+    .app-item img {
+      width: 36px;
+      height: 36px;
       display: block;
-      height: 0;
-      overflow: hidden;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
-      text-transform: none;
-      letter-spacing: 0.03em;
-      color: rgba(230, 237, 243, 0.55);
-      margin-top: 0.3rem;
-      max-width: 220px;
-      line-height: 1.4;
-      transition: height 0.35s ease, opacity 0.35s ease;
-      opacity: 0;
     }
 
     .app-item.active {
-      color: var(--color-accent);
-    }
-
-    .app-item.active::after {
-      height: 2.5rem;
       opacity: 1;
+      filter: none;
+      transform: translateY(-2px);
     }
 
-    .app-item:nth-child(1)::after { content: 'Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.'; }
-    .app-item:nth-child(2)::after { content: 'Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.'; }
-    .app-item:nth-child(3)::after { content: 'Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.'; }
-    .app-item:nth-child(4)::after { content: 'Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.'; }
+    /* Panel opisu */
+    .app-desc {
+      position: fixed;
+      right: 2.5rem;
+      top: 6.5rem;
+      z-index: 9;
+      max-width: 240px;
+      padding: 1rem 1.2rem;
+      background: rgba(22, 27, 34, 0.95);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: rgba(230, 237, 243, 0.7);
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+    }
+
+    .app-desc.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .app-desc strong {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
 
     /* ── HERO ── */
     .hero {
@@ -267,11 +282,21 @@
   </nav>
 
   <div class="app-showcase" id="appShowcase">
-    <div class="app-item active">TMK Platform</div>
-    <div class="app-item">PC2 Symulator</div>
-    <div class="app-item">Komparator</div>
-    <div class="app-item">Downloader</div>
+    <div class="app-item active" data-name="TMK Platform" data-desc="Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.">
+      <img src="/assets/images/icon-tmk.png" alt="TMK Platform" width="36" height="36">
+    </div>
+    <div class="app-item" data-name="PC2 Symulator" data-desc="Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.">
+      <img src="/assets/images/icon-pc2.png" alt="PC2 Symulator" width="36" height="36">
+    </div>
+    <div class="app-item" data-name="Komparator" data-desc="Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.">
+      <img src="/assets/images/icon-comparator.png" alt="Komparator" width="36" height="36">
+    </div>
+    <div class="app-item" data-name="Downloader" data-desc="Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.">
+      <img src="/assets/images/icon-downloader.png" alt="Downloader" width="36" height="36">
+    </div>
   </div>
+
+  <div class="app-desc" id="appDesc"><strong></strong><span></span></div>
 
   <div class="hero">
     <div class="logo-container">
@@ -287,26 +312,47 @@
   <script>
     (function() {
       var items = document.querySelectorAll('.app-item');
+      var descPanel = document.getElementById('appDesc');
+      var descStrong = descPanel.querySelector('strong');
+      var descSpan = descPanel.querySelector('span');
       var current = 0;
       var total = items.length;
       var interval = 4000;
+      var timer;
 
-      function rotate() {
-        items[current].classList.remove('active');
-        current = (current + 1) % total;
-        items[current].classList.add('active');
+      function showItem(i) {
+        items.forEach(function(el) { el.classList.remove('active'); });
+        items[i].classList.add('active');
+        descStrong.textContent = items[i].dataset.name;
+        descSpan.textContent = items[i].dataset.desc;
+        descPanel.classList.add('visible');
+        current = i;
       }
 
-      // Auto-rotate
-      setInterval(rotate, interval);
+      function rotate() {
+        showItem((current + 1) % total);
+      }
 
-      // Hover: pause auto, show description
+      function startTimer() {
+        timer = setInterval(rotate, interval);
+      }
+
+      function stopTimer() {
+        clearInterval(timer);
+      }
+
+      // Init: show first
+      showItem(0);
+      startTimer();
+
+      // Hover: pause, show that item
       items.forEach(function(item, i) {
         item.addEventListener('mouseenter', function() {
-          // Remove active from all
-          items.forEach(function(el) { el.classList.remove('active'); });
-          item.classList.add('active');
-          current = i;
+          stopTimer();
+          showItem(i);
+        });
+        item.addEventListener('mouseleave', function() {
+          startTimer();
         });
       });
     })();
