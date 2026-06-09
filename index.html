@@ -197,6 +197,44 @@
       box-shadow: 0 0 6px var(--color-accent);
     }
 
+    /* ── STATYSTYKI W LEWYM GÓRNYM ROGU ── */
+    .stats-block {
+      position: fixed;
+      left: 2.5rem;
+      top: 2.5rem;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      animation: fadeInNav 1s 0.5s ease both;
+    }
+
+    .stat-item {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: left;
+      opacity: 0;
+      animation: fadeInLink 0.5s ease forwards;
+    }
+    .stat-item:nth-child(1) { animation-delay: 0.5s; }
+    .stat-item:nth-child(2) { animation-delay: 0.75s; }
+    .stat-item:nth-child(3) { animation-delay: 1.0s; }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: rgba(230, 237, 243, 0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
       position: fixed;
@@ -344,6 +382,7 @@
       .app-showcase { display: none; }
       .app-desc { display: none; }
       .app-dots { display: none; }
+      .stats-block { display: none; }
       .social-links { display: none; }
       .nav-link {
         font-size: 0.65rem;
@@ -415,6 +454,21 @@
   </style>
 </head>
 <body>
+  <div class="stats-block">
+    <div class="stat-item">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Aplikacji</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">41K+</div>
+      <div class="stat-label">Linii kodu</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">160+</div>
+      <div class="stat-label">Transakcji live</div>
+    </div>
+  </div>
+
   <nav class="nav-sidebar nav-left">
     <a href="#projekty" class="nav-link">Projekty</a>
     <a href="#artykuly" class="nav-link">Artykuły</a>
