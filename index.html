@@ -151,7 +151,15 @@
       animation: fadeInNav 1s 0.5s ease both;
     }
 
-    /* Naglowek + ikona produkcji */
+    /* ── W PRODUKCJI (lewy gorny rog) ── */
+    .production-panel {
+      position: fixed;
+      left: 2.5rem;
+      top: 2.5rem;
+      z-index: 10;
+      animation: fadeInNav 1s 0.4s ease both;
+    }
+
     .production-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.55rem;
@@ -423,6 +431,7 @@
       .app-showcase { display: none; }
       .app-desc { display: none; }
       .app-dots { display: none; }
+      .production-panel { display: none; }
       .stats-block { display: none; }
       .social-links { display: none; }
       .nav-link {
@@ -495,6 +504,17 @@
   </style>
 </head>
 <body>
+  <div class="production-panel">
+    <div class="production-label">W produkcji</div>
+    <div class="production-item">
+      <img src="/assets/images/icon-clientcreator.png" alt="ClientCreatorTMK" width="28" height="28">
+      <div>
+        <div class="production-name">ClientCreatorTMK</div>
+        <div class="production-badge">Nowa aplikacja</div>
+      </div>
+    </div>
+  </div>
+
   <div class="stats-block">
     <div class="stat-item">
       <div class="stat-value">4</div>
@@ -519,15 +539,6 @@
   </nav>
 
   <div class="app-wrapper">
-    <div class="production-label">W produkcji</div>
-    <div class="production-item">
-      <img src="/assets/images/icon-clientcreator.png" alt="ClientCreatorTMK" width="28" height="28">
-      <div>
-        <div class="production-name">ClientCreatorTMK</div>
-        <div class="production-badge">Nowa aplikacja</div>
-      </div>
-    </div>
-
     <div class="app-showcase" id="appShowcase">
       <div class="app-item active" data-name="TorekMarketKiller" data-desc="Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.">
         <img src="/assets/images/icon-tmk.png" alt="TMK Platform" width="36" height="36">
