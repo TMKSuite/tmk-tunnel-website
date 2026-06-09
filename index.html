@@ -170,6 +170,15 @@
       margin-bottom: 0.8rem;
     }
 
+    .production-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      box-shadow: 0 0 6px var(--color-accent);
+      flex-shrink: 0;
+    }
+
     .production-item {
       display: flex;
       align-items: center;
@@ -507,6 +516,7 @@
   <div class="production-panel">
     <div class="production-label">W produkcji</div>
     <div class="production-item">
+      <span class="production-dot"></span>
       <img src="/assets/images/icon-clientcreator.png?v=1" alt="ClientCreatorTMK" width="28" height="28">
       <div>
         <div class="production-name">ClientCreatorTMK</div>
