@@ -132,28 +132,6 @@
       display: block;
     }
 
-    .tagline {
-      position: fixed;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--color-text);
-      opacity: 0.6;
-      letter-spacing: 0.08em;
-      text-align: center;
-      white-space: nowrap;
-      animation: fadeIn 1s 0.8s ease both;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-      to { opacity: 0.6; transform: translateX(-50%) translateY(0); }
-    }
-
     /* ── MOBILE ── */
     @media (max-width: 900px), (max-height: 550px) {
       .nav-sidebar {
@@ -187,9 +165,6 @@
       .logo-container img {
         width: min(350px, 80vw);
       }
-      .tagline {
-        bottom: 4.5rem;
-      }
     }
   </style>
 </head>
@@ -210,9 +185,6 @@
         height="1519"
       >
     </div>
-    <p class="tagline">
-      Solo system architect
-    </p>
   </div>
 </body>
 </html>
