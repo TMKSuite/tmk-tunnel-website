@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tmk-tunnel.pl/sitemap.xml

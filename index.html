@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TMK Suite — Solo System Architect. Platforma tradingowa, symulator portfela, komparator danych i downloader świec. Wszystko zbudowane z pomocą AI.">
+  <meta name="author" content="TMK Suite">
+  <meta property="og:title" content="TMK Suite — Solo System Architect">
+  <meta property="og:description" content="Profesjonalne narzędzia do handlu algorytmicznego. Zbudowane w 100% z pomocą AI.">
+  <meta property="og:image" content="https://tmk-tunnel.pl/assets/images/og-image.webp">
+  <meta property="og:url" content="https://tmk-tunnel.pl">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>TMK Suite — Solo System Architect</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #0d1117;
+      --color-text: #E6EDF3;
+      --color-accent: #58A6FF;
+      --color-accent-glow: rgba(88, 166, 255, 0.12);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--color-bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--color-text);
+      overflow: hidden;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(88, 166, 255, 0.06) 0%, transparent 70%);
+    }
+
+    /* Subtelny orb w tle */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 60%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .logo-container {
+      position: relative;
+      z-index: 1;
+      animation: fadeInScale 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .logo-container img {
+      max-width: 90vw;
+      max-height: 80vh;
+      width: auto;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 40px rgba(88, 166, 255, 0.15));
+    }
+
+    .tagline {
+      position: relative;
+      z-index: 1;
+      margin-top: 2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--color-text);
+      opacity: 0.7;
+      letter-spacing: 0.05em;
+      text-align: center;
+      animation: fadeIn 1s 0.8s ease both;
+    }
+
+    .tagline span {
+      color: var(--color-accent);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="logo-container">
+      <img
+        src="/assets/images/logo-hero.webp"
+        alt="TMK Suite Logo"
+        width="1600"
+        height="1519"
+      >
+    </div>
+    <p class="tagline">
+      Solo system architect &bull; <span>zero ręcznego kodu</span> &bull; 41&nbsp;000 linii z pomocą AI
+    </p>
+  </div>
+</body>
+</html>
