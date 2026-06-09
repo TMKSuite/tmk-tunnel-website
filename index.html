@@ -175,11 +175,18 @@
       color: rgba(230, 237, 243, 0.4);
       letter-spacing: 0.12em;
       transition: all 0.3s ease;
+      animation: newsPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes newsPulse {
+      0%, 100% { border-color: rgba(212, 168, 67, 0.2); box-shadow: 0 0 0 rgba(212, 168, 67, 0); }
+      50% { border-color: rgba(212, 168, 67, 0.5); box-shadow: 0 0 12px rgba(212, 168, 67, 0.15); }
     }
 
     .news-toggle:hover {
       border-color: var(--color-accent);
       color: rgba(230, 237, 243, 0.7);
+      animation: none;
     }
 
     .news-dot {
