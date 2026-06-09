@@ -285,11 +285,39 @@
       box-shadow: 0 0 6px var(--color-accent);
     }
 
-    /* ── STATYSTYKI W LEWYM GÓRNYM ROGU ── */
+    /* ── TECH STACK ── */
+    .tech-stack {
+      position: fixed;
+      left: 2.5rem;
+      bottom: 4.8rem;
+      z-index: 10;
+      display: flex;
+      gap: 0.6rem;
+      animation: fadeInNav 1s 0.7s ease both;
+    }
+
+    .tech-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 500;
+      color: rgba(230, 237, 243, 0.3);
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .tech-badge:hover {
+      color: var(--color-accent);
+      border-color: rgba(212, 168, 67, 0.3);
+    }
+
+    /* ── STATYSTYKI W LEWYM DOLNYM ROGU ── */
     .stats-block {
       position: fixed;
       left: 2.5rem;
-      bottom: 5rem;
+      bottom: 7rem;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -471,6 +499,7 @@
       .app-dots { display: none; }
       .production-panel { display: none; }
       .stats-block { display: none; }
+      .tech-stack { display: none; }
       .social-links { display: none; }
       .nav-link {
         font-size: 0.65rem;
@@ -570,6 +599,15 @@
       <div class="stat-value">160+</div>
       <div class="stat-label">Transakcji live</div>
     </div>
+  </div>
+
+  <div class="tech-stack">
+    <span class="tech-badge">Python</span>
+    <span class="tech-badge">FastAPI</span>
+    <span class="tech-badge">MT5</span>
+    <span class="tech-badge">Claude</span>
+    <span class="tech-badge">DeepSeek</span>
+    <span class="tech-badge">Cloudflare</span>
   </div>
 
   <nav class="nav-sidebar nav-left">
