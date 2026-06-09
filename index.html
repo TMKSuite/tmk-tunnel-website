@@ -173,12 +173,22 @@
       .nav-link::before {
         display: none;
       }
+      .logo-container img {
+        width: min(450px, 88vw);
+        max-height: 55vh;
+        object-fit: contain;
+      }
+    }
+
+    /* ── TELEFON W PIONIE ── */
+    @media (max-width: 900px) and (min-height: 600px) {
       .hero {
         justify-content: flex-start;
         padding-top: 12vh;
       }
       .logo-container img {
         width: min(500px, 92vw);
+        max-height: none;
       }
     }
   </style>
