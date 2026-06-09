@@ -112,6 +112,7 @@
       top: 2.5rem;
       z-index: 10;
       display: flex;
+      flex-direction: column;
       gap: 1.2rem;
       animation: fadeInNav 1s 0.5s ease both;
     }
@@ -140,26 +141,29 @@
     .app-desc {
       position: fixed;
       right: 2.5rem;
-      top: 6.5rem;
+      top: calc(2.5rem + 4 * 36px + 3 * 1.2rem + 1.5rem);
+      bottom: 2rem;
       z-index: 9;
-      max-width: 240px;
-      padding: 1rem 1.2rem;
-      background: rgba(22, 27, 34, 0.95);
-      border: 1px solid rgba(255,255,255,0.08);
+      width: 220px;
+      padding: 1.2rem;
+      background: rgba(22, 27, 34, 0.92);
+      border: 1px solid rgba(255,255,255,0.06);
       border-radius: 10px;
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       line-height: 1.5;
       color: rgba(230, 237, 243, 0.7);
       opacity: 0;
-      transform: translateY(-6px);
+      transform: translateX(8px);
       transition: opacity 0.35s ease, transform 0.35s ease;
       pointer-events: none;
+      display: flex;
+      flex-direction: column;
     }
 
     .app-desc.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0);
     }
 
     .app-desc strong {
@@ -170,7 +174,20 @@
       color: var(--color-accent);
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-desc .desc-body {
+      flex: 1;
+    }
+
+    .app-desc .desc-footer {
+      margin-top: auto;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.65rem;
+      color: rgba(230, 237, 243, 0.35);
+      font-style: italic;
     }
 
     /* ── HERO ── */
@@ -296,7 +313,11 @@
     </div>
   </div>
 
-  <div class="app-desc" id="appDesc"><strong></strong><span></span></div>
+  <div class="app-desc" id="appDesc">
+    <strong></strong>
+    <span class="desc-body"></span>
+    <span class="desc-footer">Każda z nich zbudowana w 100% z pomocą AI</span>
+  </div>
 
   <div class="hero">
     <div class="logo-container">
@@ -314,7 +335,7 @@
       var items = document.querySelectorAll('.app-item');
       var descPanel = document.getElementById('appDesc');
       var descStrong = descPanel.querySelector('strong');
-      var descSpan = descPanel.querySelector('span');
+      var descSpan = descPanel.querySelector('.desc-body');
       var current = 0;
       var total = items.length;
       var interval = 4000;
