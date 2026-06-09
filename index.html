@@ -51,7 +51,6 @@
     }
 
     .nav-left { left: 2.5rem; }
-    .nav-right { right: 2.5rem; text-align: right; }
 
     @keyframes fadeInNav {
       from { opacity: 0; }
@@ -106,40 +105,58 @@
       box-shadow: 0 0 8px var(--color-accent);
     }
 
-    /* ── PRAWY PANEL: APLIKACJE ── */
-    .app-label {
+    /* ── APLIKACJE W PRAWYM GÓRNYM ROGU ── */
+    .app-showcase {
+      position: fixed;
+      right: 2.5rem;
+      top: 3rem;
+      z-index: 10;
+      animation: fadeInNav 1s 0.5s ease both;
+    }
+
+    .app-item {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 400;
-      color: rgba(230, 237, 243, 0.3);
-      letter-spacing: 0.1em;
+      color: rgba(230, 237, 243, 0.5);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0;
-      animation: fadeInRight 0.5s ease forwards;
+      padding: 0.5rem 0;
+      cursor: default;
       position: relative;
-      padding-right: 1.2rem;
-    }
-    .app-label:nth-child(1) { animation-delay: 0.5s; }
-    .app-label:nth-child(2) { animation-delay: 0.75s; }
-    .app-label:nth-child(3) { animation-delay: 1.0s; }
-    .app-label:nth-child(4) { animation-delay: 1.25s; }
-
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(8px); }
-      to { opacity: 1; transform: translateX(0); }
+      transition: color 0.3s ease;
     }
 
-    .app-label::after {
+    .app-item::after {
       content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: rgba(230, 237, 243, 0.15);
+      display: block;
+      height: 0;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      text-transform: none;
+      letter-spacing: 0.03em;
+      color: rgba(230, 237, 243, 0.55);
+      margin-top: 0.3rem;
+      max-width: 220px;
+      line-height: 1.4;
+      transition: height 0.35s ease, opacity 0.35s ease;
+      opacity: 0;
     }
+
+    .app-item.active {
+      color: var(--color-accent);
+    }
+
+    .app-item.active::after {
+      height: 2.5rem;
+      opacity: 1;
+    }
+
+    .app-item:nth-child(1)::after { content: 'Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.'; }
+    .app-item:nth-child(2)::after { content: 'Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.'; }
+    .app-item:nth-child(3)::after { content: 'Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.'; }
+    .app-item:nth-child(4)::after { content: 'Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.'; }
 
     /* ── HERO ── */
     .hero {
@@ -200,7 +217,7 @@
         width: 100vw;
         box-sizing: border-box;
       }
-      .nav-right { display: none; }
+      .app-showcase { display: none; }
       .nav-link {
         font-size: 0.65rem;
         padding-left: 0;
@@ -230,7 +247,7 @@
         left: 1rem;
         gap: 1.5rem;
       }
-      .nav-right { display: none; }
+      .app-showcase { display: none; }
       .nav-link {
         font-size: 2.2rem;
         padding-left: 2.2rem;
@@ -249,12 +266,12 @@
     <a href="#pomysly" class="nav-link">Pomysły</a>
   </nav>
 
-  <aside class="nav-sidebar nav-right">
-    <span class="app-label">TMK Platform</span>
-    <span class="app-label">PC2 Symulator</span>
-    <span class="app-label">Komparator</span>
-    <span class="app-label">Downloader</span>
-  </aside>
+  <div class="app-showcase" id="appShowcase">
+    <div class="app-item active">TMK Platform</div>
+    <div class="app-item">PC2 Symulator</div>
+    <div class="app-item">Komparator</div>
+    <div class="app-item">Downloader</div>
+  </div>
 
   <div class="hero">
     <div class="logo-container">
@@ -266,5 +283,33 @@
       >
     </div>
   </div>
+
+  <script>
+    (function() {
+      var items = document.querySelectorAll('.app-item');
+      var current = 0;
+      var total = items.length;
+      var interval = 4000;
+
+      function rotate() {
+        items[current].classList.remove('active');
+        current = (current + 1) % total;
+        items[current].classList.add('active');
+      }
+
+      // Auto-rotate
+      setInterval(rotate, interval);
+
+      // Hover: pause auto, show description
+      items.forEach(function(item, i) {
+        item.addEventListener('mouseenter', function() {
+          // Remove active from all
+          items.forEach(function(el) { el.classList.remove('active'); });
+          item.classList.add('active');
+          current = i;
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
