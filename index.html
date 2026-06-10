@@ -1473,10 +1473,10 @@
         display: none;
       }
 
-      /* Lang switcher mobilny — prawy górny róg */
+      /* Lang switcher mobilny — prawy górny róg hero */
       .lang-mobile {
         display: flex;
-        position: fixed;
+        position: absolute;
         right: 0.8rem;
         top: 0.8rem;
         transform: none;
@@ -1505,6 +1505,7 @@
 
       /* ── C. Hero ── */
       .hero {
+        position: relative;
         height: 100vh;
         height: 100dvh;
         justify-content: flex-start;
@@ -1525,10 +1526,10 @@
         display: none !important;
       }
 
-      /* ── E. Production panel — lewy górny róg ── */
+      /* ── E. Production panel — lewy górny róg hero */
       .production-panel {
         display: block !important;
-        position: fixed;
+        position: absolute;
         left: 0.8rem;
         top: 0.8rem;
         z-index: 9;
@@ -1836,22 +1837,6 @@
 </head>
 <body>
   <div id="top"></div>
-  <button class="lang-mobile" id="langSwitcherMobile" aria-label="Zmień język">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-    <span id="langLabelMobile">PL</span>
-  </button>
-  <div class="production-panel open" id="productionPanel">
-    <button class="news-toggle" id="newsToggle">
-      <span class="news-dot"></span>
-      <span data-i18n="news.button">CO NOWEGO</span>
-      <span class="news-arrow">▾</span>
-    </button>
-    <div class="news-list" id="newsList">
-      <div class="news-slot" id="newsSlot0"></div>
-      <div class="news-slot" id="newsSlot1"></div>
-    </div>
-  </div>
-
 
   <nav class="nav-sidebar nav-left">
     <a href="#top" class="nav-logo" title="Strona główna">
@@ -1934,6 +1919,22 @@
   </div>
 
   <div class="hero">
+    <button class="lang-mobile" id="langSwitcherMobile" aria-label="Zmień język">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <span id="langLabelMobile">PL</span>
+    </button>
+    <div class="production-panel open" id="productionPanel">
+      <button class="news-toggle" id="newsToggle">
+        <span class="news-dot"></span>
+        <span data-i18n="news.button">CO NOWEGO</span>
+        <span class="news-arrow">▾</span>
+      </button>
+      <div class="news-list" id="newsList">
+        <div class="news-slot" id="newsSlot0"></div>
+        <div class="news-slot" id="newsSlot1"></div>
+      </div>
+    </div>
+
     <div class="logo-container">
       <img
         src="/assets/images/logo-hero.webp"
@@ -2773,24 +2774,6 @@
       // Ustaw stan początkowy
       onScroll();
 
-      // Fallback: dodatkowy bezpośredni handler dla mobile
-      window.addEventListener('scroll', function() {
-        var scrollY = window.pageYOffset || window.scrollY;
-        var opacity = Math.max(0, 1 - scrollY / 300);
-        var hidden = opacity < 0.02;
-        var panel = document.getElementById('productionPanel');
-        var lang = document.getElementById('langSwitcherMobile');
-        if (panel) {
-          panel.style.setProperty('opacity', opacity, 'important');
-          panel.style.setProperty('pointer-events', hidden ? 'none' : 'auto', 'important');
-          panel.style.setProperty('visibility', hidden ? 'hidden' : 'visible', 'important');
-        }
-        if (lang) {
-          lang.style.setProperty('opacity', opacity, 'important');
-          lang.style.setProperty('pointer-events', hidden ? 'none' : 'auto', 'important');
-          lang.style.setProperty('visibility', hidden ? 'hidden' : 'visible', 'important');
-        }
-      }, { passive: true });
     })();
 
     // ── Nawigacja klawiaturą: strzałki lewo/prawo ──
