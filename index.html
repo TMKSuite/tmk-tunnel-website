@@ -2695,7 +2695,7 @@
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
-      var clickLock = false;
+      var clickLock = false;        // blokuje updateActive na czas animacji klika
       var clickUnlockTimer = null;
 
       function getLinkForSection(id) {
@@ -2703,6 +2703,7 @@
       }
 
       function setActive(id) {
+        // Zawsze czyść wszystko — nawet przy tym samym ID
         navLinks.forEach(function(link) { link.classList.remove('active'); });
         if (id) {
           var link = getLinkForSection(id);
@@ -2712,7 +2713,10 @@
       }
 
       function updateActive() {
+        // W trakcie animacji klika NIE ruszamy podświetlenia — inaczej found===null
+        // (sekcja jeszcze nie przeszła progu) wyczyściłoby .active ustawione przez klik
         if (clickLock) return;
+        // getBoundingClientRect — działa niezależnie od tego co scrolluje (window czy body)
         var line = window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
@@ -2720,8 +2724,11 @@
             found = section.id;
           }
         });
-        // Dno strony: ostatnie sekcje nie przekroczą progu → wymuś ostatnią
-        var scrollTop = window.pageYOffset || window.scrollY || 0;
+        // Dno strony: ostatnie sekcje nie zjadą powyżej progu (brak miejsca na scroll),
+        // więc gdy jesteśmy na samym dole — wymuś ostatnią sekcję jako aktywną.
+        // UWAGA: przy html,body{height:100%} scrolluje body, więc realną wysokość
+        // treści bierzemy z maksimum body/documentElement (documentElement bywa = viewport).
+        var scrollTop = window.pageYOffset || window.scrollY;
         var docHeight = Math.max(
           document.body.scrollHeight, document.documentElement.scrollHeight,
           document.body.offsetHeight, document.documentElement.offsetHeight
@@ -2730,6 +2737,7 @@
         if (atBottom && scrollTop > 0 && sections.length) {
           found = sections[sections.length - 1].id;
         }
+        // found === null = jesteśmy w hero → czyści podświetlenie
         setActive(found);
       }
 
@@ -2744,10 +2752,18 @@
       }
 
       var scrollTicking = false;
+      // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
+      // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie — podświetl OD RAZU, zablokuj updateActive do 'scrollend'
+      // Kliknięcie — podświetl klikniętą zakładkę OD RAZU i zablokuj updateActive
+      // na STAŁY czas animacji scrolla. Świadomie NIE zwalniamy blokady na żadnym
+      // zdarzeniu (scroll/scrollend/touchmove/wheel) — na telefonie tapnięcie generuje
+      // mikro-scroll, którego 'scrollend' odpalał blokadę za wcześnie i gasił podświetlenie.
+      // Czysty timer jest tu najpewniejszy: zakładka zostaje gold przez całą animację,
+      // a po niej jeden updateActive potwierdza właściwą sekcję.
+      var CLICK_LOCK_MS = 1000;
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2761,20 +2777,15 @@
           setActive(id);
           target.scrollIntoView({ behavior: 'smooth' });
 
-          var released = false;
-          function releaseClickLock() {
-            if (released) return;
-            released = true;
-            window.removeEventListener('scrollend', releaseClickLock);
-            if (clickUnlockTimer) { clearTimeout(clickUnlockTimer); clickUnlockTimer = null; }
+          clickUnlockTimer = setTimeout(function() {
             clickLock = false;
-            updateActive();
-          }
-          window.addEventListener('scrollend', releaseClickLock);
-          clickUnlockTimer = setTimeout(releaseClickLock, 1200); // fallback dla Safari
+            clickUnlockTimer = null;
+            updateActive();   // koryguje na faktyczną sekcję po zakończeniu scrolla
+          }, CLICK_LOCK_MS);
         });
       });
 
+      // Inicjalny stan
       updateActive();
     })();
 
