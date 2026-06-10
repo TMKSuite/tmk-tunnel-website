@@ -1416,14 +1416,16 @@
       .nav-link:nth-child(3) { grid-row: 2; grid-column: 1; }  /* Projekty */
 
       /* Kolumna 2: Logo nad Artykuły */
-      .nav-logo {
+      .nav-logo,
+      .nav-logo:hover,
+      .nav-logo:active {
         grid-row: 1;
         grid-column: 2;
         display: flex;
         position: static;
         left: auto;
         top: auto;
-        transform: none;
+        transform: none !important;
         opacity: 0.85;
         filter: brightness(1) grayscale(0);
         animation: none;
