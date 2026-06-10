@@ -1458,9 +1458,34 @@
         color: var(--color-accent);
       }
 
-      /* Lang switcher — ukryty na mobile */
+      /* Lang switcher — prawy górny róg */
       .nav-lang {
-        display: none;
+        position: fixed;
+        right: 0.8rem;
+        top: 0.8rem;
+        transform: none;
+        opacity: 0.6;
+        animation: none;
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 51;
+      }
+      .nav-lang svg {
+        width: 14px;
+        height: 14px;
+        fill: var(--color-accent);
+      }
+      .nav-lang span {
+        font-size: 0.55rem;
+        margin-left: 4px;
+        color: var(--color-accent);
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 500;
+        letter-spacing: 0.08em;
       }
 
       /* ── C. Hero ── */
