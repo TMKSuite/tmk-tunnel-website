@@ -45,8 +45,9 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 11;
-      opacity: 0.2;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0.25;
+      filter: brightness(0.6) grayscale(0.4);
+      transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
       animation: fadeInNav 1s 0.3s ease both;
       display: flex;
       align-items: center;
@@ -60,6 +61,7 @@
 
     .nav-logo:hover {
       opacity: 0.6;
+      filter: brightness(1) grayscale(0);
       transform: translateY(-50%) scale(1.1);
     }
 
