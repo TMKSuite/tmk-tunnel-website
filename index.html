@@ -2687,11 +2687,12 @@
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
-    // ── Active nav link na podstawie IntersectionObserver ──
+    // ── Active nav link na podstawie scrolla ──
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
+      var manualScroll = false;
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
@@ -2699,37 +2700,35 @@
 
       function setActive(id) {
         if (activeId === id) return;
-        activeId = id;
+        // Usuń stare podświetlenie z każdego linka
         navLinks.forEach(function(link) { link.classList.remove('active'); });
+        activeId = id;
         if (id) {
           var link = getLinkForSection(id);
           if (link) link.classList.add('active');
         }
       }
 
-      // IntersectionObserver: pierwsza widoczna sekcja od góry = aktywna
-      var observer = new IntersectionObserver(function(entries) {
-        // Zbierz wszystkie aktualnie widoczne sekcje (ratio > 0)
-        var visible = [];
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            visible.push({ id: entry.target.id, top: entry.boundingClientRect.top });
+      function updateActive() {
+        if (manualScroll) return;
+        var viewH = window.innerHeight;
+        var threshold = viewH * 0.3;
+        var found = null;
+        sections.forEach(function(section) {
+          if (section.getBoundingClientRect().top <= threshold) {
+            found = section.id;
           }
         });
-        // Sortuj od góry (najmniejsze top) i weź pierwszą
-        visible.sort(function(a, b) { return a.top - b.top; });
-        if (visible.length > 0) {
-          setActive(visible[0].id);
-        } else if (window.pageYOffset < 200) {
+        if (!found && window.pageYOffset < 200) {
           setActive(null);
+        } else if (found) {
+          setActive(found);
         }
-      }, { threshold: 0.2 });
+      }
 
-      sections.forEach(function(section) {
-        observer.observe(section);
-      });
+      window.addEventListener('scroll', updateActive, { passive: true });
 
-      // Natychmiastowe podświetlenie + scroll przy kliknięciu
+      // Kliknięcie w nav link — scroll + podświetlenie
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2737,10 +2736,16 @@
           setActive(id);
           var target = document.getElementById(id);
           if (target) {
+            manualScroll = true;
             target.scrollIntoView({ behavior: 'smooth' });
+            // Po zakończeniu scrolla oddaj kontrolę observerowi
+            setTimeout(function() { manualScroll = false; }, 800);
           }
         });
       });
+
+      // Inicjalny stan
+      updateActive();
     })();
 
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
