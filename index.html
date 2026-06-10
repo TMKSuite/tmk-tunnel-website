@@ -1133,6 +1133,11 @@
       flex-shrink: 0;
     }
 
+    .overlay-header img.circle {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
     .overlay-header .oh-name {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.5rem;
@@ -1910,6 +1915,7 @@
 
           document.getElementById('ovIcon').src = icon;
           document.getElementById('ovIcon').alt = name;
+          document.getElementById('ovIcon').classList.remove('circle');
           document.getElementById('ovName').textContent = name;
           document.getElementById('ovBadge').textContent = badgeText;
           document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
@@ -2032,8 +2038,9 @@
           var date = card.querySelector('.article-date').textContent;
           var excerpt = card.querySelector('.article-excerpt').textContent;
 
-          document.getElementById('ovIcon').src = '/assets/images/logo-nav.webp';
+          document.getElementById('ovIcon').src = '/assets/images/face.png';
           document.getElementById('ovIcon').alt = 'Artykuł';
+          document.getElementById('ovIcon').classList.add('circle');
           document.getElementById('ovName').textContent = title;
           document.getElementById('ovBadge').textContent = date;
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
