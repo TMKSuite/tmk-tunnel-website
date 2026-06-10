@@ -2687,12 +2687,11 @@
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
-    // ── Active nav link na podstawie pozycji scrolla ──
+    // ── Active nav link na podstawie IntersectionObserver ──
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
-      var ticking = false;
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
@@ -2708,29 +2707,26 @@
         }
       }
 
-      function updateActive() {
-        var viewH = window.innerHeight;
-        var threshold = viewH * 0.3;
-
-        // Znajdź ostatnią sekcję której góra jest powyżej progu
-        var found = null;
-        sections.forEach(function(section) {
-          if (section.getBoundingClientRect().top <= threshold) {
-            found = section.id;
+      // IntersectionObserver: która sekcja zajmuje najwięcej miejsca w viewporcie
+      var observer = new IntersectionObserver(function(entries) {
+        var best = null;
+        var bestRatio = 0;
+        entries.forEach(function(entry) {
+          if (entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio;
+            best = entry.target.id;
           }
         });
-
-        if (!found && window.pageYOffset < 100) {
+        if (best) {
+          setActive(best);
+        } else if (window.pageYOffset < 200) {
           setActive(null);
-        } else if (found) {
-          setActive(found);
         }
-        ticking = false;
-      }
+      }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] });
 
-      window.addEventListener('scroll', function() {
-        updateActive();
-      }, { passive: true });
+      sections.forEach(function(section) {
+        observer.observe(section);
+      });
 
       // Natychmiastowe podświetlenie + scroll przy kliknięciu
       navLinks.forEach(function(link) {
@@ -2744,9 +2740,6 @@
           }
         });
       });
-
-      // Inicjalny stan
-      updateActive();
     })();
 
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
