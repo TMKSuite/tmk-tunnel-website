@@ -2739,16 +2739,18 @@
       // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie — scroll + usuń focus, updateActive zarządza podświetleniem
+      // Kliknięcie — scroll + podświetlenie od razu, updateActive koryguje
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
           link.blur();
-          var target = document.getElementById(link.getAttribute('href').replace('#', ''));
+          var id = link.getAttribute('href').replace('#', '');
+          var target = document.getElementById(id);
           if (target) {
-            // Natychmiast podświetl klikniętą
-            setActive(link.getAttribute('href').replace('#', ''));
+            setActive(id);
             target.scrollIntoView({ behavior: 'smooth' });
+            // Po zakończeniu animacji upewnij się że podświetlenie jest poprawne
+            setTimeout(function() { updateActive(); }, 600);
           }
         });
       });
