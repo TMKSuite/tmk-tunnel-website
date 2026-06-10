@@ -498,8 +498,8 @@
       transform: scale(1.15);
     }
 
-    /* Lang mobilny — ukryty na desktopie */
-    .lang-mobile {
+    /* Lang toggle — ukryty na desktopie */
+    .lang-toggle {
       display: none;
     }
 
@@ -1483,35 +1483,49 @@
         display: none;
       }
 
-      /* Lang switcher mobilny — prawy górny róg hero */
-      .lang-mobile {
+      /* Lang toggle — złoty sliding switch */
+      .lang-toggle {
         display: flex;
         position: absolute;
         right: 0.8rem;
         top: 0.8rem;
-        transform: none;
-        opacity: 0.7;
-        animation: none;
-        align-items: center;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 4px;
         z-index: 51;
+        width: 52px;
+        height: 28px;
+        border-radius: 14px;
+        border: 1.5px solid rgba(212, 168, 67, 0.4);
+        background: rgba(0, 0, 0, 0.6);
+        cursor: pointer;
+        padding: 0;
+        align-items: center;
+        overflow: hidden;
       }
-      .lang-mobile svg {
-        width: 25px;
-        height: 25px;
-        fill: var(--color-accent);
+      .lang-knob {
+        position: absolute;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 1;
       }
-      .lang-mobile span {
-        font-size: 1rem;
-        margin-left: 5px;
-        color: var(--color-accent);
+      .lang-toggle.en .lang-knob {
+        transform: translateX(24px);
+      }
+      .lang-label {
+        position: absolute;
         font-family: 'Space Grotesk', sans-serif;
-        font-weight: 500;
-        letter-spacing: 0.08em;
+        font-size: 0.6rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: rgba(230, 237, 243, 0.4);
+        z-index: 0;
+        transition: color 0.3s ease;
+        pointer-events: none;
       }
+      .lang-pl { left: 7px; }
+      .lang-en { right: 7px; }
 
       /* ── C. Hero ── */
       .hero {
@@ -1957,9 +1971,10 @@
   </div>
 
   <div class="hero">
-    <button class="lang-mobile" id="langSwitcherMobile" aria-label="Zmień język">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-      <span id="langLabelMobile">PL</span>
+    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
+      <span class="lang-knob"></span>
+      <span class="lang-label lang-pl">PL</span>
+      <span class="lang-label lang-en">EN</span>
     </button>
     <div class="production-panel open" id="productionPanel">
       <button class="news-toggle" id="newsToggle">
@@ -2346,8 +2361,7 @@
       // Update lang label
       var label = document.getElementById('langLabel');
       if (label) label.textContent = lang.toUpperCase();
-      var labelMobile = document.getElementById('langLabelMobile');
-      if (labelMobile) labelMobile.textContent = lang.toUpperCase();
+      if (window._syncLangToggle) window._syncLangToggle(lang);
 
       // Update all elements with data-i18n
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -2486,14 +2500,20 @@
         var next = currentLang === 'pl' ? 'en' : 'pl';
         switchLang(next);
       });
-      // Mobile lang switcher
-      var btnMobile = document.getElementById('langSwitcherMobile');
-      if (btnMobile) {
-        btnMobile.addEventListener('click', function() {
+      // Mobile toggle
+      var toggle = document.getElementById('langSwitcherMobile');
+      if (toggle) {
+        toggle.addEventListener('click', function() {
           var next = currentLang === 'pl' ? 'en' : 'pl';
           switchLang(next);
         });
       }
+      // Sync toggle knob z aktualnym językiem
+      window._syncLangToggle = function(lang) {
+        if (toggle) {
+          toggle.classList.toggle('en', lang === 'en');
+        }
+      };
     })();
 
     // ── App showcase rotation ──
