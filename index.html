@@ -1147,7 +1147,7 @@
   </style>
 </head>
 <body>
-  <div class="production-panel" id="productionPanel">
+  <div class="production-panel open" id="productionPanel">
     <button class="news-toggle" id="newsToggle">
       <span class="news-dot"></span>
       <span data-i18n="news.button">CO NOWEGO</span>
@@ -1535,6 +1535,8 @@
       // Init
       buildItems();
       showItem(0);
+      // Auto-start jeśli panel domyślnie otwarty
+      if (panel.classList.contains('open')) startTimer();
 
       // Expose for lang switch
       window._rebuildNews = function() {
