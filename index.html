@@ -1789,6 +1789,7 @@
   </style>
 </head>
 <body>
+  <div id="top"></div>
   <div class="production-panel open" id="productionPanel">
     <button class="news-toggle" id="newsToggle">
       <span class="news-dot"></span>
@@ -1813,7 +1814,7 @@
   </div>
 
   <nav class="nav-sidebar nav-left">
-    <a href="#" class="nav-logo" title="Strona główna">
+    <a href="#top" class="nav-logo" title="Strona główna">
       <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
     </a>
     <a href="#o-mnie" class="nav-link" data-i18n="nav.omnie">O mnie</a>
@@ -2572,11 +2573,7 @@
       }
     })();
 
-    // Logo w navbarze — scroll na górę strony
-    document.querySelector('.nav-logo').addEventListener('click', function(e) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    // Logo w navbarze — scroll na górę (native anchor do #top)
 
     // Zapamiętaj ostatnią sekcję przed opuszczeniem strony (np. Giscus OAuth)
     window.addEventListener('beforeunload', function() {
