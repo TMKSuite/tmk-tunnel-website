@@ -373,25 +373,36 @@
       bottom: 4.8rem;
       z-index: 10;
       display: flex;
-      gap: 0.6rem;
+      gap: 0.9rem;
       animation: fadeInNav 1s 0.7s ease both;
     }
 
-    .tech-badge {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.5rem;
-      font-weight: 400;
-      color: rgba(230, 237, 243, 0.25);
-      letter-spacing: 0.05em;
-      padding: 0.2rem 0.4rem;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 4px;
-      transition: all 0.3s ease;
+    .tech-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+      text-decoration: none;
     }
 
-    .tech-badge:hover {
-      color: var(--color-accent);
-      border-color: rgba(212, 168, 67, 0.3);
+    .tech-item:hover {
+      opacity: 0.8;
+    }
+
+    .tech-item img,
+    .tech-item svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .tech-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.45rem;
+      color: rgba(230, 237, 243, 0.4);
+      letter-spacing: 0.04em;
     }
 
     /* ── STATYSTYKI (w app-wrapper, wysrodkowane jak panel opisu) ── */
@@ -1139,12 +1150,12 @@
 
 
   <div class="tech-stack">
-    <span class="tech-badge">Python</span>
-    <span class="tech-badge">FastAPI</span>
-    <span class="tech-badge">MT5</span>
-    <span class="tech-badge">Claude</span>
-    <span class="tech-badge">DeepSeek</span>
-    <span class="tech-badge">Cloudflare</span>
+    <div class="tech-item"><img src="/assets/icons/python.svg" alt="Python" width="18" height="18"><span class="tech-label">Python</span></div>
+    <div class="tech-item"><img src="/assets/icons/fastapi.svg" alt="FastAPI" width="18" height="18"><span class="tech-label">FastAPI</span></div>
+    <div class="tech-item"><img src="/assets/icons/Metatrader5.svg" alt="MT5" width="18" height="18"><span class="tech-label">MT5</span></div>
+    <div class="tech-item"><img src="/assets/icons/claude.svg" alt="Claude" width="18" height="18"><span class="tech-label">Claude</span></div>
+    <div class="tech-item"><img src="/assets/icons/deepseek.svg" alt="DeepSeek" width="18" height="18"><span class="tech-label">DeepSeek</span></div>
+    <div class="tech-item"><img src="/assets/icons/cloudflare.svg" alt="Cloudflare" width="18" height="18"><span class="tech-label">Cloudflare</span></div>
   </div>
 
   <nav class="nav-sidebar nav-left">
