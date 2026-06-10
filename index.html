@@ -1467,6 +1467,9 @@
       .nav-link.active {
         color: var(--color-accent);
       }
+      .nav-link:hover {
+        color: rgba(230, 237, 243, 0.45);
+      }
 
       /* Lang switcher w navbarze — ukryty */
       .nav-lang {
@@ -2698,13 +2701,13 @@
       }
 
       function setActive(id) {
-        if (activeId === id) return;
-        activeId = id;
+        // Zawsze czyść wszystko — nawet przy tym samym ID
         navLinks.forEach(function(link) { link.classList.remove('active'); });
         if (id) {
           var link = getLinkForSection(id);
           if (link) link.classList.add('active');
         }
+        activeId = id;
       }
 
       function updateActive() {
