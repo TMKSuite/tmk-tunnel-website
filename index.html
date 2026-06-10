@@ -1215,6 +1215,25 @@
     <div class="section-placeholder"><p data-i18n="placeholder.contact">Kontakt — wkrótce</p></div>
   </section>
 
+  <!-- ═══════════ OVERLAY: szczegóły aplikacji ═══════════ -->
+  <div class="overlay" id="appOverlay">
+    <div class="overlay-panel" id="overlayPanel">
+      <button class="overlay-close" id="overlayClose" aria-label="Zamknij">✕</button>
+      <div class="overlay-header">
+        <img id="ovIcon" src="" alt="" width="56" height="56">
+        <div>
+          <div class="oh-name" id="ovName"></div>
+          <span class="oh-badge" id="ovBadge"></span>
+        </div>
+      </div>
+      <div class="overlay-body" id="ovBody">
+        <p>Treść aplikacji — będzie wypełniana dynamicznie.</p>
+      </div>
+      <div class="overlay-meta-row" id="ovMeta"></div>
+      <div class="overlay-tags" id="ovTags"></div>
+    </div>
+  </div>
+
   <script>
     // ── i18n ──
     var I18N = {
@@ -1524,25 +1543,6 @@
       onScroll();
     })();
   </script>
-
-  <!-- ═══════════ OVERLAY: szczegóły aplikacji ═══════════ -->
-  <div class="overlay" id="appOverlay">
-    <div class="overlay-panel" id="overlayPanel">
-      <button class="overlay-close" id="overlayClose" aria-label="Zamknij">✕</button>
-      <div class="overlay-header">
-        <img id="ovIcon" src="" alt="" width="56" height="56">
-        <div>
-          <div class="oh-name" id="ovName"></div>
-          <span class="oh-badge" id="ovBadge"></span>
-        </div>
-      </div>
-      <div class="overlay-body" id="ovBody">
-        <p>Treść aplikacji — będzie wypełniana dynamicznie.</p>
-      </div>
-      <div class="overlay-meta-row" id="ovMeta"></div>
-      <div class="overlay-tags" id="ovTags"></div>
-    </div>
-  </div>
 
 </body>
 </html>
