@@ -1899,6 +1899,14 @@
       }
     })();
 
+    // Po załadowaniu — zostań na sekcji z hasha (np. po Giscus OAuth)
+    if (window.location.hash) {
+      var target = document.querySelector(window.location.hash);
+      if (target) {
+        setTimeout(function() { target.scrollIntoView({ behavior: 'instant' }); }, 100);
+      }
+    }
+
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
