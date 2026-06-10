@@ -764,6 +764,63 @@
       flex: 1 1 340px;
     }
 
+    /* ── SEKCJA KONTAKT ── */
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contact-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
+      flex: 1;
+      max-width: 240px;
+    }
+
+    .contact-card:hover {
+      border-color: rgba(212, 168, 67, 0.25);
+      background: rgba(212, 168, 67, 0.03);
+      transform: translateY(-3px);
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .contact-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--color-accent);
+    }
+
+    .contact-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .contact-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      line-height: 1.4;
+      color: rgba(230, 237, 243, 0.4);
+      text-align: center;
+    }
+
     /* ── SEKCJA O MNIE ── */
     .about-section {
       padding: 0 4rem 4rem;
@@ -1386,8 +1443,36 @@
     <div class="section-placeholder"><p data-i18n="placeholder.ideas">Pomysły — wkrótce</p></div>
   </section>
 
+  <!-- ═══════════ SEKCJA: KONTAKT ═══════════ -->
   <section class="page-section" id="kontakt">
-    <div class="section-placeholder"><p data-i18n="placeholder.contact">Kontakt — wkrótce</p></div>
+    <h2 class="section-heading" data-i18n="contact.heading">Kontakt</h2>
+    <p class="section-subheading" data-i18n="contact.subheading">Masz pytanie? Chcesz pogadać o AI, tradingu albo współpracy? Odezwij się.</p>
+
+    <div class="contact-grid">
+      <a href="https://github.com/TMKSuite" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-desc">Kod wszystkich aplikacji — publiczne repo</div>
+      </a>
+
+      <a href="https://www.linkedin.com/in/krycha-tmk/" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-desc">Profil zawodowy — napisz i poznajmy się</div>
+      </a>
+
+      <a href="https://www.youtube.com/@PozaWykresemzTMK" target="_blank" rel="noopener" class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </div>
+        <div class="contact-label">YouTube</div>
+        <div class="contact-desc">Kanał o tradingu — strategie, analizy, narzędzia</div>
+      </a>
+    </div>
   </section>
 
   <!-- ═══════════ OVERLAY: szczegóły aplikacji ═══════════ -->
@@ -1445,6 +1530,8 @@
         'about.story': '<p>Do połowy 2025 roku pracowałem fizycznie. Zero doświadczenia w kodowaniu, zero studiów informatycznych. Potem zerwałem ścięgno Achillesa — i utknąłem w domu. Zamiast oglądać Netflixa, stworzyłem cały stack do automatyzacji handlu.</p><p>Handel na rynkach forex od dawna jest zdominowany przez algorytmy. Dziś konkurowanie z maszynami "na rękę" nie ma sensu — człowiek jest zbyt wolny, zbyt emocjonalny, zbyt omylny. Jeśli maszyny już tu rządzą, to jedyna sensowna strategia to <strong>wykluczyć człowieka z równania</strong>. Zbudować własną maszynę. A sobie zostawić nadzór.</p><p>Zacząłem od prostego eksperymentu. Czy da się otworzyć zlecenie na MT4 automatycznie? ChatGPT, FastAPI w pierwszym oknie konsoli, darmowy ngrok w drugim. Żadnego GUI — ręcznie wklejałem JSON z przykładowym zleceniem, żeby sprawdzić czy pozycja się otworzy. Otworzyła się. Ten moment — kiedy kod napisany przez AI wykonał realną transakcję — zmienił wszystko.</p><p>Od tego czasu dodawałem kolejne warstwy. FastAPI, Cloudflare Tunnel, kod EA w MQL5, system sygnałów, trailing stop, watchdogi terminali, Cerebrus, Wyrocznia. Równolegle rozwijałem symulator portfela — żeby najpierw przetestować wszystko w warunkach laboratoryjnych, zanim zainwestuję prawdziwe pieniądze. Po ponad roku platforma przypomina profesjonalne narzędzie, a nie amatorski projekt startowany z dwóch okien konsoli.</p><p>Dopiero od czerwca 2026 używam agenta AI, który sam edytuje kod. Wcześniej wyglądało to zupełnie inaczej: wklejałem fragmenty kodu do okna przeglądarki, model językowy sugerował poprawki, ja ręcznie nanosiłem je do pliku i sprawdzałem czy działa. Jeśli nie — powtarzałem cały cykl. Byłem jak ludzki kompilator. A im projekt stawał się większy, tym więcej zależności musiałem trzymać w głowie — które okno komunikuje się z którym, jak zmiana w jednym module wpłynie na inne, czy nowa funkcja nie rozwali czegoś w zupełnie innym miejscu. Bez umiejętności programistycznych, bez mentora, bez mapy. Tylko ja i model językowy.</p><p><strong>Nie umiem kodować.</strong> Umiem za to rozkładać złożone systemy na części, zadawać precyzyjne pytania i składać odpowiedzi w działającą całość. LLM to mój zespół — ja jestem architektem. I nie musi to dotyczyć tylko tradingu — to podejście działa wszędzie tam, gdzie jest złożony proces do zautomatyzowania.</p><p>W ciągu roku zbudowałem cztery aplikacje — łącznie ponad 41 tysięcy linii kodu. Downloader pobiera dane świecowe z TradingView. Komparator porównuje je z MT5 i wykrywa rozbieżności. Symulator portfela testuje strategie metodami Walk-Forward i optymalizacją genetyczną. A platforma TMK — największa z nich — łączy to wszystko w jeden system: alerty z TradingView przelatują przez FastAPI, Cloudflare Tunnel i kod EA, by wylądować jako realne transakcje na wielu kontach. Człowiek tylko patrzy.</p><p>To nie jest portfolio programisty. To portfolio kogoś, kto nauczył się budować systemy bez umiejętności pisania kodu — używając AI jako narzędzia, a nie wymówki. Trading był naturalnym pierwszym krokiem — bo to moje zainteresowanie. Ale ten sam proces można zastosować wszędzie.</p><p>Szukam ludzi, którzy myślą podobnie. I miejsca, gdzie takie podejście jest rozumiane.</p>',
         'placeholder.about': 'O mnie — wkrótce',
         'placeholder.ideas': 'Pomysły — wkrótce',
+        'contact.heading': 'Kontakt',
+        'contact.subheading': 'Masz pytanie? Chcesz pogadać o AI, tradingu albo współpracy? Odezwij się.',
         'placeholder.contact': 'Kontakt — wkrótce'
       },
       en: {
@@ -1477,6 +1564,8 @@
         'about.story': '<p>Until mid-2025, I was working a physical job. Zero coding experience, no CS degree. Then I tore my Achilles tendon — and was stuck at home. Instead of watching Netflix, I built an entire trading automation stack.</p>',
         'placeholder.about': 'About me — coming soon',
         'placeholder.ideas': 'Ideas — coming soon',
+        'contact.heading': 'Contact',
+        'contact.subheading': 'Have a question? Want to talk about AI, trading, or collaboration? Reach out.',
         'placeholder.contact': 'Contact — coming soon'
       }
     };
