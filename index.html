@@ -288,14 +288,12 @@
       max-height: 0;
       overflow: hidden;
       transition: opacity 0.35s ease, max-height 0.35s ease, margin-top 0.35s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      position: relative;
     }
 
     .production-panel.open .news-list {
       opacity: 1;
-      max-height: 200px;
+      max-height: 60px;
       margin-top: 0.8rem;
     }
 
@@ -303,13 +301,18 @@
       display: flex;
       align-items: baseline;
       gap: 0.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
     }
 
-    .news-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .news-item.active {
+      opacity: 1;
+      position: relative;
+      pointer-events: auto;
     }
 
     .news-date {
@@ -1151,18 +1154,9 @@
       <span class="news-arrow">▾</span>
     </button>
     <div class="news-list" id="newsList">
-      <div class="news-item">
-        <span class="news-date">10.06</span>
-        <span class="news-text">Strona tmk-tunnel.pl — nowa odsłona</span>
-      </div>
-      <div class="news-item">
-        <span class="news-date">09.06</span>
-        <span class="news-text">Import Live History między terminalami</span>
-      </div>
-      <div class="news-item">
-        <span class="news-date">07.06</span>
-        <span class="news-text">System auto-update przez GitHub Releases</span>
-      </div>
+      <div class="news-item" data-date="10.06" data-text-pl="Strona tmk-tunnel.pl — nowa odsłona" data-text-en="tmk-tunnel.pl — new website launched"></div>
+      <div class="news-item" data-date="09.06" data-text-pl="Import Live History między terminalami" data-text-en="Live History import between terminals"></div>
+      <div class="news-item" data-date="07.06" data-text-pl="System auto-update przez GitHub Releases" data-text-en="Auto-update system via GitHub Releases"></div>
     </div>
   </div>
 
@@ -1491,15 +1485,62 @@
 
       // Update current app description
       if (window._refreshAppDesc) window._refreshAppDesc();
+      // Update news items
+      if (window._rebuildNews) window._rebuildNews();
     }
 
-    // ── NOWOŚCI toggle ──
+    // ── CO NOWEGO toggle + rotacja ──
     (function() {
       var toggle = document.getElementById('newsToggle');
       var panel = document.getElementById('productionPanel');
+      var items = document.querySelectorAll('.news-item');
+      var current = 0;
+      var total = items.length;
+      var timer;
+      var interval = 5000;
+
+      // Zbuduj treść każdego itemu
+      function buildItems() {
+        var lang = currentLang === 'en' ? 'En' : 'Pl';
+        items.forEach(function(item) {
+          var date = item.dataset.date;
+          var text = item.dataset['text' + lang] || item.dataset.textPl || '';
+          item.innerHTML = '<span class="news-date">' + date + '</span><span class="news-text">' + text + '</span>';
+        });
+      }
+
+      function showItem(i) {
+        items.forEach(function(el) { el.classList.remove('active'); });
+        items[i].classList.add('active');
+        current = i;
+      }
+
+      function rotate() {
+        showItem((current + 1) % total);
+      }
+
+      function startTimer() { timer = setInterval(rotate, interval); }
+      function stopTimer() { clearInterval(timer); }
+
+      // Toggle panel
       toggle.addEventListener('click', function() {
         panel.classList.toggle('open');
+        if (panel.classList.contains('open')) {
+          startTimer();
+        } else {
+          stopTimer();
+        }
       });
+
+      // Init
+      buildItems();
+      showItem(0);
+
+      // Expose for lang switch
+      window._rebuildNews = function() {
+        buildItems();
+        showItem(current);
+      };
     })();
 
     // ── Overlay: otwieranie/zamykanie ──
