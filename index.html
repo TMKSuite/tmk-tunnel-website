@@ -1169,6 +1169,34 @@
 
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
+
+    // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
+    (function() {
+      var FADE_DISTANCE = 350; // px — dystans na jakim elementy znikają
+      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack');
+      var ticking = false;
+
+      function onScroll() {
+        var scrollY = window.pageYOffset || window.scrollY;
+        var opacity = Math.max(0, 1 - scrollY / FADE_DISTANCE);
+
+        floatingEls.forEach(function(el) {
+          el.style.opacity = opacity;
+          el.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+        });
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Ustaw stan początkowy
+      onScroll();
+    })();
   </script>
 </body>
 </html>
