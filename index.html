@@ -765,6 +765,50 @@
     }
 
     /* ── SEKCJA POMYSŁY (Giscus) ── */
+    .projects-ref {
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 0 1.2rem;
+    }
+
+    .projects-ref summary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+      padding: 0.9rem 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .projects-ref[open] summary {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 0.5rem;
+    }
+
+    .projects-ref-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 0.5rem 0 1rem;
+    }
+
+    .ref-item {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: rgba(230, 237, 243, 0.4);
+      line-height: 1.5;
+    }
+
+    .ref-item strong {
+      color: rgba(230, 237, 243, 0.65);
+      font-weight: 500;
+    }
+
     .giscus-wrapper {
       max-width: 800px;
       margin: 0 auto;
@@ -1451,6 +1495,18 @@
   <section class="page-section" id="pomysly">
     <h2 class="section-heading" data-i18n="ideas.heading">Pomysły</h2>
     <p class="section-subheading" data-i18n="ideas.subheading">Masz pomysł na nową funkcję lub aplikację? Rzuć go tutaj — najlepsze mogą trafić do produkcji w wolnym czasie.</p>
+    <details class="projects-ref">
+      <summary data-i18n="ideas.ref_title">Projekty — spis treści</summary>
+      <div class="projects-ref-list">
+        <span class="ref-item"><strong>TorekMarketKiller</strong> — automatyzacja TradingView → MT5</span>
+        <span class="ref-item"><strong>PortfolioCommandCenter</strong> — symulator portfela</span>
+        <span class="ref-item"><strong>CandleComparison</strong> — porównanie danych świecowych</span>
+        <span class="ref-item"><strong>CandleDownloader</strong> — pobieranie świec z TV</span>
+        <span class="ref-item"><strong>ClientCreator</strong> — budowanie .exe (w toku)</span>
+        <span class="ref-item"><strong>tmk-tunnel.pl</strong> — ta strona</span>
+      </div>
+    </details>
+
     <div class="giscus-wrapper">
       <script src="https://giscus.app/client.js"
         data-repo="TMKSuite/tmk-tunnel-website"
@@ -1567,6 +1623,7 @@
         'placeholder.about': 'O mnie — wkrótce',
         'ideas.heading': 'Pomysły',
         'ideas.subheading': 'Masz pomysł na nową funkcję lub aplikację? Rzuć go tutaj — najlepsze mogą trafić do produkcji w wolnym czasie.',
+        'ideas.ref_title': 'Projekty — spis treści',
         'placeholder.ideas': 'Pomysły — wkrótce',
         'contact.heading': 'Kontakt',
         'contact.subheading': 'Masz pytanie? Chcesz pogadać o AI, tradingu albo współpracy? Odezwij się.',
@@ -1606,6 +1663,7 @@
         'placeholder.about': 'About me — coming soon',
         'ideas.heading': 'Ideas',
         'ideas.subheading': 'Got an idea for a new feature or app? Drop it here — the best ones might make it into production in my spare time.',
+        'ideas.ref_title': 'Projects — table of contents',
         'placeholder.ideas': 'Ideas — coming soon',
         'contact.heading': 'Contact',
         'contact.subheading': 'Have a question? Want to talk about AI, trading, or collaboration? Reach out.',
