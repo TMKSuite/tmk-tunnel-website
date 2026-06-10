@@ -1151,9 +1151,9 @@
     <a href="#" class="nav-logo" title="Strona główna">
       <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
     </a>
+    <a href="#o-mnie" class="nav-link" data-i18n="nav.omnie">O mnie</a>
     <a href="#projekty" class="nav-link" data-i18n="nav.projekty">Projekty</a>
     <a href="#artykuly" class="nav-link" data-i18n="nav.artykuly">Artykuły</a>
-    <a href="#o-mnie" class="nav-link" data-i18n="nav.omnie">O mnie</a>
     <a href="#pomysly" class="nav-link" data-i18n="nav.pomysly">Pomysły</a>
     <a href="#kontakt" class="nav-link" data-i18n="nav.kontakt">Kontakt</a>
     <button class="nav-lang" id="langSwitcher" title="Zmień język / Change language" aria-label="Zmień język">
@@ -1238,6 +1238,35 @@
     </div>
   </div>
 
+  
+
+  <!-- ═══════════ SEKCJA: O MNIE ═══════════ -->
+  <section class="page-section about-section" id="o-mnie">
+    <div class="about-banner">
+      <img src="/assets/images/banner4.png" alt="">
+    </div>
+    <div class="about-photo-wrapper">
+      <div class="about-photo-circle">
+        <img class="about-photo" src="/assets/images/face.png" alt="Krychaa">
+      </div>
+    </div>
+    <div class="about-header">
+      <h2 class="about-name">Krystian</h2>
+      <p class="about-role" data-i18n="about.role">Architekt systemów • Budowniczy z AI</p>
+    </div>
+    <div class="about-story" data-i18n="about.story">
+      <p>Do połowy 2025 roku pracowałem fizycznie. Zero doświadczenia w kodowaniu, zero studiów informatycznych. Potem zerwałem ścięgno Achillesa — i utknąłem w domu. Zamiast oglądać Netflixa, stworzyłem cały stack do automatyzacji handlu.</p>
+      <p>Handel na rynkach forex od dawna jest zdominowany przez algorytmy. Dziś konkurowanie z maszynami "na rękę" nie ma sensu — człowiek jest zbyt wolny, zbyt emocjonalny, zbyt omylny. Jeśli maszyny już tu rządzą, to jedyna sensowna strategia to <strong>wykluczyć człowieka z równania</strong>. Zbudować własną maszynę. A sobie zostawić nadzór.</p>
+      <p>Zacząłem od prostego eksperymentu. Czy da się otworzyć zlecenie na MT4 automatycznie? ChatGPT, FastAPI w pierwszym oknie konsoli, darmowy ngrok w drugim. Żadnego GUI — ręcznie wklejałem JSON z przykładowym zleceniem, żeby sprawdzić czy pozycja się otworzy. Otworzyła się. Ten moment — kiedy kod napisany przez AI wykonał realną transakcję — zmienił wszystko.</p>
+      <p>Od tego czasu dodawałem kolejne warstwy. FastAPI, Cloudflare Tunnel, kod EA w MQL5, system sygnałów, trailing stop, watchdogi terminali, Cerebrus, Wyrocznia. Równolegle rozwijałem symulator portfela — żeby najpierw przetestować wszystko w warunkach laboratoryjnych, zanim zainwestuję prawdziwe pieniądze. Po ponad roku platforma przypomina profesjonalne narzędzie, a nie amatorski projekt startowany z dwóch okien konsoli.</p>
+      <p>Dopiero od czerwca 2026 używam agenta AI, który sam edytuje kod. Wcześniej wyglądało to zupełnie inaczej: wklejałem fragmenty kodu do okna przeglądarki, model językowy sugerował poprawki, ja ręcznie nanosiłem je do pliku i sprawdzałem czy działa. Jeśli nie — powtarzałem cały cykl. Byłem jak ludzki kompilator. A im projekt stawał się większy, tym więcej zależności musiałem trzymać w głowie — które okno komunikuje się z którym, jak zmiana w jednym module wpłynie na inne, czy nowa funkcja nie rozwali czegoś w zupełnie innym miejscu. Bez umiejętności programistycznych, bez mentora, bez mapy. Tylko ja i model językowy.</p>
+      <p><strong>Nie umiem kodować.</strong> Umiem za to rozkładać złożone systemy na części, zadawać precyzyjne pytania i składać odpowiedzi w działającą całość. LLM to mój zespół — ja jestem architektem. I nie musi to dotyczyć tylko tradingu — to podejście działa wszędzie tam, gdzie jest złożony proces do zautomatyzowania.</p>
+      <p>W ciągu roku zbudowałem cztery aplikacje — łącznie ponad 41 tysięcy linii kodu. Downloader pobiera dane świecowe z TradingView. Komparator porównuje je z MT5 i wykrywa rozbieżności. Symulator portfela testuje strategie metodami Walk-Forward i optymalizacją genetyczną. A platforma TMK — największa z nich — łączy to wszystko w jeden system: alerty z TradingView przelatują przez FastAPI, Cloudflare Tunnel i kod EA, by wylądować jako realne transakcje na wielu kontach. Człowiek tylko patrzy.</p>
+      <p>To nie jest portfolio programisty. To portfolio kogoś, kto nauczył się budować systemy bez umiejętności pisania kodu — używając AI jako narzędzia, a nie wymówki. Trading był naturalnym pierwszym krokiem — bo to moje zainteresowanie. Ale ten sam proces można zastosować wszędzie.</p>
+      <p>Szukam ludzi, którzy myślą podobnie. I miejsca, gdzie takie podejście jest rozumiane.</p>
+    </div>
+  </section>
+
   <!-- ═══════════ SEKCJA: PROJEKTY ═══════════ -->
   <section class="page-section" id="projekty">
     <h2 class="section-heading" data-i18n="projects.heading">Projekty</h2>
@@ -1307,37 +1336,12 @@
     </div>
   </section>
 
-  <!-- ═══════════ SEKCJE-PLACEHOLDERY (do zbudowania) ═══════════ -->
+<!-- ═══════════ SEKCJE-PLACEHOLDERY (do zbudowania) ═══════════ -->
   <section class="page-section" id="artykuly">
     <div class="section-placeholder"><p data-i18n="placeholder.articles">Artykuły — wkrótce</p></div>
   </section>
 
-  <!-- ═══════════ SEKCJA: O MNIE ═══════════ -->
-  <section class="page-section about-section" id="o-mnie">
-    <div class="about-banner">
-      <img src="/assets/images/banner4.png" alt="">
-    </div>
-    <div class="about-photo-wrapper">
-      <div class="about-photo-circle">
-        <img class="about-photo" src="/assets/images/face.png" alt="Krychaa">
-      </div>
-    </div>
-    <div class="about-header">
-      <h2 class="about-name">Krystian</h2>
-      <p class="about-role" data-i18n="about.role">Architekt systemów • Budowniczy z AI</p>
-    </div>
-    <div class="about-story" data-i18n="about.story">
-      <p>Do połowy 2025 roku pracowałem fizycznie. Zero doświadczenia w kodowaniu, zero studiów informatycznych. Potem zerwałem ścięgno Achillesa — i utknąłem w domu. Zamiast oglądać Netflixa, stworzyłem cały stack do automatyzacji handlu.</p>
-      <p>Handel na rynkach forex od dawna jest zdominowany przez algorytmy. Dziś konkurowanie z maszynami "na rękę" nie ma sensu — człowiek jest zbyt wolny, zbyt emocjonalny, zbyt omylny. Jeśli maszyny już tu rządzą, to jedyna sensowna strategia to <strong>wykluczyć człowieka z równania</strong>. Zbudować własną maszynę. A sobie zostawić nadzór.</p>
-      <p>Zacząłem od prostego eksperymentu. Czy da się otworzyć zlecenie na MT4 automatycznie? ChatGPT, FastAPI w pierwszym oknie konsoli, darmowy ngrok w drugim. Żadnego GUI — ręcznie wklejałem JSON z przykładowym zleceniem, żeby sprawdzić czy pozycja się otworzy. Otworzyła się. Ten moment — kiedy kod napisany przez AI wykonał realną transakcję — zmienił wszystko.</p>
-      <p>Od tego czasu dodawałem kolejne warstwy. FastAPI, Cloudflare Tunnel, kod EA w MQL5, system sygnałów, trailing stop, watchdogi terminali, Cerebrus, Wyrocznia. Równolegle rozwijałem symulator portfela — żeby najpierw przetestować wszystko w warunkach laboratoryjnych, zanim zainwestuję prawdziwe pieniądze. Po ponad roku platforma przypomina profesjonalne narzędzie, a nie amatorski projekt startowany z dwóch okien konsoli.</p>
-      <p>Dopiero od czerwca 2026 używam agenta AI, który sam edytuje kod. Wcześniej wyglądało to zupełnie inaczej: wklejałem fragmenty kodu do okna przeglądarki, model językowy sugerował poprawki, ja ręcznie nanosiłem je do pliku i sprawdzałem czy działa. Jeśli nie — powtarzałem cały cykl. Byłem jak ludzki kompilator. A im projekt stawał się większy, tym więcej zależności musiałem trzymać w głowie — które okno komunikuje się z którym, jak zmiana w jednym module wpłynie na inne, czy nowa funkcja nie rozwali czegoś w zupełnie innym miejscu. Bez umiejętności programistycznych, bez mentora, bez mapy. Tylko ja i model językowy.</p>
-      <p><strong>Nie umiem kodować.</strong> Umiem za to rozkładać złożone systemy na części, zadawać precyzyjne pytania i składać odpowiedzi w działającą całość. LLM to mój zespół — ja jestem architektem. I nie musi to dotyczyć tylko tradingu — to podejście działa wszędzie tam, gdzie jest złożony proces do zautomatyzowania.</p>
-      <p>W ciągu roku zbudowałem cztery aplikacje — łącznie ponad 41 tysięcy linii kodu. Downloader pobiera dane świecowe z TradingView. Komparator porównuje je z MT5 i wykrywa rozbieżności. Symulator portfela testuje strategie metodami Walk-Forward i optymalizacją genetyczną. A platforma TMK — największa z nich — łączy to wszystko w jeden system: alerty z TradingView przelatują przez FastAPI, Cloudflare Tunnel i kod EA, by wylądować jako realne transakcje na wielu kontach. Człowiek tylko patrzy.</p>
-      <p>To nie jest portfolio programisty. To portfolio kogoś, kto nauczył się budować systemy bez umiejętności pisania kodu — używając AI jako narzędzia, a nie wymówki. Trading był naturalnym pierwszym krokiem — bo to moje zainteresowanie. Ale ten sam proces można zastosować wszędzie.</p>
-      <p>Szukam ludzi, którzy myślą podobnie. I miejsca, gdzie takie podejście jest rozumiane.</p>
-    </div>
-  </section>
+  
 
   <section class="page-section" id="pomysly">
     <div class="section-placeholder"><p data-i18n="placeholder.ideas">Pomysły — wkrótce</p></div>
