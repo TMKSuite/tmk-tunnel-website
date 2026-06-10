@@ -2724,6 +2724,7 @@
       }
 
       function onScrollActive() {
+        if (clickLock) return;
         if (!scrollTicking) {
           requestAnimationFrame(function() {
             updateActive();
@@ -2734,12 +2735,13 @@
       }
 
       var scrollTicking = false;
+      var clickLock = false;
       // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
       // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie — scroll + podświetlenie od razu, updateActive koryguje
+      // Kliknięcie: flaga clickLock blokuje updateActive podczas animacji scrolla
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2748,9 +2750,13 @@
           var target = document.getElementById(id);
           if (target) {
             setActive(id);
+            clickLock = true;
             target.scrollIntoView({ behavior: 'smooth' });
-            // Po zakończeniu animacji upewnij się że podświetlenie jest poprawne
-            setTimeout(function() { updateActive(); }, 600);
+            // Po animacji zwolnij blokadę i skoryguj podświetlenie
+            setTimeout(function() {
+              clickLock = false;
+              updateActive();
+            }, 800);
           }
         });
       });
