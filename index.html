@@ -1371,6 +1371,9 @@
   </div>
 
   <script>
+    // Zapobiega przesuwaniu strony przy odświeżaniu
+    if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
     // ── i18n ──
     var I18N = {
       pl: {
