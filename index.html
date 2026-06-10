@@ -38,6 +38,28 @@
       color: var(--color-text);
     }
 
+    /* ── LOGO W LEWYM DOLNYM ROGU ── */
+    .nav-logo {
+      position: fixed;
+      left: 1.5rem;
+      bottom: 0.9rem;
+      z-index: 11;
+      opacity: 0.4;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      animation: fadeInNav 1s 0.3s ease both;
+    }
+
+    .nav-logo img {
+      display: block;
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-logo:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
     /* ── NAVBAR NA DOLE (domyslny desktop) ── */
     .nav-sidebar {
       position: fixed;
@@ -505,6 +527,7 @@
       .stats-block { display: none; }
       .tech-stack { display: none; }
       .social-links { display: none; }
+      .nav-logo { display: none; }
       .nav-link {
         font-size: 0.65rem;
         padding-left: 0;
@@ -564,6 +587,7 @@
         box-shadow: 0 0 8px var(--color-accent);
       }
       .app-showcase { display: none; }
+      .nav-logo { display: none; }
       .hero {
         justify-content: flex-start;
         padding-left: 25vw;
@@ -599,6 +623,10 @@
     <span class="tech-badge">DeepSeek</span>
     <span class="tech-badge">Cloudflare</span>
   </div>
+
+  <a href="#" class="nav-logo" title="Strona główna">
+    <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
+  </a>
 
   <nav class="nav-sidebar nav-left">
     <a href="#projekty" class="nav-link">Projekty</a>
