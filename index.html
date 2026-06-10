@@ -142,7 +142,7 @@
     /* ── APLIKACJE W PRAWYM GÓRNYM ROGU ── */
     .app-wrapper {
       position: fixed;
-      right: 0;
+      right: 1.5rem;
       top: 2.5rem;
       z-index: 10;
       display: flex;
@@ -320,22 +320,18 @@
       border-color: rgba(212, 168, 67, 0.3);
     }
 
-    /* ── STATYSTYKI W LEWYM DOLNYM ROGU ── */
+    /* ── STATYSTYKI (w app-wrapper, wysrodkowane jak panel opisu) ── */
     .stats-block {
-      position: fixed;
-      right: 1rem;
-      bottom: 7rem;
-      text-align: right;
-      z-index: 10;
+      margin-top: 1.2rem;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 0.5rem;
-      animation: fadeInNav 1s 0.5s ease both;
     }
 
     .stat-item {
       font-family: 'Space Grotesk', sans-serif;
-      text-align: right;
+      text-align: center;
       opacity: 0;
       animation: fadeInLink 0.5s ease forwards;
     }
@@ -344,7 +340,7 @@
     .stat-item:nth-child(3) { animation-delay: 1.0s; }
 
     .stat-value {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 600;
       color: var(--color-accent);
       line-height: 1;
@@ -595,20 +591,6 @@
     </div>
   </div>
 
-  <div class="stats-block">
-    <div class="stat-item">
-      <div class="stat-value">4</div>
-      <div class="stat-label">Aplikacje</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value">41K+</div>
-      <div class="stat-label">Linii kodu</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value">160+</div>
-      <div class="stat-label">Transakcji live</div>
-    </div>
-  </div>
 
   <div class="tech-stack">
     <span class="tech-badge">Python</span>
@@ -654,6 +636,21 @@
       <strong></strong>
       <span class="desc-body"></span>
       <span class="desc-footer">Każda z nich zbudowana w 100% przy użyciu modeli językowych</span>
+    </div>
+
+    <div class="stats-block">
+      <div class="stat-item">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Aplikacje</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">41K+</div>
+        <div class="stat-label">Linii kodu</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">160+</div>
+        <div class="stat-label">Transakcji live</div>
+      </div>
     </div>
   </div>
 
