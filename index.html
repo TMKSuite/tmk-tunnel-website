@@ -1891,7 +1891,7 @@
   <div id="top"></div>
 
   <nav class="nav-sidebar nav-left">
-    <a href="#top" class="nav-logo" title="Strona główna">
+    <a href="#" class="nav-logo" id="navLogo" title="Strona główna">
       <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
     </a>
     <a href="#o-mnie" class="nav-link" data-i18n="nav.omnie">O mnie</a>
@@ -2711,8 +2711,13 @@
       }
     })();
 
-    // Logo w navbarze — scroll na górę + usuń podświetlenie zakładek
-    document.querySelector('.nav-logo').addEventListener('click', function() {
+    // Logo w navbarze — scroll na górę bez # w URL
+    document.getElementById('navLogo').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
       document.querySelectorAll('.nav-link').forEach(function(l) { l.classList.remove('active'); });
     });
 
