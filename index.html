@@ -288,12 +288,14 @@
       max-height: 0;
       overflow: hidden;
       transition: opacity 0.35s ease, max-height 0.35s ease, margin-top 0.35s ease;
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
     }
 
     .production-panel.open .news-list {
       opacity: 1;
-      max-height: 60px;
+      max-height: 120px;
       margin-top: 0.8rem;
     }
 
@@ -301,18 +303,21 @@
       display: flex;
       align-items: baseline;
       gap: 0.5rem;
-      position: absolute;
-      top: 0;
-      left: 0;
       opacity: 0;
       transition: opacity 0.5s ease;
-      pointer-events: none;
     }
 
     .news-item.active {
       opacity: 1;
-      position: relative;
-      pointer-events: auto;
+    }
+
+    .news-item + .news-item {
+      padding-top: 0.4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .news-item.active + .news-item.active {
+      border-top-color: rgba(255, 255, 255, 0.06);
     }
 
     .news-date {
@@ -1509,14 +1514,15 @@
         });
       }
 
-      function showItem(i) {
+      function showPair(start) {
         items.forEach(function(el) { el.classList.remove('active'); });
-        items[i].classList.add('active');
-        current = i;
+        items[start].classList.add('active');
+        items[(start + 1) % total].classList.add('active');
+        current = start;
       }
 
       function rotate() {
-        showItem((current + 1) % total);
+        showPair((current + 1) % total);
       }
 
       function startTimer() { timer = setInterval(rotate, interval); }
@@ -1534,14 +1540,14 @@
 
       // Init
       buildItems();
-      showItem(0);
+      showPair(0);
       // Auto-start jeśli panel domyślnie otwarty
       if (panel.classList.contains('open')) startTimer();
 
       // Expose for lang switch
       window._rebuildNews = function() {
         buildItems();
-        showItem(current);
+        showPair(current);
       };
     })();
 
