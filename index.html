@@ -1531,24 +1531,31 @@
     <div class="giscus-wrapper" id="giscusContainer"></div>
     <script>
       (function() {
-        var lang = (localStorage.getItem('tmk-lang') || 'pl') === 'en' ? 'en' : 'pl';
-        var s = document.createElement('script');
-        s.src = 'https://giscus.app/client.js';
-        s.setAttribute('data-repo', 'TMKSuite/tmk-tunnel-website');
-        s.setAttribute('data-repo-id', 'R_kgDOS1rwAw');
-        s.setAttribute('data-category', 'Ideas');
-        s.setAttribute('data-category-id', 'DIC_kwDOS1rwA84C-4rN');
-        s.setAttribute('data-mapping', 'pathname');
-        s.setAttribute('data-strict', '0');
-        s.setAttribute('data-reactions-enabled', '1');
-        s.setAttribute('data-emit-metadata', '0');
-        s.setAttribute('data-input-position', 'top');
-        s.setAttribute('data-theme', 'dark');
-        s.setAttribute('data-lang', lang);
-        s.setAttribute('data-loading', 'lazy');
-        s.setAttribute('crossorigin', 'anonymous');
-        s.async = true;
-        document.getElementById('giscusContainer').appendChild(s);
+        function loadGiscus() {
+          var container = document.getElementById('giscusContainer');
+          container.innerHTML = '';
+          var lang = (localStorage.getItem('tmk-lang') || 'pl') === 'en' ? 'en' : 'pl';
+          var s = document.createElement('script');
+          s.src = 'https://giscus.app/client.js';
+          s.setAttribute('data-repo', 'TMKSuite/tmk-tunnel-website');
+          s.setAttribute('data-repo-id', 'R_kgDOS1rwAw');
+          s.setAttribute('data-category', 'Ideas');
+          s.setAttribute('data-category-id', 'DIC_kwDOS1rwA84C-4rN');
+          s.setAttribute('data-mapping', 'pathname');
+          s.setAttribute('data-strict', '0');
+          s.setAttribute('data-reactions-enabled', '1');
+          s.setAttribute('data-emit-metadata', '0');
+          s.setAttribute('data-input-position', 'top');
+          s.setAttribute('data-theme', 'dark');
+          s.setAttribute('data-lang', lang);
+          s.setAttribute('data-loading', 'lazy');
+          s.setAttribute('crossorigin', 'anonymous');
+          s.async = true;
+          container.appendChild(s);
+        }
+
+        window._reloadGiscus = loadGiscus;
+        loadGiscus();
       })();
     </script>
   </section>
@@ -1723,6 +1730,8 @@
       if (window._refreshAppDesc) window._refreshAppDesc();
       // Update news items
       if (window._rebuildNews) window._rebuildNews();
+      // Reload Giscus with new language
+      if (window._reloadGiscus) window._reloadGiscus();
     }
 
     // ── CO NOWEGO toggle + rotacja ──
