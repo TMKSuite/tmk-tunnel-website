@@ -767,7 +767,7 @@
     /* ── SEKCJA POMYSŁY (Giscus) ── */
     #pomysly .section-heading {
       font-size: 1.6rem;
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.35rem;
     }
 
     #pomysly .section-subheading {
@@ -812,13 +812,18 @@
 
     .ref-item {
       font-family: 'Inter', sans-serif;
-      font-size: 0.58rem;
-      color: rgba(230, 237, 243, 0.4);
-      line-height: 1.2;
+      font-size: 0.52rem;
+      color: rgba(230, 237, 243, 0.35);
+      line-height: 1.15;
+    }
+
+    .ref-item::before {
+      content: '• ';
+      color: var(--color-accent);
     }
 
     .ref-item strong {
-      color: rgba(230, 237, 243, 0.65);
+      color: rgba(230, 237, 243, 0.6);
       font-weight: 500;
     }
 
