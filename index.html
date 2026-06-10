@@ -1240,16 +1240,16 @@
 
     <div class="stats-block">
       <div class="stat-item">
-        <div class="stat-value">4</div>
+        <div class="stat-value" data-count="4" data-suffix="">4</div>
         <div class="stat-label" data-i18n="stats.apps">Aplikacje</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">13+</div>
+        <div class="stat-value" data-count="13" data-suffix="">0</div>
         <div class="stat-label" data-i18n="stats.time">Miesięcy pracy</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value">160+</div>
-        <div class="stat-label" data-i18n="stats.trades">Transakcji live</div>
+        <div class="stat-value" data-count="41" data-suffix="K">0</div>
+        <div class="stat-label" data-i18n="stats.loc">Linii kodu AI</div>
       </div>
     </div>
   </div>
@@ -1425,6 +1425,7 @@
         'news.badge': 'W budowie',
         'stats.apps': 'Aplikacje',
         'stats.time': 'Miesięcy pracy',
+        'stats.loc': 'Linii kodu AI',
         'stats.trades': 'Transakcji live',
         'desc.footer': 'Każda z nich zbudowana w 100% przy użyciu modeli językowych',
         'projects.heading': 'Projekty',
@@ -1456,6 +1457,7 @@
         'news.badge': 'Under development',
         'stats.apps': 'Applications',
         'stats.time': 'Months of work',
+        'stats.loc': 'AI lines of code',
         'stats.trades': 'Live trades',
         'desc.footer': 'Each built 100% using language models',
         'projects.heading': 'Projects',
@@ -1707,6 +1709,56 @@
 
       highlight(0);
       setInterval(rotate, 2500);
+    })();
+
+    // ── Animacja liczników statystyk ──
+    (function() {
+      var counters = document.querySelectorAll('.stat-value[data-count]');
+      var animated = false;
+      var DURATION = 1800; // ms
+
+      function animateCounter(el) {
+        var target = parseInt(el.dataset.count, 10);
+        var suffix = el.dataset.suffix || '';
+        var start = performance.now();
+
+        function tick(now) {
+          var elapsed = now - start;
+          var progress = Math.min(elapsed / DURATION, 1);
+          // Ease-out
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(eased * target);
+          el.textContent = suffix ? current + suffix : current;
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          }
+        }
+
+        requestAnimationFrame(tick);
+      }
+
+      function startAnimation() {
+        if (animated) return;
+        animated = true;
+        counters.forEach(function(el, i) {
+          setTimeout(function() { animateCounter(el); }, i * 400);
+        });
+      }
+
+      // Startuj gdy widoczne (Intersection Observer)
+      var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          startAnimation();
+          observer.disconnect();
+        }
+      }, { threshold: 0.5 });
+
+      var statsBlock = document.querySelector('.stats-block');
+      if (statsBlock) {
+        observer.observe(statsBlock);
+      } else {
+        startAnimation(); // fallback
+      }
     })();
 
     // Init i18n after all IIFEs have run
