@@ -1699,6 +1699,48 @@
       // Ustaw stan początkowy
       onScroll();
     })();
+
+    // ── Nawigacja klawiaturą: strzałki lewo/prawo ──
+    (function() {
+      var sections = document.querySelectorAll('.page-section');
+      var sectionArray = Array.prototype.slice.call(sections);
+
+      function getCurrentSectionIndex() {
+        var scrollY = window.pageYOffset;
+        var viewH = window.innerHeight;
+        var threshold = viewH * 0.3;
+        var found = -1;
+
+        sectionArray.forEach(function(section, i) {
+          if (section.getBoundingClientRect().top <= threshold) {
+            found = i;
+          }
+        });
+        return found;
+      }
+
+      function scrollToSection(index) {
+        if (index >= 0 && index < sectionArray.length) {
+          sectionArray[index].scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      document.addEventListener('keydown', function(e) {
+        // Ignoruj gdy użytkownik jest w polu tekstowym
+        var tag = document.activeElement ? document.activeElement.tagName : '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+        var current = getCurrentSectionIndex();
+
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          scrollToSection(current + 1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          scrollToSection(current > 0 ? current - 1 : 0);
+        }
+      });
+    })();
   </script>
 
 </body>
