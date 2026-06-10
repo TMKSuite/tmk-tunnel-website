@@ -599,6 +599,7 @@
       transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
 
     .project-card:hover {
@@ -719,6 +720,181 @@
     .projects-grid--centered .project-card {
       max-width: 380px;
       flex: 1 1 340px;
+    }
+
+    /* ── OVERLAY: szczegóły aplikacji ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overlay-panel {
+      background: rgba(10, 12, 16, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      width: min(900px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 3rem 2.5rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.35s ease;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212, 168, 67, 0.3) transparent;
+    }
+
+    .overlay.open .overlay-panel {
+      transform: translateY(0);
+    }
+
+    .overlay-close {
+      position: sticky;
+      top: 0;
+      float: right;
+      z-index: 10;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      color: rgba(230, 237, 243, 0.5);
+      font-size: 1.2rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .overlay-close:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .overlay-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .overlay-header img {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+    }
+
+    .overlay-header .oh-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .overlay-header .oh-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid;
+      margin-top: 0.3rem;
+    }
+
+    .overlay-body h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+      margin: 2rem 0 0.8rem;
+    }
+
+    .overlay-body h3:first-child {
+      margin-top: 0;
+    }
+
+    .overlay-body p, .overlay-body li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      line-height: 1.65;
+      color: rgba(230, 237, 243, 0.55);
+      margin-bottom: 0.6rem;
+    }
+
+    .overlay-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .overlay-body ul li::before {
+      content: '— ';
+      color: var(--color-accent);
+    }
+
+    .overlay-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 2rem 0 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .overlay-meta-item {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: rgba(230, 237, 243, 0.3);
+      letter-spacing: 0.04em;
+    }
+
+    .overlay-meta-item span {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      color: var(--color-accent);
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+
+    .overlay-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .overlay-tags .tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      color: rgba(230, 237, 243, 0.35);
+      padding: 0.2rem 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
     }
 
     /* ── SEKCJA-PLACEHOLDER (dla jeszcze niezrobionych) ── */
@@ -1134,6 +1310,57 @@
       });
     })();
 
+    // ── Overlay: otwieranie/zamykanie ──
+    (function() {
+      var overlay = document.getElementById('appOverlay');
+      var closeBtn = document.getElementById('overlayClose');
+      var panel = document.getElementById('overlayPanel');
+
+      function openOverlay() {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      closeBtn.addEventListener('click', closeOverlay);
+
+      // Klik poza panelem = zamknij
+      overlay.addEventListener('click', function(e) {
+        if (!panel.contains(e.target)) closeOverlay();
+      });
+
+      // Escape = zamknij
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
+      });
+
+      // Klik w kartę projektu
+      document.querySelectorAll('.project-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var name = card.querySelector('.card-name').textContent;
+          var icon = card.querySelector('.card-icon img').getAttribute('src');
+          var badgeEl = card.querySelector('.card-badge');
+          var badgeText = badgeEl ? badgeEl.textContent : '';
+          var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
+
+          document.getElementById('ovIcon').src = icon;
+          document.getElementById('ovIcon').alt = name;
+          document.getElementById('ovName').textContent = name;
+          document.getElementById('ovBadge').textContent = badgeText;
+          document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
+          document.getElementById('ovBody').innerHTML = '<h3>Opis aplikacji</h3><p>Pełny opis <strong>' + name + '</strong> pojawi się tutaj. Będzie zawierał szczegółowe informacje o tym co robi aplikacja, jakie problemy rozwiązuje, jakie narzędzia były użyte, ile czasu zajęło jej zbudowanie.</p><h3>Główne funkcje</h3><ul><li>Funkcja pierwsza — opis działania</li><li>Funkcja druga — opis działania</li><li>Funkcja trzecia — opis działania</li></ul><h3>Tech stack</h3><p>Lista technologii i narzędzi użytych w projekcie.</p>';
+          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>~XX XXX</span>Linii kodu</div><div class="overlay-meta-item"><span>X miesięcy</span>Czas budowy</div><div class="overlay-meta-item"><span>Python 3.12</span>Środowisko</div>';
+          document.getElementById('ovTags').innerHTML = '<span class="tag">Python</span><span class="tag">LLM</span><span class="tag">AI-powered</span>';
+
+          openOverlay();
+        });
+      });
+    })();
+
     // ── Language switcher ──
     (function() {
       var btn = document.getElementById('langSwitcher');
@@ -1297,5 +1524,25 @@
       onScroll();
     })();
   </script>
+
+  <!-- ═══════════ OVERLAY: szczegóły aplikacji ═══════════ -->
+  <div class="overlay" id="appOverlay">
+    <div class="overlay-panel" id="overlayPanel">
+      <button class="overlay-close" id="overlayClose" aria-label="Zamknij">✕</button>
+      <div class="overlay-header">
+        <img id="ovIcon" src="" alt="" width="56" height="56">
+        <div>
+          <div class="oh-name" id="ovName"></div>
+          <span class="oh-badge" id="ovBadge"></span>
+        </div>
+      </div>
+      <div class="overlay-body" id="ovBody">
+        <p>Treść aplikacji — będzie wypełniana dynamicznie.</p>
+      </div>
+      <div class="overlay-meta-row" id="ovMeta"></div>
+      <div class="overlay-tags" id="ovTags"></div>
+    </div>
+  </div>
+
 </body>
 </html>
