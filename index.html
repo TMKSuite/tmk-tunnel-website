@@ -2364,6 +2364,9 @@
       if (label) label.textContent = lang.toUpperCase();
       if (window._syncLangToggle) window._syncLangToggle(lang);
 
+      // Aktualizuj hash w URL przy zmianie języka
+      if (window._updateUrlHash) window._updateUrlHash(lang);
+
       // Update all elements with data-i18n
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.dataset.i18n;
@@ -2838,8 +2841,17 @@
           if (clickUnlockTimer) clearTimeout(clickUnlockTimer);
           setActive(id);
           target.scrollIntoView({ behavior: 'smooth' });
-          if (window.history.replaceState) {
-            window.history.replaceState(null, '', '#' + id);
+          // Aktualizuj hash w URL zgodnie z językiem
+          var urlHashes = {
+            about:    { pl: 'o-mnie',   en: 'about' },
+            projects: { pl: 'projekty', en: 'projects' },
+            articles: { pl: 'artykuly', en: 'articles' },
+            ideas:    { pl: 'pomysly',  en: 'ideas' },
+            contact:  { pl: 'kontakt',  en: 'contact' }
+          };
+          if (window.history.replaceState && urlHashes[id]) {
+            var hash = urlHashes[id][currentLang] || id;
+            window.history.replaceState(null, '', '#' + hash);
           }
 
           clickUnlockTimer = setTimeout(function() {
@@ -2849,6 +2861,40 @@
           }, CLICK_LOCK_MS);
         });
       });
+
+      // Mapowanie hash URL: English ID ↔ język
+      var urlHashesReverse = {
+        'o-mnie': 'about', 'projekty': 'projects', 'artykuly': 'articles',
+        'pomysly': 'ideas', 'kontakt': 'contact'
+      };
+      window._updateUrlHash = function(lang) {
+        var hash = window.location.hash.replace('#', '');
+        var enId = urlHashesReverse[hash] || hash;
+        var urlHashesFwd = {
+          about: { pl: 'o-mnie', en: 'about' },
+          projects: { pl: 'projekty', en: 'projects' },
+          articles: { pl: 'artykuly', en: 'articles' },
+          ideas: { pl: 'pomysly', en: 'ideas' },
+          contact: { pl: 'kontakt', en: 'contact' }
+        };
+        if (urlHashesFwd[enId] && window.history.replaceState) {
+          window.history.replaceState(null, '', '#' + urlHashesFwd[enId][lang]);
+        }
+      };
+      // Przy wejściu: konwertuj polski hash na angielski ID i scrolluj
+      (function() {
+        var hash = window.location.hash.replace('#', '');
+        if (hash && urlHashesReverse[hash]) {
+          var enId = urlHashesReverse[hash];
+          var target = document.getElementById(enId);
+          if (target) {
+            setTimeout(function() { target.scrollIntoView({ behavior: 'instant' }); }, 200);
+          }
+          if (window.history.replaceState && currentLang === 'pl') {
+            // Zostaw polski hash w URL
+          }
+        }
+      })();
 
       // Inicjalny stan
       updateActive();
