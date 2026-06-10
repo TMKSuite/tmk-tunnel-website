@@ -2713,8 +2713,15 @@
       }
 
       function isAtBottom() {
-        var el = document.scrollingElement || document.documentElement;
-        return el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+        // html,body{height:100%} → scrollHeight dokumentu = viewport.
+        // Bierzemy max z body, documentElement i najniższego punktu ostatniej sekcji.
+        var docH = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight,
+          lastSection ? lastSection.offsetTop + lastSection.offsetHeight : 0
+        );
+        var scrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        return scrollY + window.innerHeight >= docH - 10;
       }
 
       function updateActive() {
