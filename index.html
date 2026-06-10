@@ -2687,7 +2687,7 @@
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
-    // ── Active nav link na podstawie scrolla (offsetTop) ──
+    // ── Active nav link na podstawie scrolla (capture + getBoundingClientRect) ──
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
@@ -2708,22 +2708,19 @@
       }
 
       function updateActive() {
-        var scrollY = window.pageYOffset + window.innerHeight * 0.35;
+        // getBoundingClientRect — działa niezależnie od tego co scrolluje (window czy body)
+        var line = window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
-          if (section.offsetTop <= scrollY) {
+          if (section.getBoundingClientRect().top <= line) {
             found = section.id;
           }
         });
-        if (found) {
-          setActive(found);
-        } else if (window.pageYOffset < 150) {
-          setActive(null);
-        }
+        // found === null = jesteśmy w hero → czyści podświetlenie
+        setActive(found);
       }
 
-      var scrollTicking = false;
-      window.addEventListener('scroll', function() {
+      function onScrollActive() {
         if (!scrollTicking) {
           requestAnimationFrame(function() {
             updateActive();
@@ -2731,7 +2728,13 @@
           });
           scrollTicking = true;
         }
-      }, { passive: true });
+      }
+
+      var scrollTicking = false;
+      // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
+      window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
+      // resize — dvh zmienia się przy chowaniu paska adresu na mobile
+      window.addEventListener('resize', updateActive, { passive: true });
 
       // Kliknięcie — scroll + natychmiastowe podświetlenie
       navLinks.forEach(function(link) {
