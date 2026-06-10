@@ -65,6 +65,36 @@
       transform: translateY(-50%) scale(1.1);
     }
 
+    /* ── LANGUAGE SWITCHER (prawy dolny róg navbara) ── */
+    .nav-lang {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 11;
+      opacity: 0.4;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      animation: fadeInNav 1s 0.3s ease both;
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .nav-lang svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+      fill: var(--color-accent);
+    }
+
+    .nav-lang:hover {
+      opacity: 0.85;
+      transform: translateY(-50%) scale(1.1);
+    }
+
     /* ── NAVBAR NA DOLE (domyslny desktop) ── */
     .nav-sidebar {
       position: fixed;
@@ -533,6 +563,7 @@
       .tech-stack { display: none; }
       .social-links { display: none; }
       .nav-logo { display: none; }
+      .nav-lang { display: none; }
       .nav-link {
         font-size: 0.65rem;
         padding-left: 0;
@@ -593,6 +624,7 @@
       }
       .app-showcase { display: none; }
       .nav-logo { display: none; }
+      .nav-lang { display: none; }
       .hero {
         justify-content: flex-start;
         padding-left: 25vw;
@@ -607,14 +639,14 @@
   <div class="production-panel" id="productionPanel">
     <button class="news-toggle" id="newsToggle">
       <span class="news-dot"></span>
-      NOWOŚCI
+      <span data-i18n="news.button">NOWOŚCI</span>
       <span class="news-arrow">▾</span>
     </button>
     <div class="production-item" id="productionItem">
       <img src="/assets/images/icon-clientcreator.png?v=1" alt="ClientCreatorTMK" width="28" height="28">
       <div>
         <div class="production-name">ClientCreatorTMK</div>
-        <div class="production-badge">Nowa aplikacja</div>
+        <div class="production-badge" data-i18n="news.badge">Nowa aplikacja</div>
       </div>
     </div>
   </div>
@@ -633,25 +665,36 @@
     <a href="#" class="nav-logo" title="Strona główna">
       <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
     </a>
-    <a href="#projekty" class="nav-link">Projekty</a>
-    <a href="#artykuly" class="nav-link">Artykuły</a>
-    <a href="#o-mnie" class="nav-link">O mnie</a>
-    <a href="#pomysly" class="nav-link">Pomysły</a>
-    <a href="#kontakt" class="nav-link">Kontakt</a>
+    <a href="#projekty" class="nav-link" data-i18n="nav.projekty">Projekty</a>
+    <a href="#artykuly" class="nav-link" data-i18n="nav.artykuly">Artykuły</a>
+    <a href="#o-mnie" class="nav-link" data-i18n="nav.omnie">O mnie</a>
+    <a href="#pomysly" class="nav-link" data-i18n="nav.pomysly">Pomysły</a>
+    <a href="#kontakt" class="nav-link" data-i18n="nav.kontakt">Kontakt</a>
+    <button class="nav-lang" id="langSwitcher" title="Zmień język / Change language" aria-label="Zmień język">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    </button>
   </nav>
 
   <div class="app-wrapper">
     <div class="app-showcase" id="appShowcase">
-      <div class="app-item active" data-name="TorekMarketKiller" data-desc="Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.">
+      <div class="app-item active" data-name="TorekMarketKiller"
+           data-desc-pl="Automatyczny trading: alerty TradingView przez FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia."
+           data-desc-en="Automated trading: TradingView alerts via FastAPI → MT5. Multi-terminal, Cerebrus, Wyrocznia.">
         <img src="/assets/images/icon-tmk.png" alt="TMK Platform" width="36" height="36">
       </div>
-      <div class="app-item" data-name="PortfolioCommandCenterTMK" data-desc="Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.">
+      <div class="app-item" data-name="PortfolioCommandCenterTMK"
+           data-desc-pl="Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne."
+           data-desc-en="Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs.">
         <img src="/assets/images/icon-pc2.png" alt="PC2 Symulator" width="36" height="36">
       </div>
-      <div class="app-item" data-name="CandleComparisonTMK" data-desc="Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.">
+      <div class="app-item" data-name="CandleComparisonTMK"
+           data-desc-pl="Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty."
+           data-desc-en="Candle data comparison MT5 vs TradingView. Tick size, time shift, reports.">
         <img src="/assets/images/icon-comparator.png" alt="Komparator" width="36" height="36">
       </div>
-      <div class="app-item" data-name="CandleDownloaderTMK" data-desc="Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.">
+      <div class="app-item" data-name="CandleDownloaderTMK"
+           data-desc-pl="Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy."
+           data-desc-en="Candle data download from TradingView via WebSocket. CSV ready for analysis.">
         <img src="/assets/images/icon-downloader.png" alt="Downloader" width="36" height="36">
       </div>
     </div>
@@ -666,21 +709,21 @@
     <div class="app-desc" id="appDesc">
       <strong></strong>
       <span class="desc-body"></span>
-      <span class="desc-footer">Każda z nich zbudowana w 100% przy użyciu modeli językowych</span>
+      <span class="desc-footer" data-i18n="desc.footer">Każda z nich zbudowana w 100% przy użyciu modeli językowych</span>
     </div>
 
     <div class="stats-block">
       <div class="stat-item">
         <div class="stat-value">4</div>
-        <div class="stat-label">Aplikacje</div>
+        <div class="stat-label" data-i18n="stats.apps">Aplikacje</div>
       </div>
       <div class="stat-item">
         <div class="stat-value">41K+</div>
-        <div class="stat-label">Linii kodu</div>
+        <div class="stat-label" data-i18n="stats.loc">Linii kodu</div>
       </div>
       <div class="stat-item">
         <div class="stat-value">160+</div>
-        <div class="stat-label">Transakcji live</div>
+        <div class="stat-label" data-i18n="stats.trades">Transakcji live</div>
       </div>
     </div>
   </div>
@@ -709,7 +752,56 @@
   </div>
 
   <script>
-    // NOWOŚCI toggle
+    // ── i18n ──
+    var I18N = {
+      pl: {
+        'nav.projekty': 'Projekty',
+        'nav.artykuly': 'Artykuły',
+        'nav.omnie': 'O mnie',
+        'nav.pomysly': 'Pomysły',
+        'nav.kontakt': 'Kontakt',
+        'news.button': 'NOWOŚCI',
+        'news.badge': 'Nowa aplikacja',
+        'stats.apps': 'Aplikacje',
+        'stats.loc': 'Linii kodu',
+        'stats.trades': 'Transakcji live',
+        'desc.footer': 'Każda z nich zbudowana w 100% przy użyciu modeli językowych'
+      },
+      en: {
+        'nav.projekty': 'Projects',
+        'nav.artykuly': 'Articles',
+        'nav.omnie': 'About me',
+        'nav.pomysly': 'Ideas',
+        'nav.kontakt': 'Contact',
+        'news.button': 'NEWS',
+        'news.badge': 'New app',
+        'stats.apps': 'Applications',
+        'stats.loc': 'Lines of code',
+        'stats.trades': 'Live trades',
+        'desc.footer': 'Each built 100% using language models'
+      }
+    };
+
+    var currentLang = localStorage.getItem('tmk-lang') || 'pl';
+
+    function switchLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('tmk-lang', lang);
+      document.documentElement.lang = lang;
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.dataset.i18n;
+        if (I18N[lang] && I18N[lang][key]) {
+          el.textContent = I18N[lang][key];
+        }
+      });
+
+      // Update current app description
+      if (window._refreshAppDesc) window._refreshAppDesc();
+    }
+
+    // ── NOWOŚCI toggle ──
     (function() {
       var toggle = document.getElementById('newsToggle');
       var panel = document.getElementById('productionPanel');
@@ -718,7 +810,16 @@
       });
     })();
 
-    // App showcase rotation
+    // ── Language switcher ──
+    (function() {
+      var btn = document.getElementById('langSwitcher');
+      btn.addEventListener('click', function() {
+        var next = currentLang === 'pl' ? 'en' : 'pl';
+        switchLang(next);
+      });
+    })();
+
+    // ── App showcase rotation ──
     (function() {
       var items = document.querySelectorAll('.app-item');
       var dots = document.querySelectorAll('.dot');
@@ -730,15 +831,23 @@
       var interval = 4000;
       var timer;
 
+      function getDesc(item) {
+        return item.dataset['desc' + (currentLang === 'en' ? 'En' : 'Pl')] || item.dataset.descPl || '';
+      }
+
       function showItem(i) {
         items.forEach(function(el) { el.classList.remove('active'); });
         dots.forEach(function(d) { d.classList.remove('active'); });
         items[i].classList.add('active');
         dots[i].classList.add('active');
         descStrong.textContent = items[i].dataset.name;
-        descSpan.textContent = items[i].dataset.desc;
+        descSpan.textContent = getDesc(items[i]);
         descPanel.classList.add('visible');
         current = i;
+      }
+
+      function refreshAppDesc() {
+        descSpan.textContent = getDesc(items[current]);
       }
 
       function rotate() {
@@ -753,7 +862,7 @@
         clearInterval(timer);
       }
 
-      // Init: show first
+      // Init
       showItem(0);
       startTimer();
 
@@ -767,7 +876,14 @@
           startTimer();
         });
       });
+
+      // Expose for lang switch
+      window._refreshAppDesc = refreshAppDesc;
+      window._getCurrentItem = function() { return items[current]; };
     })();
+
+    // Init i18n after all IIFEs have run
+    switchLang(currentLang);
   </script>
 </body>
 </html>
