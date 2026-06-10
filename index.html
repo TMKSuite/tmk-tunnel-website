@@ -723,6 +723,97 @@
       flex: 1 1 340px;
     }
 
+    /* ── SEKCJA O MNIE ── */
+    .about-section {
+      padding: 0 4rem 4rem;
+    }
+
+    .about-banner {
+      width: 100%;
+      height: 260px;
+      background: linear-gradient(160deg, #0d1117 0%, #161b22 40%, #1a1f2e 70%, #0d1117 100%);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-banner::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.3), transparent);
+    }
+
+    .about-photo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: -80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 0 2px rgba(212, 168, 67, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+      object-fit: cover;
+      background: #161b22;
+    }
+
+    .about-photo-placeholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 0 2px rgba(212, 168, 67, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5);
+      background: #161b22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      color: rgba(212, 168, 67, 0.2);
+    }
+
+    .about-header {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .about-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .about-role {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--color-accent);
+      letter-spacing: 0.06em;
+      margin-top: 0.3rem;
+    }
+
+    .about-story {
+      max-width: 700px;
+      margin: 2.5rem auto 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: rgba(230, 237, 243, 0.55);
+    }
+
+    .about-story p {
+      margin-bottom: 1.2rem;
+    }
+
     /* ── OVERLAY: szczegóły aplikacji ── */
     .overlay {
       position: fixed;
@@ -1204,8 +1295,22 @@
     <div class="section-placeholder"><p data-i18n="placeholder.articles">Artykuły — wkrótce</p></div>
   </section>
 
-  <section class="page-section" id="o-mnie">
-    <div class="section-placeholder"><p data-i18n="placeholder.about">O mnie — wkrótce</p></div>
+  <!-- ═══════════ SEKCJA: O MNIE ═══════════ -->
+  <section class="page-section about-section" id="o-mnie">
+    <div class="about-banner"></div>
+    <div class="about-photo-wrapper">
+      <!-- TYMCZASOWY placeholder — podmień src na swoje zdjęcie -->
+      <div class="about-photo-placeholder" id="aboutPhotoPlaceholder">?</div>
+      <!-- <img class="about-photo" id="aboutPhoto" src="/assets/images/profile.webp" alt="Krychaa" style="display:none"> -->
+    </div>
+    <div class="about-header">
+      <h2 class="about-name">Krychaa</h2>
+      <p class="about-role" data-i18n="about.role">Solo System Architect • Budowniczy z AI</p>
+    </div>
+    <div class="about-story" data-i18n="about.story">
+      <p>Tu pojawi się Twoja historia — jak zacząłeś, dlaczego trading, dlaczego AI, jak powstało TMK. Opiszesz swoją drogę od pracy fizycznej do budowania złożonych systemów z pomocą modeli językowych.</p>
+      <p>To będzie osobista sekcja, która pokazuje kim jesteś i dlaczego to robisz.</p>
+    </div>
   </section>
 
   <section class="page-section" id="pomysly">
@@ -1263,6 +1368,8 @@
         'projects.group_done': 'Gotowe',
         'projects.group_wip': 'W toku',
         'placeholder.articles': 'Artykuły — wkrótce',
+        'about.role': 'Solo System Architect • Budowniczy z AI',
+        'about.story': '<p>Tu pojawi się Twoja historia — jak zacząłeś, dlaczego trading, dlaczego AI, jak powstało TMK. Opiszesz swoją drogę od pracy fizycznej do budowania złożonych systemów z pomocą modeli językowych.</p><p>To będzie osobista sekcja, która pokazuje kim jesteś i dlaczego to robisz.</p>',
         'placeholder.about': 'O mnie — wkrótce',
         'placeholder.ideas': 'Pomysły — wkrótce',
         'placeholder.contact': 'Kontakt — wkrótce'
@@ -1292,6 +1399,8 @@
         'projects.group_done': 'Completed',
         'projects.group_wip': 'In progress',
         'placeholder.articles': 'Articles — coming soon',
+        'about.role': 'Solo System Architect • Built with AI',
+        'about.story': '<p>This is where your story will appear — how you started, why trading, why AI, how TMK was born. You\'ll describe your journey from physical labor to building complex systems with the help of language models.</p><p>This is a personal section that shows who you are and why you do this.</p>',
         'placeholder.about': 'About me — coming soon',
         'placeholder.ideas': 'Ideas — coming soon',
         'placeholder.contact': 'Contact — coming soon'
