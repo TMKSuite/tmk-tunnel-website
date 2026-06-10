@@ -2696,8 +2696,8 @@
       var sections = document.querySelectorAll('.page-section');
       var lastSection = sections[sections.length - 1];
       var activeId = null;
-      var clickLock = false;
-      var clickUnlockTimer = null;
+      var lastClickTime = 0;        // timestamp ostatniego klika — blokada czasowa
+      var CLICK_LOCK_MS = 800;      // jak długo klik trzyma podświetlenie
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
@@ -2713,8 +2713,6 @@
       }
 
       function isAtBottom() {
-        // html,body{height:100%} → scrollHeight dokumentu = viewport.
-        // Bierzemy max z body, documentElement i najniższego punktu ostatniej sekcji.
         var docH = Math.max(
           document.body.scrollHeight,
           document.documentElement.scrollHeight,
@@ -2725,7 +2723,8 @@
       }
 
       function updateActive() {
-        if (clickLock) return;
+        // Blokada czasowa — nie ruszaj podświetlenia przez CLICK_LOCK_MS po kliknięciu
+        if (Date.now() - lastClickTime < CLICK_LOCK_MS) return;
         // Dno strony → wymuś ostatnią sekcję
         if (isAtBottom()) {
           setActive(lastSection ? lastSection.id : null);
@@ -2739,13 +2738,6 @@
           }
         });
         setActive(found);
-      }
-
-      function unlockClick() {
-        if (!clickLock) return;
-        clickLock = false;
-        if (clickUnlockTimer) { clearTimeout(clickUnlockTimer); clickUnlockTimer = null; }
-        updateActive();
       }
 
       function onScrollActive() {
@@ -2762,12 +2754,7 @@
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Odblokuj gdy użytkownik sam scrolluje (wheel/touch)
-      window.addEventListener('wheel', unlockClick, { passive: true });
-      window.addEventListener('touchstart', unlockClick, { passive: true });
-      window.addEventListener('keydown', unlockClick, { passive: true });
-
-      // Kliknięcie — scroll + podświetlenie
+      // Kliknięcie — podświetl i zablokuj updateActive na CLICK_LOCK_MS
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2775,15 +2762,9 @@
           var id = link.getAttribute('href').replace('#', '');
           var target = document.getElementById(id);
           if (target) {
-            clickLock = true;
-            if (clickUnlockTimer) clearTimeout(clickUnlockTimer);
+            lastClickTime = Date.now();
             setActive(id);
             target.scrollIntoView({ behavior: 'smooth' });
-            // Długi bezpiecznik — na wypadek gdyby wheel/touch nie odpaliły
-            clickUnlockTimer = setTimeout(function() {
-              clickLock = false;
-              updateActive();
-            }, 3000);
           }
         });
       });
