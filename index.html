@@ -1229,18 +1229,19 @@
       var observer = new IntersectionObserver(function(entries) {
         // Zbierz wszystkie aktualnie widoczne sekcje
         var visible = entries
-          .filter(function(e) { return e.isIntersecting; })
+          .filter(function(e) { return e.isIntersecting || e.intersectionRatio > 0; })
           .map(function(e) { return { id: e.target.id, ratio: e.intersectionRatio }; });
 
         if (visible.length === 0) {
-          setActive(null);
+          // Czyścimy tylko gdy jesteśmy przy hero (góra strony)
+          if (window.pageYOffset < 100) setActive(null);
           return;
         }
 
         // Wybierz tę z najwyższym intersectionRatio
         visible.sort(function(a, b) { return b.ratio - a.ratio; });
         setActive(visible[0].id);
-      }, { threshold: [0, 0.2, 0.4, 0.6, 0.8], rootMargin: '-10% 0px -10% 0px' });
+      }, { threshold: [0, 0.15, 0.3, 0.5, 0.7], rootMargin: '-8% 0px -8% 0px' });
 
       sections.forEach(function(section) { observer.observe(section); });
 
