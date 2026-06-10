@@ -1583,25 +1583,28 @@
         margin-top: 0.05rem;
       }
 
-      /* ── F. Tech stack → scroll-flow ── */
+      /* ── F. Tech stack — nad navbarem ── */
       .tech-stack {
-        position: relative;
-        left: auto;
-        bottom: auto;
-        z-index: 1;
+        display: flex !important;
+        position: fixed;
+        left: 50%;
+        bottom: 5.2rem;
+        transform: translateX(-50%);
+        z-index: 9;
         justify-content: center;
-        gap: 0.55rem;
-        padding: 1rem 0.3rem;
-        flex-wrap: wrap;
+        gap: 0.7rem;
+        padding: 0;
+        flex-wrap: nowrap;
         animation: none;
+        width: auto;
       }
       .tech-item img,
       .tech-item svg {
-        width: 15px;
-        height: 15px;
+        width: 14px;
+        height: 14px;
       }
       .tech-label {
-        font-size: 0.4rem;
+        font-size: 0.38rem;
       }
 
       /* ── G. Social links ── */
