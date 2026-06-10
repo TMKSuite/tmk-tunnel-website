@@ -2729,10 +2729,7 @@
       }
 
       window.addEventListener('scroll', function() {
-        if (!ticking) {
-          requestAnimationFrame(updateActive);
-          ticking = true;
-        }
+        updateActive();
       }, { passive: true });
 
       // Natychmiastowe podświetlenie + scroll przy kliknięciu
