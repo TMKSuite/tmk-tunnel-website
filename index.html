@@ -2711,7 +2711,6 @@
       }
 
       function updateActive() {
-        // getBoundingClientRect — działa niezależnie od tego co scrolluje (window czy body)
         var line = window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
@@ -2719,8 +2718,13 @@
             found = section.id;
           }
         });
-        // found === null = jesteśmy w hero → czyści podświetlenie
-        setActive(found);
+        if (found) {
+          setActive(found);
+        } else {
+          // Czyść tylko gdy naprawdę jesteśmy na górze (hero)
+          var st = document.scrollingElement ? document.scrollingElement.scrollTop : window.pageYOffset;
+          if (st < 100) setActive(null);
+        }
       }
 
       function onScrollActive() {
@@ -2736,12 +2740,10 @@
 
       var scrollTicking = false;
       var clickLock = false;
-      // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
-      // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie: flaga clickLock blokuje updateActive podczas animacji scrolla
+      // Kliknięcie: clickLock blokuje kasowanie podświetlenia podczas animacji
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2752,11 +2754,10 @@
             setActive(id);
             clickLock = true;
             target.scrollIntoView({ behavior: 'smooth' });
-            // Po animacji zwolnij blokadę i skoryguj podświetlenie
             setTimeout(function() {
               clickLock = false;
               updateActive();
-            }, 800);
+            }, 900);
           }
         });
       });
