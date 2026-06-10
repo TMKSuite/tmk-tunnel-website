@@ -1181,8 +1181,8 @@
         var opacity = Math.max(0, 1 - scrollY / FADE_DISTANCE);
 
         floatingEls.forEach(function(el) {
-          el.style.opacity = opacity;
-          el.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+          el.style.setProperty('opacity', opacity, 'important');
+          el.style.setProperty('pointer-events', opacity < 0.05 ? 'none' : 'auto', 'important');
         });
         ticking = false;
       }
