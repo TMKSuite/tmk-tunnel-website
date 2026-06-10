@@ -1416,19 +1416,22 @@
       .nav-link:nth-child(3) { grid-row: 2; grid-column: 1; }  /* Projekty */
 
       /* Kolumna 2: Logo nad Artykuły */
-      .nav-logo,
-      .nav-logo:hover,
-      .nav-logo:active {
+      .nav-logo {
         grid-row: 1;
         grid-column: 2;
-        display: flex;
+        display: flex !important;
         position: static;
         left: auto;
         top: auto;
         transform: none !important;
-        opacity: 0.85;
-        filter: brightness(1) grayscale(0);
+        opacity: 0.85 !important;
+        filter: brightness(1) grayscale(0) !important;
         animation: none;
+      }
+      .nav-logo:hover,
+      .nav-logo:active {
+        transform: none !important;
+        opacity: 0.85 !important;
       }
       .nav-logo img {
         width: 32px;
@@ -2574,8 +2577,9 @@
       sessionStorage.setItem('tmk-last-section', window.location.hash || '');
     });
 
-    // Po załadowaniu — wróć do ostatniej sekcji
+    // Po załadowaniu — wróć do ostatniej sekcji (tylko raz, np. po Giscus OAuth)
     var lastSection = sessionStorage.getItem('tmk-last-section');
+    sessionStorage.removeItem('tmk-last-section');
     var hash = window.location.hash || lastSection;
     if (hash) {
       var target = document.querySelector(hash);
