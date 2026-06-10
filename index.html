@@ -2695,6 +2695,8 @@
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
+      var clickLock = false;        // blokuje updateActive na czas animacji klika
+      var clickUnlockTimer = null;
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
@@ -2711,6 +2713,9 @@
       }
 
       function updateActive() {
+        // W trakcie animacji klika NIE ruszamy podświetlenia
+        if (clickLock) return;
+        // getBoundingClientRect — działa niezależnie od tego co scrolluje (window czy body)
         var line = window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
@@ -2718,17 +2723,11 @@
             found = section.id;
           }
         });
-        if (found) {
-          setActive(found);
-        } else {
-          // Czyść tylko gdy naprawdę jesteśmy na górze (hero)
-          var st = document.scrollingElement ? document.scrollingElement.scrollTop : window.pageYOffset;
-          if (st < 100) setActive(null);
-        }
+        // found === null = jesteśmy w hero → czyści podświetlenie
+        setActive(found);
       }
 
       function onScrollActive() {
-        if (clickLock) return;
         if (!scrollTicking) {
           requestAnimationFrame(function() {
             updateActive();
@@ -2739,11 +2738,12 @@
       }
 
       var scrollTicking = false;
-      var clickLock = false;
+      // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
+      // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie: clickLock blokuje kasowanie podświetlenia podczas animacji
+      // Kliknięcie — scroll + podświetlenie od razu, updateActive koryguje po animacji
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2751,13 +2751,15 @@
           var id = link.getAttribute('href').replace('#', '');
           var target = document.getElementById(id);
           if (target) {
-            setActive(id);
+            // Zablokuj updateActive, podświetl klikniętą zakładkę i odpal scroll
             clickLock = true;
+            if (clickUnlockTimer) clearTimeout(clickUnlockTimer);
+            setActive(id);
             target.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(function() {
+            clickUnlockTimer = setTimeout(function() {
               clickLock = false;
               updateActive();
-            }, 900);
+            }, 800);
           }
         });
       });
