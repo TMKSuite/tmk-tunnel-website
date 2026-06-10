@@ -2572,6 +2572,12 @@
       }
     })();
 
+    // Logo w navbarze — scroll na górę strony
+    document.querySelector('.nav-logo').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     // Zapamiętaj ostatnią sekcję przed opuszczeniem strony (np. Giscus OAuth)
     window.addEventListener('beforeunload', function() {
       sessionStorage.setItem('tmk-last-section', window.location.hash || '');
