@@ -2838,6 +2838,9 @@
           if (clickUnlockTimer) clearTimeout(clickUnlockTimer);
           setActive(id);
           target.scrollIntoView({ behavior: 'smooth' });
+          if (window.history.replaceState) {
+            window.history.replaceState(null, '', '#' + id);
+          }
 
           clickUnlockTimer = setTimeout(function() {
             clickLock = false;
