@@ -508,6 +508,11 @@
       display: none;
     }
 
+    /* Statystyki mobilne — ukryte na desktopie */
+    .stats-mobile {
+      display: none;
+    }
+
     .social-links svg {
       width: 20px;
       height: 20px;
@@ -1525,6 +1530,35 @@
         display: none;
       }
 
+      /* ── E2. Statystyki mobilne ── */
+      .stats-mobile {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 0.5rem 1rem 1.5rem;
+        flex-wrap: wrap;
+      }
+      .stats-mobile-item {
+        font-family: 'Space Grotesk', sans-serif;
+        text-align: center;
+      }
+      .stats-mobile-value {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--color-accent);
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+      .stats-mobile-label {
+        font-size: 0.6rem;
+        font-weight: 400;
+        color: rgba(230, 237, 243, 0.3);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 0.15rem;
+      }
+
       /* ── F. Tech stack → scroll-flow ── */
       .tech-stack {
         position: relative;
@@ -1895,6 +1929,22 @@
   </div>
 
   
+
+  <!-- Statystyki mobilne (nad navbarem, pod logo) -->
+  <div class="stats-mobile">
+    <div class="stats-mobile-item">
+      <div class="stats-mobile-value" data-count="4" data-suffix="">0</div>
+      <div class="stats-mobile-label" data-i18n="stats.apps">Aplikacje</div>
+    </div>
+    <div class="stats-mobile-item">
+      <div class="stats-mobile-value" data-count="13" data-suffix="">0</div>
+      <div class="stats-mobile-label" data-i18n="stats.time">Miesięcy pracy</div>
+    </div>
+    <div class="stats-mobile-item">
+      <div class="stats-mobile-value" data-count="41" data-suffix="K" data-duration="5000">0</div>
+      <div class="stats-mobile-label" data-i18n="stats.loc">Linii kodu AI</div>
+    </div>
+  </div>
 
   <!-- ═══════════ SEKCJA: O MNIE ═══════════ -->
   <section class="page-section about-section" id="o-mnie">
@@ -2522,7 +2572,7 @@
 
     // ── Animacja liczników statystyk ──
     (function() {
-      var counters = document.querySelectorAll('.stat-value[data-count]');
+      var counters = document.querySelectorAll('.stat-value[data-count], .stats-mobile-value[data-count]');
       var animated = false;
       var DURATION = 1800; // ms
 
@@ -2566,8 +2616,11 @@
       }, { threshold: 0.5 });
 
       var statsBlock = document.querySelector('.stats-block');
-      if (statsBlock) {
+      var statsMobile = document.querySelector('.stats-mobile');
+      if (statsBlock && window.getComputedStyle(statsBlock).display !== 'none') {
         observer.observe(statsBlock);
+      } else if (statsMobile) {
+        observer.observe(statsMobile);
       } else {
         startAnimation(); // fallback
       }
