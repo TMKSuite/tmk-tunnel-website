@@ -693,6 +693,30 @@
       50% { opacity: 1; }
     }
 
+    /* ── NAGŁÓWEK GRUPY W SEKCJI ── */
+    .group-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 1.8rem;
+    }
+
+    .projects-grid--centered {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .projects-grid--centered .project-card {
+      max-width: 380px;
+      flex: 1 1 340px;
+    }
+
     /* ── SEKCJA-PLACEHOLDER (dla jeszcze niezrobionych) ── */
     .section-placeholder {
       display: flex;
@@ -930,6 +954,8 @@
     <h2 class="section-heading" data-i18n="projects.heading">Projekty</h2>
     <p class="section-subheading" data-i18n="projects.subheading">Pięć narzędzi — <span class="accent">jeden system</span>. Wszystkie zbudowane z pomocą AI.</p>
 
+    <h3 class="group-heading" data-i18n="projects.group_done">Gotowe</h3>
+
     <div class="projects-grid">
       <!-- TMK -->
       <div class="project-card">
@@ -974,10 +1000,14 @@
           <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
         </div>
       </div>
+    </div>
 
+    <h3 class="group-heading" data-i18n="projects.group_wip">W toku</h3>
+
+    <div class="projects-grid projects-grid--centered">
       <!-- ClientCreator -->
       <div class="project-card">
-        <div class="card-icon"><img src="/assets/images/icon-clientcreator.png" alt="ClientCreator" width="48" height="48"></div>
+        <div class="card-icon"><img src="/assets/images/icon-clientcreator.png?v=1" alt="ClientCreator" width="48" height="48"></div>
         <div class="card-name">ClientCreatorTMK</div>
         <div class="card-desc" data-i18n="projects.clientcreator">Narzędzie do budowania klientów .exe. Kompilacja PyInstaller, podpisywanie kodu, auto-update przez GitHub Releases.</div>
         <div class="card-meta">
@@ -1030,6 +1060,8 @@
         'projects.badge_live': 'Live',
         'projects.badge_stable': 'Stabilny',
         'projects.badge_wip': 'W toku',
+        'projects.group_done': 'Gotowe',
+        'projects.group_wip': 'W toku',
         'placeholder.articles': 'Artykuły — wkrótce',
         'placeholder.about': 'O mnie — wkrótce',
         'placeholder.ideas': 'Pomysły — wkrótce',
@@ -1057,6 +1089,8 @@
         'projects.badge_live': 'Live',
         'projects.badge_stable': 'Stable',
         'projects.badge_wip': 'In progress',
+        'projects.group_done': 'Completed',
+        'projects.group_wip': 'In progress',
         'placeholder.articles': 'Articles — coming soon',
         'placeholder.about': 'About me — coming soon',
         'placeholder.ideas': 'Ideas — coming soon',
