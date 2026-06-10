@@ -1686,6 +1686,28 @@
       window._getCurrentItem = function() { return items[current]; };
     })();
 
+    // ── Tech stack: cykliczne podświetlanie ──
+    (function() {
+      var items = document.querySelectorAll('.tech-item');
+      if (!items.length) return;
+      var current = 0;
+      var total = items.length;
+
+      function highlight(i) {
+        items.forEach(function(el, idx) {
+          el.style.opacity = idx === i ? '0.8' : '0.3';
+        });
+        current = i;
+      }
+
+      function rotate() {
+        highlight((current + 1) % total);
+      }
+
+      highlight(0);
+      setInterval(rotate, 2500);
+    })();
+
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
