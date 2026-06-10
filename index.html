@@ -2687,7 +2687,7 @@
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
-    // ── Active nav link na podstawie scrolla ──
+    // ── Active nav link na podstawie scrolla (offsetTop) ──
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
@@ -2698,21 +2698,20 @@
       }
 
       function setActive(id) {
-        // ZAWSZE usuń wszystkie, nawet jeśli to ten sam ID
+        if (activeId === id) return;
+        activeId = id;
         navLinks.forEach(function(link) { link.classList.remove('active'); });
-        if (id && id !== activeId) {
+        if (id) {
           var link = getLinkForSection(id);
           if (link) link.classList.add('active');
         }
-        activeId = id;
       }
 
       function updateActive() {
-        var viewH = window.innerHeight;
-        var threshold = viewH * 0.35;
+        var scrollY = window.pageYOffset + window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
-          if (section.getBoundingClientRect().top <= threshold) {
+          if (section.offsetTop <= scrollY) {
             found = section.id;
           }
         });
@@ -2734,11 +2733,12 @@
         }
       }, { passive: true });
 
-      // Kliknięcie w nav link — scroll tylko (podświetlenie zrobi updateActive)
+      // Kliknięcie — scroll + natychmiastowe podświetlenie
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
           var id = link.getAttribute('href').replace('#', '');
+          setActive(id);
           var target = document.getElementById(id);
           if (target) {
             target.scrollIntoView({ behavior: 'smooth' });
