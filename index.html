@@ -1127,18 +1127,28 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .overlay-header img {
+    .ov-icon-wrap {
       width: 56px;
       height: 56px;
       flex-shrink: 0;
     }
 
-    .overlay-header img.circle {
-      width: 60px;
-      height: 60px;
+    .ov-icon-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ov-icon-wrap.circle {
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .ov-icon-wrap.circle img {
+      transform: scale(2);
       object-fit: cover;
-      transform: scale(1.8);
     }
 
     .overlay-header .oh-name {
@@ -1684,7 +1694,9 @@
     <div class="overlay-panel" id="overlayPanel">
       <button class="overlay-close" id="overlayClose" aria-label="Zamknij">✕</button>
       <div class="overlay-header">
-        <img id="ovIcon" src="" alt="" width="56" height="56">
+        <div class="ov-icon-wrap" id="ovIconWrap">
+          <img id="ovIcon" src="" alt="" width="56" height="56">
+        </div>
         <div>
           <div class="oh-name" id="ovName"></div>
           <span class="oh-badge" id="ovBadge"></span>
@@ -1918,7 +1930,7 @@
 
           document.getElementById('ovIcon').src = icon;
           document.getElementById('ovIcon').alt = name;
-          document.getElementById('ovIcon').classList.remove('circle');
+          document.getElementById('ovIconWrap').classList.remove('circle');
           document.getElementById('ovName').textContent = name;
           document.getElementById('ovBadge').textContent = badgeText;
           document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
@@ -2043,7 +2055,7 @@
 
           document.getElementById('ovIcon').src = '/assets/images/face.png';
           document.getElementById('ovIcon').alt = 'Artykuł';
-          document.getElementById('ovIcon').classList.add('circle');
+          document.getElementById('ovIconWrap').classList.add('circle');
           document.getElementById('ovName').textContent = title;
           document.getElementById('ovBadge').textContent = date;
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
