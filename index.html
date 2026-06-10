@@ -1209,13 +1209,13 @@
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
-    // ── Active nav link na podstawie widocznej sekcji ──
+    // ── Active nav link na podstawie pozycji scrolla ──
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
+      var ticking = false;
 
-      // Mapa: id sekcji → link w navbarze
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
       }
@@ -1230,32 +1230,43 @@
         }
       }
 
-      var observer = new IntersectionObserver(function(entries) {
-        // Zbierz wszystkie aktualnie widoczne sekcje
-        var visible = entries
-          .filter(function(e) { return e.isIntersecting || e.intersectionRatio > 0; })
-          .map(function(e) { return { id: e.target.id, ratio: e.intersectionRatio }; });
+      function updateActive() {
+        var viewH = window.innerHeight;
+        var threshold = viewH * 0.3;
 
-        if (visible.length === 0) {
-          // Czyścimy tylko gdy jesteśmy przy hero (góra strony)
-          if (window.pageYOffset < 100) setActive(null);
-          return;
+        // Znajdź ostatnią sekcję której góra jest powyżej progu
+        var found = null;
+        sections.forEach(function(section) {
+          if (section.getBoundingClientRect().top <= threshold) {
+            found = section.id;
+          }
+        });
+
+        if (!found && window.pageYOffset < 100) {
+          setActive(null);
+        } else if (found) {
+          setActive(found);
         }
+        ticking = false;
+      }
 
-        // Wybierz tę z najwyższym intersectionRatio
-        visible.sort(function(a, b) { return b.ratio - a.ratio; });
-        setActive(visible[0].id);
-      }, { threshold: [0, 0.15, 0.3, 0.5, 0.7], rootMargin: '-8% 0px -8% 0px' });
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(updateActive);
+          ticking = true;
+        }
+      }, { passive: true });
 
-      sections.forEach(function(section) { observer.observe(section); });
-
-      // Natychmiastowe podświetlenie przy kliknięciu (nie czekamy na scroll)
+      // Natychmiastowe podświetlenie przy kliknięciu
       navLinks.forEach(function(link) {
         link.addEventListener('click', function() {
           var id = link.getAttribute('href').replace('#', '');
           setActive(id);
         });
       });
+
+      // Inicjalny stan
+      updateActive();
     })();
 
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
