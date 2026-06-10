@@ -1328,87 +1328,6 @@
     }
 
 
-    /* ── TELEFON W POZIOMIE: hero scrollowalny, navbar niższy ── */
-    @media (max-width: 900px) and (max-height: 500px) {
-      .hero {
-        min-height: 100vh;
-        height: auto;
-        padding: 1.5rem 1rem 90px;
-      }
-      .logo-container img {
-        width: min(220px, 35vw);
-        max-width: 35vw;
-      }
-      .nav-left {
-        padding: 0.3rem 0.2rem 0.4rem 0.2rem;
-        gap: 0.25rem 0.2rem;
-      }
-      .nav-link {
-        font-size: 0.75rem;
-      }
-      .nav-logo img {
-        width: 34px;
-        height: 34px;
-      }
-      .lang-toggle {
-        width: 48px;
-        height: 26px;
-        border-radius: 13px;
-        top: 0.4rem;
-        right: 0.4rem;
-      }
-      .lang-knob {
-        width: 18px;
-        height: 18px;
-        left: 3px;
-      }
-      .lang-toggle.en .lang-knob {
-        transform: translateX(22px);
-      }
-      .lang-label {
-        font-size: 0.55rem;
-      }
-      .lang-pl { left: 6px; }
-      .lang-en { right: 6px; }
-      .stats-mobile {
-        gap: 0.6rem;
-      }
-      .stats-mobile-value {
-        font-size: 2rem;
-      }
-      .stats-mobile-label {
-        font-size: 0.55rem;
-      }
-      .tech-stack {
-        gap: 0.5rem;
-        padding-top: 0.5rem;
-      }
-      .tech-item img,
-      .tech-item svg {
-        width: 14px;
-        height: 14px;
-      }
-      .tech-label {
-        font-size: 0.35rem;
-      }
-      .production-panel {
-        max-width: 140px;
-      }
-      .news-toggle {
-        font-size: 0.6rem;
-        padding: 0.2rem 0.4rem;
-      }
-      .news-slot .news-date { font-size: 0.5rem; }
-      .news-slot .news-text { font-size: 0.55rem; }
-      .page-section {
-        padding: 0 1rem 4rem 1rem;
-        scroll-margin-bottom: 60px;
-      }
-      .page-section:last-of-type {
-        padding-bottom: 5rem;
-      }
-    }
-
     /* ══════════════════════════════════════════
        MOBILE (max-width: 768px)
        ══════════════════════════════════════════ */
@@ -1917,6 +1836,60 @@
       }
       .overlay-tags .tag {
         font-size: 0.55rem;
+      }
+
+      /* ── O. Poziom (landscape) — pomniejszone ── */
+      @media (max-height: 500px) {
+        .hero {
+          min-height: 100vh;
+          height: auto;
+          padding: 1.5rem 1rem 85px;
+        }
+        .logo-container img {
+          width: min(200px, 30vw);
+          max-width: 30vw;
+        }
+        .nav-left {
+          padding: 0.3rem 0.2rem 0.4rem 0.2rem;
+          gap: 0.25rem 0.2rem;
+        }
+        .nav-link {
+          font-size: 0.7rem;
+        }
+        .nav-logo img {
+          width: 32px;
+          height: 32px;
+        }
+        .lang-toggle {
+          width: 44px;
+          height: 24px;
+          border-radius: 12px;
+          top: 0.3rem;
+          right: 0.3rem;
+        }
+        .lang-knob {
+          width: 16px;
+          height: 16px;
+          left: 3px;
+        }
+        .lang-toggle.en .lang-knob {
+          transform: translateX(20px);
+        }
+        .lang-label { font-size: 0.5rem; }
+        .lang-pl { left: 5px; }
+        .lang-en { right: 5px; }
+        .stats-mobile { gap: 0.5rem; }
+        .stats-mobile-value { font-size: 1.8rem; }
+        .stats-mobile-label { font-size: 0.5rem; }
+        .tech-stack { gap: 0.4rem; padding-top: 0.4rem; }
+        .tech-item img, .tech-item svg { width: 12px; height: 12px; }
+        .tech-label { font-size: 0.32rem; }
+        .production-panel { max-width: 130px; }
+        .news-toggle { font-size: 0.55rem; padding: 0.15rem 0.35rem; }
+        .news-slot .news-date { font-size: 0.45rem; }
+        .news-slot .news-text { font-size: 0.5rem; }
+        .page-section { padding: 0 1rem 3rem 1rem; scroll-margin-bottom: 50px; }
+        .page-section:last-of-type { padding-bottom: 4rem; }
       }
     }
   </style>
