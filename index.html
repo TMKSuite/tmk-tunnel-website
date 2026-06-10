@@ -1585,11 +1585,16 @@
       .stats-mobile-item {
         font-family: 'Space Grotesk', sans-serif;
         text-align: center;
-        flex: 1;
-        border-right: 1px solid rgba(212, 168, 67, 0.2);
+        position: relative;
       }
-      .stats-mobile-item:last-child {
-        border-right: none;
+      .stats-mobile-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -0.55rem;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: rgba(212, 168, 67, 0.2);
       }
       .stats-mobile-item .stats-mobile-value {
         animation: statPulse 3s ease-in-out infinite;
