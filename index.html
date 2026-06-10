@@ -2692,54 +2692,56 @@
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
       var activeId = null;
-      var manualScroll = false;
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
       }
 
       function setActive(id) {
-        if (activeId === id) return;
-        // Usuń stare podświetlenie z każdego linka
+        // ZAWSZE usuń wszystkie, nawet jeśli to ten sam ID
         navLinks.forEach(function(link) { link.classList.remove('active'); });
-        activeId = id;
-        if (id) {
+        if (id && id !== activeId) {
           var link = getLinkForSection(id);
           if (link) link.classList.add('active');
         }
+        activeId = id;
       }
 
       function updateActive() {
-        if (manualScroll) return;
         var viewH = window.innerHeight;
-        var threshold = viewH * 0.3;
+        var threshold = viewH * 0.35;
         var found = null;
         sections.forEach(function(section) {
           if (section.getBoundingClientRect().top <= threshold) {
             found = section.id;
           }
         });
-        if (!found && window.pageYOffset < 200) {
-          setActive(null);
-        } else if (found) {
+        if (found) {
           setActive(found);
+        } else if (window.pageYOffset < 150) {
+          setActive(null);
         }
       }
 
-      window.addEventListener('scroll', updateActive, { passive: true });
+      var scrollTicking = false;
+      window.addEventListener('scroll', function() {
+        if (!scrollTicking) {
+          requestAnimationFrame(function() {
+            updateActive();
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
+      }, { passive: true });
 
-      // Kliknięcie w nav link — scroll + podświetlenie
+      // Kliknięcie w nav link — scroll tylko (podświetlenie zrobi updateActive)
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
           var id = link.getAttribute('href').replace('#', '');
-          setActive(id);
           var target = document.getElementById(id);
           if (target) {
-            manualScroll = true;
             target.scrollIntoView({ behavior: 'smooth' });
-            // Po zakończeniu scrolla oddaj kontrolę observerowi
-            setTimeout(function() { manualScroll = false; }, 800);
           }
         });
       });
