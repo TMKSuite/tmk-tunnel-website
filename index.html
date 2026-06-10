@@ -2748,7 +2748,7 @@
 
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
     (function() {
-      var FADE_DISTANCE = 350; // px — dystans na jakim elementy znikają
+      var FADE_DISTANCE = 350;
       var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack, .lang-mobile');
       var ticking = false;
 
@@ -2772,6 +2772,22 @@
 
       // Ustaw stan początkowy
       onScroll();
+
+      // Fallback: dodatkowy bezpośredni handler dla mobile
+      window.addEventListener('scroll', function() {
+        var scrollY = window.pageYOffset || window.scrollY;
+        var opacity = Math.max(0, 1 - scrollY / 350);
+        var panel = document.getElementById('productionPanel');
+        var lang = document.getElementById('langSwitcherMobile');
+        if (panel) {
+          panel.style.opacity = opacity;
+          panel.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+        }
+        if (lang) {
+          lang.style.opacity = opacity;
+          lang.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+        }
+      }, { passive: true });
     })();
 
     // ── Nawigacja klawiaturą: strzałki lewo/prawo ──
