@@ -2776,16 +2776,19 @@
       // Fallback: dodatkowy bezpośredni handler dla mobile
       window.addEventListener('scroll', function() {
         var scrollY = window.pageYOffset || window.scrollY;
-        var opacity = Math.max(0, 1 - scrollY / 350);
+        var opacity = Math.max(0, 1 - scrollY / 300);
+        var hidden = opacity < 0.02;
         var panel = document.getElementById('productionPanel');
         var lang = document.getElementById('langSwitcherMobile');
         if (panel) {
           panel.style.setProperty('opacity', opacity, 'important');
-          panel.style.setProperty('pointer-events', opacity < 0.05 ? 'none' : 'auto', 'important');
+          panel.style.setProperty('pointer-events', hidden ? 'none' : 'auto', 'important');
+          panel.style.setProperty('visibility', hidden ? 'hidden' : 'visible', 'important');
         }
         if (lang) {
           lang.style.setProperty('opacity', opacity, 'important');
-          lang.style.setProperty('pointer-events', opacity < 0.05 ? 'none' : 'auto', 'important');
+          lang.style.setProperty('pointer-events', hidden ? 'none' : 'auto', 'important');
+          lang.style.setProperty('visibility', hidden ? 'hidden' : 'visible', 'important');
         }
       }, { passive: true });
     })();
