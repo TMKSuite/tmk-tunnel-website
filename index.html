@@ -1522,6 +1522,18 @@
         padding: 5rem 1rem 140px;
         background: radial-gradient(ellipse at center, #000000 85%, #0a0f14 100%);
       }
+      .logo-container {
+        position: relative;
+      }
+      .logo-container::after {
+        content: '';
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        bottom: 15%;
+        height: 2px;
+        background: rgba(212, 168, 67, 0.3);
+      }
       .logo-container img {
         width: min(390px, 95vw);
         max-width: 95vw;
