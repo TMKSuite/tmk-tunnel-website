@@ -2694,8 +2694,9 @@
     (function() {
       var navLinks = document.querySelectorAll('.nav-link');
       var sections = document.querySelectorAll('.page-section');
+      var lastSection = sections[sections.length - 1];
       var activeId = null;
-      var clickLock = false;        // blokuje updateActive na czas animacji klika
+      var clickLock = false;
       var clickUnlockTimer = null;
 
       function getLinkForSection(id) {
@@ -2703,7 +2704,6 @@
       }
 
       function setActive(id) {
-        // Zawsze czyść wszystko — nawet przy tym samym ID
         navLinks.forEach(function(link) { link.classList.remove('active'); });
         if (id) {
           var link = getLinkForSection(id);
@@ -2712,10 +2712,18 @@
         activeId = id;
       }
 
+      function isAtBottom() {
+        var el = document.scrollingElement || document.documentElement;
+        return el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+      }
+
       function updateActive() {
-        // W trakcie animacji klika NIE ruszamy podświetlenia
         if (clickLock) return;
-        // getBoundingClientRect — działa niezależnie od tego co scrolluje (window czy body)
+        // Dno strony → wymuś ostatnią sekcję
+        if (isAtBottom()) {
+          setActive(lastSection ? lastSection.id : null);
+          return;
+        }
         var line = window.innerHeight * 0.35;
         var found = null;
         sections.forEach(function(section) {
@@ -2723,8 +2731,14 @@
             found = section.id;
           }
         });
-        // found === null = jesteśmy w hero → czyści podświetlenie
         setActive(found);
+      }
+
+      function unlockClick() {
+        if (!clickLock) return;
+        clickLock = false;
+        if (clickUnlockTimer) { clearTimeout(clickUnlockTimer); clickUnlockTimer = null; }
+        updateActive();
       }
 
       function onScrollActive() {
@@ -2738,12 +2752,15 @@
       }
 
       var scrollTicking = false;
-      // capture:true — łapie scroll z body/html (scroll nie bąbelkuje)
       window.addEventListener('scroll', onScrollActive, { passive: true, capture: true });
-      // resize — dvh zmienia się przy chowaniu paska adresu na mobile
       window.addEventListener('resize', updateActive, { passive: true });
 
-      // Kliknięcie — scroll + podświetlenie od razu, updateActive koryguje po animacji
+      // Odblokuj gdy użytkownik sam scrolluje (wheel/touch)
+      window.addEventListener('wheel', unlockClick, { passive: true });
+      window.addEventListener('touchstart', unlockClick, { passive: true });
+      window.addEventListener('keydown', unlockClick, { passive: true });
+
+      // Kliknięcie — scroll + podświetlenie
       navLinks.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -2751,20 +2768,19 @@
           var id = link.getAttribute('href').replace('#', '');
           var target = document.getElementById(id);
           if (target) {
-            // Zablokuj updateActive, podświetl klikniętą zakładkę i odpal scroll
             clickLock = true;
             if (clickUnlockTimer) clearTimeout(clickUnlockTimer);
             setActive(id);
             target.scrollIntoView({ behavior: 'smooth' });
+            // Długi bezpiecznik — na wypadek gdyby wheel/touch nie odpaliły
             clickUnlockTimer = setTimeout(function() {
               clickLock = false;
               updateActive();
-            }, 800);
+            }, 1200);
           }
         });
       });
 
-      // Inicjalny stan
       updateActive();
     })();
 
