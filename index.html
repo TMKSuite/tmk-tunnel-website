@@ -2707,22 +2707,23 @@
         }
       }
 
-      // IntersectionObserver: która sekcja zajmuje najwięcej miejsca w viewporcie
+      // IntersectionObserver: pierwsza widoczna sekcja od góry = aktywna
       var observer = new IntersectionObserver(function(entries) {
-        var best = null;
-        var bestRatio = 0;
+        // Zbierz wszystkie aktualnie widoczne sekcje (ratio > 0)
+        var visible = [];
         entries.forEach(function(entry) {
-          if (entry.intersectionRatio > bestRatio) {
-            bestRatio = entry.intersectionRatio;
-            best = entry.target.id;
+          if (entry.isIntersecting) {
+            visible.push({ id: entry.target.id, top: entry.boundingClientRect.top });
           }
         });
-        if (best) {
-          setActive(best);
+        // Sortuj od góry (najmniejsze top) i weź pierwszą
+        visible.sort(function(a, b) { return a.top - b.top; });
+        if (visible.length > 0) {
+          setActive(visible[0].id);
         } else if (window.pageYOffset < 200) {
           setActive(null);
         }
-      }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] });
+      }, { threshold: 0.2 });
 
       sections.forEach(function(section) {
         observer.observe(section);
