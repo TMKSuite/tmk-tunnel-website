@@ -2749,13 +2749,10 @@
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
     (function() {
       var FADE_DISTANCE = 350; // px — dystans na jakim elementy znikają
-      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack');
+      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack, .stats-mobile, .lang-mobile');
       var ticking = false;
 
       function onScroll() {
-        // Na mobile elementy nie są fixed — nie fade'ujemy
-        if (window.innerWidth <= 768) return;
-
         var scrollY = window.pageYOffset || window.scrollY;
         var opacity = Math.max(0, 1 - scrollY / FADE_DISTANCE);
 
