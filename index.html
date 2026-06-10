@@ -30,6 +30,10 @@
       --color-accent-glow: rgba(212, 168, 67, 0.12);
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -546,6 +550,163 @@
       display: block;
     }
 
+    /* ── SEKCJE PONIŻEJ HERO ── */
+    .page-section {
+      min-height: 100vh;
+      padding: 6rem 4rem 8rem 4rem;
+      position: relative;
+    }
+
+    .section-heading {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-align: center;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subheading {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(230, 237, 243, 0.4);
+      text-align: center;
+      margin-bottom: 4rem;
+      letter-spacing: 0.04em;
+    }
+
+    .section-subheading .accent {
+      color: var(--color-accent);
+    }
+
+    /* ── GRID KART PROJEKTÓW ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: rgba(212, 168, 67, 0.25);
+      background: rgba(212, 168, 67, 0.03);
+      transform: translateY(-3px);
+    }
+
+    .project-card .card-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-card .card-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .project-card .card-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .project-card .card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: rgba(230, 237, 243, 0.5);
+      flex: 1;
+    }
+
+    .project-card .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .project-card .card-stat {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(230, 237, 243, 0.35);
+      letter-spacing: 0.04em;
+    }
+
+    .project-card .card-stat .val {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+
+    .project-card .card-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid;
+      margin-left: auto;
+    }
+
+    .badge-live {
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.2);
+      background: rgba(74, 222, 128, 0.05);
+    }
+
+    .badge-stable {
+      color: rgba(230, 237, 243, 0.5);
+      border-color: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .badge-wip {
+      color: var(--color-accent);
+      border-color: rgba(212, 168, 67, 0.2);
+      background: rgba(212, 168, 67, 0.05);
+      animation: badgePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    /* ── SEKCJA-PLACEHOLDER (dla jeszcze niezrobionych) ── */
+    .section-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+
+    .section-placeholder p {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      color: rgba(230, 237, 243, 0.15);
+      letter-spacing: 0.08em;
+    }
+
     /* ── TELEFON W PIONIE: navbar na dole ── */
     @media (max-width: 900px) and (min-height: 500px) {
       .nav-left {
@@ -763,6 +924,86 @@
     </div>
   </div>
 
+  <!-- ═══════════ SEKCJA: PROJEKTY ═══════════ -->
+  <section class="page-section" id="projekty">
+    <h2 class="section-heading" data-i18n="projects.heading">Projekty</h2>
+    <p class="section-subheading" data-i18n="projects.subheading">Pięć narzędzi — <span class="accent">jeden system</span>. Wszystkie zbudowane z pomocą AI.</p>
+
+    <div class="projects-grid">
+      <!-- TMK -->
+      <div class="project-card">
+        <div class="card-icon"><img src="/assets/images/icon-tmk.png" alt="TMK" width="48" height="48"></div>
+        <div class="card-name">TorekMarketKiller</div>
+        <div class="card-desc" data-i18n="projects.tmk">Platforma tradingowa: alerty TradingView przez FastAPI → MT5. Multi-terminal, multi-konto, Cerebrus, Wyrocznia, trailing stop.</div>
+        <div class="card-meta">
+          <span class="card-stat"><span class="val">~33 900</span> LOC</span>
+          <span class="card-badge badge-live" data-i18n="projects.badge_live">Live</span>
+        </div>
+      </div>
+
+      <!-- PC2 -->
+      <div class="project-card">
+        <div class="card-icon"><img src="/assets/images/icon-pc2.png" alt="PC2" width="48" height="48"></div>
+        <div class="card-name">PortfolioCommandCenter</div>
+        <div class="card-desc" data-i18n="projects.pc2">Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne, testy odporności.</div>
+        <div class="card-meta">
+          <span class="card-stat"><span class="val">~6 700</span> LOC</span>
+          <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
+        </div>
+      </div>
+
+      <!-- Komparator -->
+      <div class="project-card">
+        <div class="card-icon"><img src="/assets/images/icon-comparator.png" alt="Komparator" width="48" height="48"></div>
+        <div class="card-name">CandleComparisonTMK</div>
+        <div class="card-desc" data-i18n="projects.comparator">Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, auto-detekcja formatu CSV.</div>
+        <div class="card-meta">
+          <span class="card-stat"><span class="val">~500</span> LOC</span>
+          <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
+        </div>
+      </div>
+
+      <!-- Downloader -->
+      <div class="project-card">
+        <div class="card-icon"><img src="/assets/images/icon-downloader.png" alt="Downloader" width="48" height="48"></div>
+        <div class="card-name">CandlesDownloaderTMK</div>
+        <div class="card-desc" data-i18n="projects.downloader">Pobieranie danych świecowych z TradingView przez WebSocket. Eksport do CSV, interwały od 1 min do monthly.</div>
+        <div class="card-meta">
+          <span class="card-stat"><span class="val">~370</span> LOC</span>
+          <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
+        </div>
+      </div>
+
+      <!-- ClientCreator -->
+      <div class="project-card">
+        <div class="card-icon"><img src="/assets/images/icon-clientcreator.png" alt="ClientCreator" width="48" height="48"></div>
+        <div class="card-name">ClientCreatorTMK</div>
+        <div class="card-desc" data-i18n="projects.clientcreator">Narzędzie do budowania klientów .exe. Kompilacja PyInstaller, podpisywanie kodu, auto-update przez GitHub Releases.</div>
+        <div class="card-meta">
+          <span class="card-stat"><span class="val">~1 100</span> LOC</span>
+          <span class="card-badge badge-wip" data-i18n="projects.badge_wip">W toku</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SEKCJE-PLACEHOLDERY (do zbudowania) ═══════════ -->
+  <section class="page-section" id="artykuly">
+    <div class="section-placeholder"><p data-i18n="placeholder.articles">Artykuły — wkrótce</p></div>
+  </section>
+
+  <section class="page-section" id="o-mnie">
+    <div class="section-placeholder"><p data-i18n="placeholder.about">O mnie — wkrótce</p></div>
+  </section>
+
+  <section class="page-section" id="pomysly">
+    <div class="section-placeholder"><p data-i18n="placeholder.ideas">Pomysły — wkrótce</p></div>
+  </section>
+
+  <section class="page-section" id="kontakt">
+    <div class="section-placeholder"><p data-i18n="placeholder.contact">Kontakt — wkrótce</p></div>
+  </section>
+
   <script>
     // ── i18n ──
     var I18N = {
@@ -777,7 +1018,21 @@
         'stats.apps': 'Aplikacje',
         'stats.loc': 'Linii kodu',
         'stats.trades': 'Transakcji live',
-        'desc.footer': 'Każda z nich zbudowana w 100% przy użyciu modeli językowych'
+        'desc.footer': 'Każda z nich zbudowana w 100% przy użyciu modeli językowych',
+        'projects.heading': 'Projekty',
+        'projects.subheading': 'Pięć narzędzi — <span class="accent">jeden system</span>. Wszystkie zbudowane z pomocą AI.',
+        'projects.tmk': 'Platforma tradingowa: alerty TradingView przez FastAPI → MT5. Multi-terminal, multi-konto, Cerebrus, Wyrocznia, trailing stop.',
+        'projects.pc2': 'Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne, testy odporności.',
+        'projects.comparator': 'Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, auto-detekcja formatu CSV.',
+        'projects.downloader': 'Pobieranie danych świecowych z TradingView przez WebSocket. Eksport do CSV, interwały od 1 min do monthly.',
+        'projects.clientcreator': 'Narzędzie do budowania klientów .exe. Kompilacja PyInstaller, podpisywanie kodu, auto-update przez GitHub Releases.',
+        'projects.badge_live': 'Live',
+        'projects.badge_stable': 'Stabilny',
+        'projects.badge_wip': 'W toku',
+        'placeholder.articles': 'Artykuły — wkrótce',
+        'placeholder.about': 'O mnie — wkrótce',
+        'placeholder.ideas': 'Pomysły — wkrótce',
+        'placeholder.contact': 'Kontakt — wkrótce'
       },
       en: {
         'nav.projekty': 'Projects',
@@ -790,7 +1045,21 @@
         'stats.apps': 'Applications',
         'stats.loc': 'Lines of code',
         'stats.trades': 'Live trades',
-        'desc.footer': 'Each built 100% using language models'
+        'desc.footer': 'Each built 100% using language models',
+        'projects.heading': 'Projects',
+        'projects.subheading': 'Five tools — <span class="accent">one system</span>. All built with AI.',
+        'projects.tmk': 'Trading platform: TradingView alerts via FastAPI → MT5. Multi-terminal, multi-account, Cerebrus, Wyrocznia, trailing stop.',
+        'projects.pc2': 'Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs, robustness tests.',
+        'projects.comparator': 'Candle data comparison MT5 vs TradingView. Tick size, time shift, auto CSV format detection.',
+        'projects.downloader': 'Candle data download from TradingView via WebSocket. CSV export, intervals from 1 min to monthly.',
+        'projects.clientcreator': 'Client .exe builder tool. PyInstaller compilation, code signing, auto-update via GitHub Releases.',
+        'projects.badge_live': 'Live',
+        'projects.badge_stable': 'Stable',
+        'projects.badge_wip': 'In progress',
+        'placeholder.articles': 'Articles — coming soon',
+        'placeholder.about': 'About me — coming soon',
+        'placeholder.ideas': 'Ideas — coming soon',
+        'placeholder.contact': 'Contact — coming soon'
       }
     };
 
@@ -809,7 +1078,7 @@
       document.querySelectorAll('[data-i18n]').forEach(function(el) {
         var key = el.dataset.i18n;
         if (I18N[lang] && I18N[lang][key]) {
-          el.textContent = I18N[lang][key];
+          el.innerHTML = I18N[lang][key];
         }
       });
 
