@@ -815,6 +815,8 @@
       font-size: 0.48rem;
       color: rgba(230, 237, 243, 0.35);
       line-height: 1.15;
+      cursor: pointer;
+      transition: color 0.2s ease;
     }
 
     .ref-item::before {
@@ -822,9 +824,18 @@
       color: var(--color-accent);
     }
 
+    .ref-item:hover {
+      color: var(--color-accent);
+    }
+
     .ref-item strong {
       color: rgba(230, 237, 243, 0.6);
       font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .ref-item:hover strong {
+      color: var(--color-accent);
     }
 
     .giscus-wrapper {
@@ -1516,12 +1527,12 @@
     <details class="projects-ref">
       <summary data-i18n="ideas.ref_title">Projekty — spis treści</summary>
       <div class="projects-ref-list">
-        <span class="ref-item"><strong>TorekMarketKiller</strong> — automatyzacja TradingView → MT5</span>
-        <span class="ref-item"><strong>PortfolioCommandCenter</strong> — symulator portfela</span>
-        <span class="ref-item"><strong>CandleComparison</strong> — porównanie danych świecowych</span>
-        <span class="ref-item"><strong>CandleDownloader</strong> — pobieranie świec z TV</span>
-        <span class="ref-item"><strong>ClientCreator</strong> — budowanie .exe (w toku)</span>
-        <span class="ref-item"><strong>tmk-tunnel.pl</strong> — ta strona</span>
+        <span class="ref-item" data-app="TorekMarketKiller" data-icon="/assets/images/icon-tmk.png"><strong>TorekMarketKiller</strong> — automatyzacja TradingView → MT5</span>
+        <span class="ref-item" data-app="PortfolioCommandCenter" data-icon="/assets/images/icon-pc2.png"><strong>PortfolioCommandCenter</strong> — symulator portfela</span>
+        <span class="ref-item" data-app="CandleComparison" data-icon="/assets/images/icon-comparator.png"><strong>CandleComparison</strong> — porównanie danych świecowych</span>
+        <span class="ref-item" data-app="CandleDownloader" data-icon="/assets/images/icon-downloader.png"><strong>CandleDownloader</strong> — pobieranie świec z TV</span>
+        <span class="ref-item" data-app="ClientCreator" data-icon="/assets/images/icon-clientcreator.png?v=1"><strong>ClientCreator</strong> — budowanie .exe (w toku)</span>
+        <span class="ref-item" data-app="tmk-tunnel.pl" data-icon="/assets/images/logo-nav.webp"><strong>tmk-tunnel.pl</strong> — ta strona</span>
       </div>
     </details>
 
@@ -1898,6 +1909,23 @@
       // Expose for lang switch
       window._refreshAppDesc = refreshAppDesc;
       window._getCurrentItem = function() { return items[current]; };
+    })();
+
+    // ── Spis projektów: kliknięcie otwiera overlay ──
+    (function() {
+      document.querySelectorAll('.ref-item[data-app]').forEach(function(ref) {
+        ref.addEventListener('click', function() {
+          var name = ref.dataset.app;
+          // Znajdź kartę projektu o tej samej nazwie i kliknij
+          var cards = document.querySelectorAll('.project-card');
+          cards.forEach(function(card) {
+            var cardName = card.querySelector('.card-name');
+            if (cardName && cardName.textContent.trim() === name) {
+              card.click();
+            }
+          });
+        });
+      });
     })();
 
     // ── Tech stack: cykliczne podświetlanie ──
