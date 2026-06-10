@@ -72,8 +72,9 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 11;
-      opacity: 0.4;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0.25;
+      filter: brightness(0.6) grayscale(0.4);
+      transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
       animation: fadeInNav 1s 0.3s ease both;
       display: flex;
       align-items: center;
@@ -85,22 +86,23 @@
 
     .nav-lang svg {
       display: block;
-      width: 18px;
-      height: 18px;
+      width: 15px;
+      height: 15px;
       fill: var(--color-accent);
     }
 
     .nav-lang span {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.55rem;
+      font-size: 0.5rem;
       font-weight: 500;
       color: var(--color-accent);
       letter-spacing: 0.08em;
-      margin-left: 5px;
+      margin-left: 4px;
     }
 
     .nav-lang:hover {
-      opacity: 0.85;
+      opacity: 0.6;
+      filter: brightness(1) grayscale(0);
       transform: translateY(-50%) scale(1.1);
     }
 
