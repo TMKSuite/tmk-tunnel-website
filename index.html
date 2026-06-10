@@ -1530,33 +1530,36 @@
         display: none;
       }
 
-      /* ── E2. Statystyki mobilne ── */
+      /* ── E2. Statystyki mobilne — lewy górny róg ── */
       .stats-mobile {
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 1rem;
-        padding: 0.5rem 0.5rem 1.5rem;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+        position: fixed;
+        left: 0.8rem;
+        top: 0.8rem;
+        z-index: 9;
+        animation: fadeInNav 1s 0.5s ease both;
       }
       .stats-mobile-item {
         font-family: 'Space Grotesk', sans-serif;
-        text-align: center;
+        text-align: left;
       }
       .stats-mobile-value {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         font-weight: 600;
         color: var(--color-accent);
         line-height: 1;
         letter-spacing: -0.02em;
       }
       .stats-mobile-label {
-        font-size: 0.65rem;
+        font-size: 0.5rem;
         font-weight: 400;
-        color: rgba(230, 237, 243, 0.3);
-        letter-spacing: 0.1em;
+        color: rgba(230, 237, 243, 0.25);
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        margin-top: 0.15rem;
+        margin-top: 0.05rem;
       }
 
       /* ── F. Tech stack → scroll-flow ── */
