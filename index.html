@@ -40,13 +40,16 @@
 
     /* ── LOGO W LEWYM DOLNYM ROGU ── */
     .nav-logo {
-      position: fixed;
+      position: absolute;
       left: 1.5rem;
-      bottom: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 11;
-      opacity: 0.4;
+      opacity: 0.35;
       transition: opacity 0.3s ease, transform 0.3s ease;
       animation: fadeInNav 1s 0.3s ease both;
+      display: flex;
+      align-items: center;
     }
 
     .nav-logo img {
@@ -56,8 +59,8 @@
     }
 
     .nav-logo:hover {
-      opacity: 1;
-      transform: scale(1.1);
+      opacity: 0.75;
+      transform: translateY(-50%) scale(1.1);
     }
 
     /* ── NAVBAR NA DOLE (domyslny desktop) ── */
@@ -624,11 +627,10 @@
     <span class="tech-badge">Cloudflare</span>
   </div>
 
-  <a href="#" class="nav-logo" title="Strona główna">
-    <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
-  </a>
-
   <nav class="nav-sidebar nav-left">
+    <a href="#" class="nav-logo" title="Strona główna">
+      <img src="/assets/images/logo-nav.webp" alt="TMK Suite" width="36" height="36">
+    </a>
     <a href="#projekty" class="nav-link">Projekty</a>
     <a href="#artykuly" class="nav-link">Artykuły</a>
     <a href="#o-mnie" class="nav-link">O mnie</a>
