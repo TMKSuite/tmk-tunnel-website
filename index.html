@@ -764,6 +764,55 @@
       flex: 1 1 340px;
     }
 
+    /* ── SEKCJA ARTYKUŁY ── */
+    .articles-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .article-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 1.8rem 2rem;
+      cursor: pointer;
+      transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease;
+    }
+
+    .article-card:hover {
+      border-color: rgba(212, 168, 67, 0.2);
+      background: rgba(212, 168, 67, 0.02);
+      transform: translateY(-2px);
+    }
+
+    .article-date {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.06em;
+    }
+
+    .article-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin: 0.5rem 0 0.6rem;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .article-excerpt {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: rgba(230, 237, 243, 0.4);
+    }
+
     /* ── SEKCJA POMYSŁY (Giscus) ── */
     #pomysly .section-heading {
       margin-bottom: 0.5rem;
@@ -1507,8 +1556,30 @@
   </section>
 
 <!-- ═══════════ SEKCJE-PLACEHOLDERY (do zbudowania) ═══════════ -->
+  <!-- ═══════════ SEKCJA: ARTYKUŁY ═══════════ -->
   <section class="page-section" id="artykuly">
-    <div class="section-placeholder"><p data-i18n="placeholder.articles">Artykuły — wkrótce</p></div>
+    <h2 class="section-heading" data-i18n="articles.heading">Artykuły</h2>
+    <p class="section-subheading" data-i18n="articles.subheading">Piszę o tym czego się uczę — AI, trading, budowanie systemów bez umiejętności kodowania.</p>
+
+    <div class="articles-list">
+      <article class="article-card" data-article="1">
+        <time class="article-date">10.06.2026</time>
+        <h3 class="article-title">Jak zerwane ścięgno Achillesa doprowadziło do zbudowania platformy tradingowej</h3>
+        <p class="article-excerpt">Rok temu nie miałem pojęcia o kodowaniu. Dziś mam system, który sam handluje na wielu terminalach MT5. To nie jest historia o technologii — to historia o tym, co się dzieje gdy zamiast Netflixa wybierasz rozmowę z AI.</p>
+      </article>
+
+      <article class="article-card" data-article="2">
+        <time class="article-date">01.06.2026</time>
+        <h3 class="article-title">Dlaczego przestałem być traderem a zostałem architektem systemów</h3>
+        <p class="article-excerpt">Przez lata próbowałem pokonać rynek ręcznie. Potem zrozumiałem: nie muszę być lepszy od rynku. Wystarczy że zbuduję maszynę która nie popełnia ludzkich błędów. A ja będę tylko patrzył.</p>
+      </article>
+
+      <article class="article-card" data-article="3">
+        <time class="article-date">15.05.2026</time>
+        <h3 class="article-title">4 aplikacje, 41 tysięcy linii kodu, zero umiejętności programowania</h3>
+        <p class="article-excerpt">Jak wygląda proces budowania oprogramowania gdy nie umiesz kodować, ale potrafisz rozmawiać z modelami językowymi. Od promptu do produkcji — krok po kroku.</p>
+      </article>
+    </div>
   </section>
 
   
@@ -1650,6 +1721,8 @@
         'projects.badge_wip': 'W toku',
         'projects.group_done': 'Gotowe',
         'projects.group_wip': 'W toku',
+        'articles.heading': 'Artykuły',
+        'articles.subheading': 'Piszę o tym czego się uczę — AI, trading, budowanie systemów bez umiejętności kodowania.',
         'placeholder.articles': 'Artykuły — wkrótce',
         'about.role': 'Architekt systemów • Budowniczy z AI',
         'about.story': '<p>Do połowy 2025 roku pracowałem fizycznie. Zero doświadczenia w kodowaniu, zero studiów informatycznych. Potem zerwałem ścięgno Achillesa — i utknąłem w domu. Zamiast oglądać Netflixa, stworzyłem cały stack do automatyzacji handlu.</p><p>Handel na rynkach forex od dawna jest zdominowany przez algorytmy. Dziś konkurowanie z maszynami "na rękę" nie ma sensu — człowiek jest zbyt wolny, zbyt emocjonalny, zbyt omylny. Jeśli maszyny już tu rządzą, to jedyna sensowna strategia to <strong>wykluczyć człowieka z równania</strong>. Zbudować własną maszynę. A sobie zostawić nadzór.</p><p>Zacząłem od prostego eksperymentu. Czy da się otworzyć zlecenie na MT4 automatycznie? ChatGPT, FastAPI w pierwszym oknie konsoli, darmowy ngrok w drugim. Żadnego GUI — ręcznie wklejałem JSON z przykładowym zleceniem, żeby sprawdzić czy pozycja się otworzy. Otworzyła się. Ten moment — kiedy kod napisany przez AI wykonał realną transakcję — zmienił wszystko.</p><p>Od tego czasu dodawałem kolejne warstwy. FastAPI, Cloudflare Tunnel, kod EA w MQL5, system sygnałów, trailing stop, watchdogi terminali, Cerebrus, Wyrocznia. Równolegle rozwijałem symulator portfela — żeby najpierw przetestować wszystko w warunkach laboratoryjnych, zanim zainwestuję prawdziwe pieniądze. Po ponad roku platforma przypomina profesjonalne narzędzie, a nie amatorski projekt startowany z dwóch okien konsoli.</p><p>Dopiero od czerwca 2026 używam agenta AI, który sam edytuje kod. Wcześniej wyglądało to zupełnie inaczej: wklejałem fragmenty kodu do okna przeglądarki, model językowy sugerował poprawki, ja ręcznie nanosiłem je do pliku i sprawdzałem czy działa. Jeśli nie — powtarzałem cały cykl. Byłem jak ludzki kompilator. A im projekt stawał się większy, tym więcej zależności musiałem trzymać w głowie — które okno komunikuje się z którym, jak zmiana w jednym module wpłynie na inne, czy nowa funkcja nie rozwali czegoś w zupełnie innym miejscu. Bez umiejętności programistycznych, bez mentora, bez mapy. Tylko ja i model językowy.</p><p><strong>Nie umiem kodować.</strong> Umiem za to rozkładać złożone systemy na części, zadawać precyzyjne pytania i składać odpowiedzi w działającą całość. LLM to mój zespół — ja jestem architektem. I nie musi to dotyczyć tylko tradingu — to podejście działa wszędzie tam, gdzie jest złożony proces do zautomatyzowania.</p><p>W ciągu roku zbudowałem cztery aplikacje — łącznie ponad 41 tysięcy linii kodu. Downloader pobiera dane świecowe z TradingView. Komparator porównuje je z MT5 i wykrywa rozbieżności. Symulator portfela testuje strategie metodami Walk-Forward i optymalizacją genetyczną. A platforma TMK — największa z nich — łączy to wszystko w jeden system: alerty z TradingView przelatują przez FastAPI, Cloudflare Tunnel i kod EA, by wylądować jako realne transakcje na wielu kontach. Człowiek tylko patrzy.</p><p>To nie jest portfolio programisty. To portfolio kogoś, kto nauczył się budować systemy bez umiejętności pisania kodu — używając AI jako narzędzia, a nie wymówki. Trading był naturalnym pierwszym krokiem — bo to moje zainteresowanie. Ale ten sam proces można zastosować wszędzie.</p><p>Szukam ludzi, którzy myślą podobnie. I miejsca, gdzie takie podejście jest rozumiane.</p>',
@@ -1690,6 +1763,8 @@
         'projects.badge_wip': 'In progress',
         'projects.group_done': 'Completed',
         'projects.group_wip': 'In progress',
+        'articles.heading': 'Articles',
+        'articles.subheading': 'Writing about what I\'m learning — AI, trading, building systems without coding skills.',
         'placeholder.articles': 'Articles — coming soon',
         'about.role': 'AI-powered architecture • Built with AI',
         'about.story': '<p>Until mid-2025, I was working a physical job. Zero coding experience, no CS degree. Then I tore my Achilles tendon — and was stuck at home. Instead of watching Netflix, I built an entire trading automation stack.</p><p>Forex markets have long been dominated by algorithms. Competing against machines "by hand" makes no sense — humans are too slow, too emotional, too error-prone. If machines already rule this space, the only viable strategy is to <strong>remove the human from the equation</strong>. Build your own machine. And keep the oversight for yourself.</p><p>I started with a simple experiment. Can a trade be opened on MT4 automatically? ChatGPT, FastAPI in one console window, free ngrok in another. No GUI — I manually pasted a JSON with a sample order to see if the position would open. It did. That moment — when AI-written code executed a real trade — changed everything.</p><p>From there, I kept adding layers. FastAPI, Cloudflare Tunnel, EA code in MQL5, signal system, trailing stop, terminal watchdogs, Cerebrus, Wyrocznia. In parallel, I was building the portfolio simulator — to test everything in lab conditions first, before risking real money. Over a year later, the platform looks like a professional tool, not a hobby project launched from two console windows.</p><p>It wasn\'t until June 2026 that I started using an AI agent that edits code directly. Before that, it was a completely different workflow: I\'d paste code snippets into a browser chat, the language model would suggest fixes, and I\'d manually apply them to the file and test. If it didn\'t work — repeat the whole cycle. I was a human compiler. And as the project grew bigger, I had to keep more and more dependencies in my head — which window communicates with which, how a change in one module affects others, whether a new function would break something in a completely different place. No programming skills, no mentor, no map. Just me and the language model.</p><p><strong>I can\'t code.</strong> What I can do is break down complex systems into pieces, ask precise questions, and assemble the answers into working software. LLMs are my team — I\'m the architect. And it doesn\'t have to be about trading — this approach works anywhere there\'s a complex process to automate.</p><p>In one year, I built four applications — over 41,000 lines of code combined. The Downloader fetches candle data from TradingView. The Comparator cross-checks it against MT5 to detect discrepancies. The Portfolio Simulator stress-tests strategies with Walk-Forward and genetic optimization. And the TMK platform — the biggest one — ties it all together: TradingView alerts fly through FastAPI, Cloudflare Tunnel, and EA code to land as real trades across multiple accounts. A human just watches.</p><p>This isn\'t a developer\'s portfolio. It\'s the portfolio of someone who learned to build systems without knowing how to code — using AI as a tool, not an excuse. Trading was a natural first step — it\'s what I\'m passionate about. But the same process applies anywhere.</p><p>I\'m looking for people who think the same way. And a place where this approach is understood.</p>',
@@ -1945,6 +2020,29 @@
               card.click();
             }
           });
+        });
+      });
+    })();
+
+    // ── Artykuły: kliknięcie otwiera overlay ──
+    (function() {
+      document.querySelectorAll('.article-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var title = card.querySelector('.article-title').textContent;
+          var date = card.querySelector('.article-date').textContent;
+          var excerpt = card.querySelector('.article-excerpt').textContent;
+
+          document.getElementById('ovIcon').src = '/assets/images/logo-nav.webp';
+          document.getElementById('ovIcon').alt = 'Artykuł';
+          document.getElementById('ovName').textContent = title;
+          document.getElementById('ovBadge').textContent = date;
+          document.getElementById('ovBadge').className = 'oh-badge badge-wip';
+          document.getElementById('ovBody').innerHTML = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
+          document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+
+          document.getElementById('appOverlay').classList.add('open');
+          document.body.style.overflow = 'hidden';
         });
       });
     })();
