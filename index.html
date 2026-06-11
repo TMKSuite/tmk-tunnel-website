@@ -206,10 +206,8 @@
 
     /* ── APLIKACJE W PRAWYM GÓRNYM ROGU ── */
     .app-wrapper {
-      position: absolute;
-      /* 4rem = margines kolumny treści (.page-section padding), żeby przy zoomie
-         element mieścił się w tej samej szerokości co baner w "O mnie". */
-      right: 2rem;
+      position: fixed;
+      right: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
       top: 1.5rem;
       z-index: 10;
       display: flex;
