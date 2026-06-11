@@ -1377,6 +1377,8 @@
       .social-links { display: none; }
       .nav-logo { display: none; }
       .nav-lang { display: none; }
+      .nav-link:not(:last-child)::after,
+      .nav-logo + .nav-link::before { display: none; }
       .nav-link {
         font-size: 0.65rem;
         padding-left: 0;
@@ -1937,6 +1939,7 @@
         }
         .nav-link::before { display: none; }
         .nav-link:not(:last-child)::after {
+          display: block;
           content: '';
           position: absolute;
           right: -1.25rem;
@@ -1946,6 +1949,7 @@
           width: 1px;
           background: rgba(212, 168, 67, 0.3);
         }
+        .nav-logo + .nav-link::before { display: block; }
         .nav-logo {
           display: flex !important;
           position: absolute;
