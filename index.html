@@ -1915,8 +1915,19 @@
           letter-spacing: 0.08em;
           grid-row: auto;
           grid-column: auto;
+          position: relative;
         }
         .nav-link::before { display: none; }
+        .nav-link:not(:last-child)::after {
+          content: '';
+          position: absolute;
+          right: -0.8rem;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 1em;
+          width: 1px;
+          background: rgba(212, 168, 67, 0.3);
+        }
         .nav-logo {
           display: flex !important;
           position: absolute;
