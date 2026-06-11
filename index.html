@@ -1970,6 +1970,55 @@
         .lang-en { right: 8px; }
         .nav-link:hover { color: var(--color-accent); }
         .nav-link.active { color: var(--color-accent); }
+        .app-wrapper {
+          display: flex !important;
+          position: absolute;
+          right: 0.6rem;
+          top: 0.8rem;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.4rem;
+          z-index: 5;
+        }
+        .app-showcase {
+          display: flex;
+          flex-direction: row;
+          gap: 0.8rem;
+        }
+        .app-item img {
+          width: 28px;
+          height: 28px;
+        }
+        .app-dots {
+          display: flex;
+          gap: 0.35rem;
+        }
+        .dot {
+          width: 3px;
+          height: 3px;
+        }
+        .app-desc {
+          display: block;
+          margin-top: 0.4rem;
+          width: 180px;
+          padding: 0.6rem;
+          font-size: 0.55rem;
+          line-height: 1.4;
+          height: auto;
+          min-height: auto;
+        }
+        .app-desc strong {
+          font-size: 0.65rem;
+          margin-bottom: 0.2rem;
+        }
+        .app-desc .desc-body {
+          font-size: 0.5rem;
+        }
+        .app-desc .desc-footer {
+          margin-top: 0.4rem;
+          padding-top: 0.4rem;
+          font-size: 0.45rem;
+        }
         .stats-mobile {
           gap: 0.3rem;
           flex-direction: column;
