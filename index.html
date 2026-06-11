@@ -116,7 +116,6 @@
 
     .nav-left {
       left: 0;
-      right: 0;
       top: auto;
       bottom: 0;
       transform: none;
@@ -128,7 +127,10 @@
       background: linear-gradient(135deg, rgba(0,0,0,0.97) 0%, rgba(40,30,10,0.97) 50%, rgba(0,0,0,0.97) 100%);
       backdrop-filter: blur(16px);
       border-top: 2px solid rgba(212, 168, 67, 0.25);
-      width: 100vw;
+      /* min-width dopasowany do body (1000px): przy wąskim oknie navbar jest
+         szerszy niż viewport i przewija się razem z treścią (JS sync). */
+      min-width: 1000px;
+      width: 100%;
       box-sizing: border-box;
     }
 
@@ -3261,6 +3263,23 @@
           scrollToSection(current > 0 ? current - 1 : 0);
         }
       });
+
+      // ── Sync navbar z poziomym scrollowaniem ──
+      // Przy wąskim oknie (<1000px) body ma min-width i pojawia się poziomy pasek.
+      // Navbar jest position:fixed (przyklejony do dołu ekranu) — bez JS nie reaguje
+      // na przewijanie w poziomie. translateX(-scrollX) przenosi go razem z treścią.
+      (function() {
+        var nav = document.querySelector('.nav-left');
+        if (!nav) return;
+
+        function syncNavScroll() {
+          var sx = window.scrollX || window.pageXOffset || 0;
+          nav.style.transform = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
+        }
+
+        window.addEventListener('scroll', syncNavScroll, {passive: true});
+        syncNavScroll();
+      })();
     })();
   </script>
 
