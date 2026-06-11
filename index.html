@@ -65,7 +65,9 @@
       /* Trzyma się krawędzi KOLUMNY TREŚCI (4rem, jak CO NOWEGO i baner): widoczne
          na fullscreenie, a poniżej ~1152px ucina się — w tym samym progu co
          elementy hero. 500px = połowa min-width:1000. */
-      left: min(4rem, calc(50vw - 500px + 4rem));
+      /* max(0px, ...) — przy wąskim oknie (<~872px) formuła 50vw-500px+4rem
+         robi się ujemna; clamp do 0 zapobiega ucieczce logo poza lewą krawędź. */
+      left: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
       top: 50%;
       transform: translateY(-50%);
       z-index: 11;
@@ -523,14 +525,19 @@
       transform: scale(1.15);
     }
 
-    /* Lang toggle — sliding switch (desktop: navbar) */
-    .lang-toggle {
+    /* Lang toggle — sliding switch (desktop: navbar).
+       .lang-toggle-wrap trzyma position:fixed + right/bottom (reaguje na scroll w JS),
+       .lang-toggle ma tylko wygląd (hover scale nie koliduje z JS transform). */
+    .lang-toggle-wrap {
       position: fixed;
-      /* Trzyma się krawędzi KOLUMNY TREŚCI (4rem, jak elementy hero): widoczne na
-         fullscreenie, ucina się poniżej ~1152px w tym samym progu co reszta hero. */
-      right: min(4rem, calc(50vw - 500px + 4rem));
+      right: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
       bottom: 0.65rem;
       z-index: 11;
+      display: flex;
+      animation: fadeInNav 1s 0.3s ease both;
+    }
+
+    .lang-toggle {
       display: flex;
       width: 52px;
       height: 28px;
@@ -542,13 +549,12 @@
       padding: 0;
       align-items: center;
       overflow: hidden;
-      animation: fadeInNav 1s 0.3s ease both;
       opacity: 0.25;
       filter: brightness(0.6) grayscale(0.4);
       transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
     }
 
-    .lang-toggle:hover {
+    .lang-toggle-wrap:hover .lang-toggle {
       opacity: 0.6;
       filter: brightness(1) grayscale(0);
       transform: scale(1.1);
@@ -2252,11 +2258,11 @@
     </a>
   </div>
 
-    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
+    <span class="lang-toggle-wrap"><button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
       <span class="lang-knob"></span>
       <span class="lang-label lang-pl">PL</span>
       <span class="lang-label lang-en">EN</span>
-    </button>
+    </button></span>
     <div class="production-panel open" id="productionPanel">
       <button class="news-toggle" id="newsToggle">
         <span class="news-dot"></span>
@@ -3264,21 +3270,23 @@
         }
       });
 
-      // ── Sync navbar z poziomym scrollowaniem ──
+      // ── Sync elementów fixed z poziomym scrollowaniem ──
       // Przy wąskim oknie (<1000px) body ma min-width i pojawia się poziomy pasek.
-      // Navbar jest position:fixed (przyklejony do dołu ekranu) — bez JS nie reaguje
-      // na przewijanie w poziomie. translateX(-scrollX) przenosi go razem z treścią.
+      // Elementy position:fixed są przyklejone do viewportu — translateX(-scrollX)
+      // przenosi je razem z treścią.
       (function() {
         var nav = document.querySelector('.nav-left');
-        if (!nav) return;
+        var lang = document.querySelector('.lang-toggle-wrap');
 
-        function syncNavScroll() {
+        function syncScroll() {
           var sx = window.scrollX || window.pageXOffset || 0;
-          nav.style.transform = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
+          var offset = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
+          if (nav) nav.style.transform = offset;
+          if (lang) lang.style.transform = offset;
         }
 
-        window.addEventListener('scroll', syncNavScroll, {passive: true});
-        syncNavScroll();
+        window.addEventListener('scroll', syncScroll, {passive: true});
+        syncScroll();
       })();
     })();
   </script>
