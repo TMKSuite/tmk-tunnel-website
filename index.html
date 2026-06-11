@@ -435,6 +435,7 @@
       color: var(--color-accent);
       line-height: 1;
       letter-spacing: -0.02em;
+      animation: statPulse 3s ease-in-out infinite;
     }
 
     .stat-label {
@@ -443,7 +444,13 @@
       color: rgba(230, 237, 243, 0.3);
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      animation: statPulse 3s ease-in-out infinite, labelFlash 3s ease-in-out infinite;
     }
+
+    .stat-item:nth-child(2) .stat-value { animation-delay: 0.5s; }
+    .stat-item:nth-child(2) .stat-label { animation-delay: 0.5s, 0.5s; }
+    .stat-item:nth-child(3) .stat-value { animation-delay: 1s; }
+    .stat-item:nth-child(3) .stat-label { animation-delay: 1s, 1s; }
 
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
@@ -782,6 +789,16 @@
     @keyframes badgePulse {
       0%, 100% { opacity: 0.7; }
       50% { opacity: 1; }
+    }
+
+    @keyframes statPulse {
+      0%, 100% { text-shadow: 0 0 0 rgba(255,255,255,0); }
+      50% { text-shadow: 0 0 20px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.3); }
+    }
+
+    @keyframes labelFlash {
+      0%, 100% { color: rgba(230,237,243,0.25); }
+      50% { color: rgba(230,237,243,0.8); }
     }
 
     /* ── NAGŁÓWEK GRUPY W SEKCJI ── */
