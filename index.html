@@ -1989,6 +1989,41 @@
         .about-name { font-size: 1.8rem; }
         .about-role { font-size: 0.9rem; }
         .about-story { font-size: 0.9rem; }
+        .social-links {
+          display: flex !important;
+          position: fixed;
+          left: 0.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+        .social-links a {
+          width: 24px;
+          height: 24px;
+          opacity: 0.35;
+        }
+        .social-links svg {
+          width: 16px;
+          height: 16px;
+        }
+        .tech-stack {
+          display: flex !important;
+          position: fixed;
+          left: 0.5rem;
+          bottom: 4.8rem;
+          z-index: 10;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+        .tech-item img, .tech-stack .tech-item svg {
+          width: 14px;
+          height: 14px;
+        }
+        .tech-label {
+          font-size: 0.35rem;
+        }
       }
     }
   </style>
