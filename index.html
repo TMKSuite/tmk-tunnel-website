@@ -1902,34 +1902,70 @@
           max-width: 30vw;
         }
         .nav-left {
-          padding: 0.3rem 0.2rem 0.4rem 0.2rem;
-          gap: 0.25rem 0.2rem;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 1.2rem;
+          padding: 0.4rem 1.5rem;
         }
         .nav-link {
-          font-size: 0.7rem;
+          font-size: 0.6rem;
+          padding-left: 1rem;
+          letter-spacing: 0.08em;
+          grid-row: auto;
+          grid-column: auto;
+        }
+        .nav-link::before {
+          display: block;
+          width: 4px;
+          height: 4px;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          background: rgba(230, 237, 243, 0.2);
+        }
+        .nav-logo {
+          display: flex !important;
+          position: absolute;
+          left: 0.8rem;
+          top: 50%;
+          transform: translateY(-50%);
+          opacity: 0.85 !important;
+          filter: brightness(1) grayscale(0) !important;
         }
         .nav-logo img {
-          width: 32px;
-          height: 32px;
+          width: 28px;
+          height: 28px;
         }
         .lang-toggle {
-          width: 44px;
-          height: 24px;
-          border-radius: 12px;
-          top: 0.3rem;
-          right: 0.3rem;
+          position: fixed;
+          right: 0.8rem;
+          bottom: 0.4rem;
+          top: auto;
+          width: 40px;
+          height: 22px;
+          border-radius: 11px;
         }
         .lang-knob {
-          width: 16px;
-          height: 16px;
-          left: 3px;
+          width: 14px;
+          height: 14px;
+          left: 2px;
         }
         .lang-toggle.en .lang-knob {
-          transform: translateX(20px);
+          transform: translateX(18px);
         }
         .lang-label { font-size: 0.5rem; }
         .lang-pl { left: 5px; }
         .lang-en { right: 5px; }
+        .nav-link:hover { color: var(--color-accent); }
+        .nav-link.active { color: var(--color-accent); }
+        .nav-link:hover::before,
+        .nav-link.active::before {
+          background: var(--color-accent);
+          box-shadow: 0 0 6px var(--color-accent);
+        }
         .stats-mobile { gap: 0.5rem; }
         .stats-mobile-value { font-size: 1.8rem; }
         .stats-mobile-label { font-size: 0.5rem; }
