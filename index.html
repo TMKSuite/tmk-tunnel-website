@@ -2849,18 +2849,29 @@
         var next = currentLang === 'pl' ? 'en' : 'pl';
         switchLang(next);
       });
-      // Mobile toggle
-      var toggle = document.getElementById('langSwitcherMobile');
-      if (toggle) {
-        toggle.addEventListener('click', function() {
+      // Mobile toggle (hero)
+      var toggleMobile = document.getElementById('langSwitcherMobile');
+      if (toggleMobile) {
+        toggleMobile.addEventListener('click', function() {
           var next = currentLang === 'pl' ? 'en' : 'pl';
           switchLang(next);
         });
       }
-      // Sync toggle knob z aktualnym językiem
+      // Nav toggle (desktop + landscape)
+      var toggleNav = document.getElementById('langSwitcherNav');
+      if (toggleNav) {
+        toggleNav.addEventListener('click', function() {
+          var next = currentLang === 'pl' ? 'en' : 'pl';
+          switchLang(next);
+        });
+      }
+      // Sync toggle knobs z aktualnym językiem
       window._syncLangToggle = function(lang) {
-        if (toggle) {
-          toggle.classList.toggle('en', lang === 'en');
+        if (toggleMobile) {
+          toggleMobile.classList.toggle('en', lang === 'en');
+        }
+        if (toggleNav) {
+          toggleNav.classList.toggle('en', lang === 'en');
         }
       };
     })();
