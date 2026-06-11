@@ -2022,10 +2022,10 @@
         .stats-mobile {
           gap: 0.8rem;
           flex-direction: row;
-          position: absolute;
+          position: fixed;
           right: 0.6rem;
-          bottom: 6.5rem;
-          right: 0.6rem;
+          bottom: 4.8rem;
+          z-index: 10;
         }
         .stats-mobile-item:not(:last-child)::after {
           top: 0;
@@ -3109,7 +3109,7 @@
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
     (function() {
       var FADE_DISTANCE = 350;
-      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack');
+      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack, .stats-mobile');
       var ticking = false;
 
       function onScroll() {
