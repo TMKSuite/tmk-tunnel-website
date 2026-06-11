@@ -51,7 +51,7 @@
          pasek pionowy ~17px = ~1007 obszaru roboczego). Normalne ekrany
          (1366, 1920...) są dużo szersze, więc u nich to nie ma znaczenia. */
       width: 100%;
-      min-width: 1980px;
+      min-width: 1000px;
       min-height: 100vh;
       position: relative;
       background: var(--color-bg);
@@ -64,7 +64,7 @@
       position: fixed;
       /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
          logo nie ucieka poza lewą krawędź. */
-      left: max(0px, min(2rem, calc(50vw - 990px + 2rem)));
+      left: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
       bottom: calc(0.65rem - 4px);
       z-index: 11;
       opacity: 0.25;
@@ -127,7 +127,7 @@
       border-top: 2px solid rgba(212, 168, 67, 0.25);
       /* min-width dopasowany do body (1000px): przy wąskim oknie navbar jest
          szerszy niż viewport i przewija się razem z treścią (JS sync). */
-      min-width: 1980px;
+      min-width: 1000px;
       width: 100%;
       box-sizing: border-box;
     }
@@ -514,7 +514,7 @@
       position: fixed;
       /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
          lang-switcher nie ucieka poza prawą krawędź. */
-      right: max(0px, min(2rem, calc(50vw - 990px + 2rem)));
+      right: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
       bottom: 0.65rem;
       z-index: 11;
       display: flex;
@@ -634,25 +634,16 @@
       text-align: center;
     }
 
-    /* Prawy panel (statystyki + ikony + opis) — płynnie znika przy zwężaniu okna,
-       zamiast płynąć razem z krawędzią. Próg 1100px = powyżej min-width body. */
-    @media (max-width: 1100px) {
-      .app-wrapper {
-        opacity: 0 !important;
-        pointer-events: none;
-        transition: opacity 0.35s ease;
-      }
-    }
-
     /* ── HERO ── */
     .hero {
+      min-width: 1980px;
+      position: relative;  /* kontekst dla absolute children, NIE body */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
       height: 100vh;
-      position: relative;
       background: radial-gradient(ellipse at center, #000000 85%, #0a0f14 100%);
       overflow: hidden;
     }
