@@ -674,9 +674,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      /* Wysokość maleje razem ze skalą — sekcja poniżej (O MNIE) dosuwa się od razu,
-         bez pustej luki. Przy oknie ≥1980px skala = 1, czyli pełne 100vh jak dotąd. */
-      height: calc(100vh * var(--hero-scale, 1));
+      height: 100vh;
       background: radial-gradient(ellipse at center, #000000 85%, #0a0f14 100%);
       overflow: hidden;
     }
