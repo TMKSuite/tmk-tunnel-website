@@ -1969,9 +1969,25 @@
         .lang-en { right: 8px; }
         .nav-link:hover { color: var(--color-accent); }
         .nav-link.active { color: var(--color-accent); }
-        .stats-mobile { gap: 0.5rem; }
-        .stats-mobile-value { font-size: 1.8rem; }
-        .stats-mobile-label { font-size: 0.5rem; }
+        .stats-mobile {
+          gap: 0.3rem;
+          flex-direction: column;
+          position: fixed;
+          right: 0.6rem;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+        }
+        .stats-mobile-item:not(:last-child)::after {
+          top: auto;
+          left: 10%;
+          right: 10%;
+          bottom: -0.15rem;
+          width: auto;
+          height: 1px;
+        }
+        .stats-mobile-value { font-size: 1.5rem; }
+        .stats-mobile-label { font-size: 0.45rem; }
         .tech-stack { gap: 0.4rem; padding-top: 0.4rem; }
         .tech-item img, .tech-item svg { width: 12px; height: 12px; }
         .tech-label { font-size: 0.32rem; }
