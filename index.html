@@ -36,11 +36,24 @@
       scrollbar-gutter: stable;
     }
 
-    html, body {
+    html {
+      /* overflow-x: auto = gdy kanvas (body) jest szerszy niż okno (zoom lub
+         wąskie okno < 1100px), pojawia się poziomy pasek i można PRZESUWAĆ
+         stronę w lewo/prawo, żeby zobaczyć boki. JS (centerCanvasX) ustawia
+         start na środek, więc nie „ucieka w prawo". */
+      overflow-x: auto;
+    }
+    body {
+      /* FULL-BLEED: strona wypełnia całą szerokość ekranu (elementy w rogach
+         ekranu, nie w wyśrodkowanym pudełku). min-width trzyma sztywny layout —
+         poniżej 1000px okno UCINA widok (z poziomym scrollem, start wyśrodkowany).
+         1000 dobrane pod 200% zoom na monitorze 2048px (viewport ~1024, minus
+         pasek pionowy ~17px = ~1007 obszaru roboczego). Normalne ekrany
+         (1366, 1920...) są dużo szersze, więc u nich to nie ma znaczenia. */
       width: 100%;
-      min-width: 1280px;
-      height: 100%;
-      overflow-x: hidden;
+      min-width: 1000px;
+      min-height: 100vh;
+      position: relative;
       background: var(--color-bg);
       font-family: 'Inter', sans-serif;
       color: var(--color-text);
@@ -49,7 +62,10 @@
     /* ── LOGO W LEWYM DOLNYM ROGU ── */
     .nav-logo {
       position: absolute;
-      left: 1.5rem;
+      /* Trzyma się krawędzi KOLUMNY TREŚCI (4rem, jak CO NOWEGO i baner): widoczne
+         na fullscreenie, a poniżej ~1152px ucina się — w tym samym progu co
+         elementy hero. 500px = połowa min-width:1000. */
+      left: min(4rem, calc(50vw - 500px + 4rem));
       top: 50%;
       transform: translateY(-50%);
       z-index: 11;
@@ -89,6 +105,9 @@
 
     /* ── NAVBAR NA DOLE (domyslny desktop) ── */
     .nav-sidebar {
+      /* fixed = pasek zawsze widoczny na dole ekranu. NIE absolute —
+         bo nav jest dzieckiem <body> (poza .hero), więc absolute przy
+         body{position:relative} wysłałoby go na sam dół dokumentu. */
       position: fixed;
       z-index: 10;
       display: flex;
@@ -199,8 +218,10 @@
 
     /* ── APLIKACJE W PRAWYM GÓRNYM ROGU ── */
     .app-wrapper {
-      position: fixed;
-      right: 1.5rem;
+      position: absolute;
+      /* 4rem = margines kolumny treści (.page-section padding), żeby przy zoomie
+         element mieścił się w tej samej szerokości co baner w "O mnie". */
+      right: 4rem;
       top: 1.5rem;
       z-index: 10;
       display: flex;
@@ -211,8 +232,8 @@
 
     /* ── CO NOWEGO (lewy górny róg) ── */
     .production-panel {
-      position: fixed;
-      left: 1rem;
+      position: absolute;
+      left: 4rem;
       top: 1.5rem;
       z-index: 10;
       animation: fadeInNav 1s 0.4s ease both;
@@ -379,8 +400,8 @@
 
     /* ── TECH STACK ── */
     .tech-stack {
-      position: fixed;
-      left: 0.6rem;
+      position: absolute;
+      left: 4rem;
       bottom: 4.2rem;
       z-index: 10;
       display: flex;
@@ -473,8 +494,8 @@
 
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
-      position: fixed;
-      left: 0.6rem;
+      position: absolute;
+      left: 4rem;
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
@@ -503,7 +524,9 @@
     /* Lang toggle — sliding switch (desktop: navbar) */
     .lang-toggle {
       position: fixed;
-      right: 1.5rem;
+      /* Trzyma się krawędzi KOLUMNY TREŚCI (4rem, jak elementy hero): widoczne na
+         fullscreenie, ucina się poniżej ~1152px w tym samym progu co reszta hero. */
+      right: min(4rem, calc(50vw - 500px + 4rem));
       bottom: 0.65rem;
       z-index: 11;
       display: flex;
@@ -657,8 +680,15 @@
     }
 
     .logo-container img {
-      width: 563px;
-      height: auto;
+      /* Wysokość dopasowana do okna (vh), z górnym limitem px — żeby logo
+         mieściło się na wysokość ekranu i nie nachodziło na elementy w rogach. */
+      height: 82vh;
+      max-height: 760px;
+      width: auto;
+      /* Limit szerokości zależny od okna: przycina logo tylko gdy okno jest
+         wąskie (≤~1086px), żeby nie nachodziło na CO NOWEGO / panel aplikacji.
+         Na normalnych ekranach (1366, 1920...) nie działa — logo pełnowymiarowe. */
+      max-width: calc(100vw - 600px);
       display: block;
     }
 
@@ -1351,7 +1381,7 @@
     }
 
     /* ── TELEFON W PIONIE: navbar na dole ── */
-    @media (max-device-width: 900px) and (min-height: 500px) {
+    @media (max-width: 900px) and (min-height: 500px) and (pointer: coarse) {
       .nav-left {
         position: fixed;
         left: 0;
@@ -1402,9 +1432,11 @@
 
 
     /* ══════════════════════════════════════════
-       MOBILE (max-width: 768px)
+       MOBILE — tylko na realnych urządzeniach dotykowych (pointer: coarse).
+       Mysz = pointer: fine = zawsze desktop, niezależnie od szerokości okna.
+       Zwężanie okna na kompie NIE wchodzi w mobile (okno ucina widok).
        ══════════════════════════════════════════ */
-    @media (max-device-width: 900px), (max-width: 900px) and (max-height: 500px) {
+    @media (max-width: 900px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
 
       /* ── A. Global ── */
       html, body {
@@ -3168,6 +3200,20 @@
       // Ustaw stan początkowy
       onScroll();
 
+    })();
+
+    // ── Poziome wyśrodkowanie kanvasu (gdy okno/zoom < szerokość strony) ──
+    // Start ustawiamy na środek, żeby nic nie „uciekało w prawo"; resztę boków
+    // użytkownik dosuwa poziomym scrollem. Zoom (Ctrl+scroll) odpala 'resize'.
+    (function() {
+      function centerCanvasX() {
+        var el = document.scrollingElement || document.documentElement;
+        var extra = el.scrollWidth - el.clientWidth;
+        if (extra > 0) el.scrollLeft = extra / 2;
+      }
+      window.addEventListener('load', centerCanvasX);
+      window.addEventListener('resize', centerCanvasX, { passive: true });
+      centerCanvasX();
     })();
 
     // ── Nawigacja klawiaturą: strzałki lewo/prawo ──
