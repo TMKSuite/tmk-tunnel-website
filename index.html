@@ -1918,6 +1918,17 @@
           position: relative;
         }
         .nav-link::before { display: none; }
+        .nav-link:first-child::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: -1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          height: 1em;
+          width: 1px;
+          background: rgba(212, 168, 67, 0.3);
+        }
         .nav-link:not(:last-child)::after {
           content: '';
           position: absolute;
