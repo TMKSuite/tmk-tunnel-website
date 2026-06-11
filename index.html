@@ -804,14 +804,19 @@
     /* ── NAGŁÓWEK GRUPY W SEKCJI ── */
     .group-heading {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.85rem;
+      font-size: 1.55rem;
       font-weight: 500;
       color: var(--color-accent);
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-align: center;
       margin-top: 2rem;
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.4rem;
+      border-top: 2px solid rgba(212, 168, 67, 0.2);
+      border-bottom: 2px solid rgba(212, 168, 67, 0.2);
+      padding: 0.5rem 0;
+      display: block;
+      animation: statPulse 3s ease-in-out infinite;
     }
 
     .group-heading:first-of-type {
