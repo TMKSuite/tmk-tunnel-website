@@ -523,11 +523,8 @@
       transform: scale(1.15);
     }
 
-    /* Lang toggle — sliding switch (desktop: dolny prawy róg hero) */
+    /* Lang toggle — wspólny wygląd */
     .lang-toggle {
-      position: absolute;
-      right: 2rem;
-      bottom: 5.5rem;
       z-index: 11;
       display: flex;
       width: 68px;
@@ -544,6 +541,23 @@
       opacity: 0.25;
       filter: brightness(0.6) grayscale(0.4);
       transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Wersja w navbarze (desktop) */
+    .lang-toggle-nav {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .lang-toggle-nav:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Wersja w hero (mobile portrait) — domyślnie ukryta */
+    .lang-toggle-mobile {
+      display: none;
     }
 
     .lang-toggle:hover {
@@ -1574,12 +1588,13 @@
       }
 
       /* Lang switcher w navbarze — ukryty */
-      .nav-lang {
+      .nav-lang,
+      .lang-toggle-nav {
         display: none;
       }
 
-      /* Lang toggle — złoty sliding switch (fixed do viewportu, NIE absolute bo jest w nav) */
-      .lang-toggle {
+      /* Lang toggle — złoty sliding switch (w hero, fixed do viewportu) */
+      .lang-toggle-mobile {
         display: flex;
         position: fixed;
         right: 0.8rem;
@@ -2047,14 +2062,15 @@
           width: 42px;
           height: 42px;
         }
-        .lang-toggle {
-          position: fixed;
+        .lang-toggle-nav {
+          display: flex;
+          position: absolute;
           right: 0.8rem;
-          bottom: 1.2rem;
-          top: auto;
-          width: 60px;
-          height: 36px;
-          border-radius: 18px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        .lang-toggle-mobile {
+          display: none;
         }
         .lang-knob {
           width: 26px;
@@ -2226,10 +2242,15 @@
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
       <span id="langLabel">PL</span>
     </button>
+    <button class="lang-toggle lang-toggle-nav" id="langSwitcherNav" aria-label="Zmień język">
+      <span class="lang-knob"></span>
+      <span class="lang-label lang-pl">PL</span>
+      <span class="lang-label lang-en">EN</span>
+    </button>
   </nav>
 
   <div class="hero">
-    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
+    <button class="lang-toggle lang-toggle-mobile" id="langSwitcherMobile" aria-label="Zmień język">
       <span class="lang-knob"></span>
       <span class="lang-label lang-pl">PL</span>
       <span class="lang-label lang-en">EN</span>
