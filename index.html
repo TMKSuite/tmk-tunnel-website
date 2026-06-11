@@ -65,7 +65,9 @@
       /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
          logo nie ucieka poza lewą krawędź. */
       left: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
-      bottom: 0.65rem;
+      /* Logo (44px całkowitej wysokości) centrowane do lang-switcher (28px):
+         0.65rem + 14px(środek lang) - 22px(pół logo) */
+      bottom: calc(0.65rem - 8px);
       z-index: 11;
       opacity: 0.25;
       filter: brightness(0.6) grayscale(0.4);
