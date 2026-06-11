@@ -197,7 +197,7 @@
 
     /* ── APLIKACJE W PRAWYM GÓRNYM ROGU ── */
     .app-wrapper {
-      position: absolute;
+      position: fixed;
       right: 1.5rem;
       top: 1.5rem;
       z-index: 10;
@@ -209,7 +209,7 @@
 
     /* ── CO NOWEGO (lewy górny róg) ── */
     .production-panel {
-      position: absolute;
+      position: fixed;
       left: 1rem;
       top: 1.5rem;
       z-index: 10;
@@ -377,7 +377,7 @@
 
     /* ── TECH STACK ── */
     .tech-stack {
-      position: absolute;
+      position: fixed;
       left: 0.6rem;
       bottom: 4.2rem;
       z-index: 10;
@@ -471,7 +471,7 @@
 
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
-      position: absolute;
+      position: fixed;
       left: 0.6rem;
       top: 50%;
       transform: translateY(-50%);
@@ -1402,7 +1402,7 @@
     /* ══════════════════════════════════════════
        MOBILE (max-width: 768px)
        ══════════════════════════════════════════ */
-    @media (max-width: 900px) {
+    @media (max-width: 768px), (max-width: 900px) and (max-height: 500px) {
 
       /* ── A. Global ── */
       html, body {
