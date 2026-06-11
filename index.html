@@ -59,13 +59,12 @@
       color: var(--color-text);
     }
 
-    /* ── LOGO W LEWYM DOLNYM ROGU (desktop: position:fixed, jak lang-switcher) ── */
+    /* ── LOGO W NAVBARZE (lewa strona) ── */
     .nav-logo {
-      position: fixed;
-      /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
-         logo nie ucieka poza lewą krawędź. */
-      left: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
-      bottom: calc(0.65rem - 4px);
+      position: absolute;
+      left: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 11;
       opacity: 0.25;
       filter: brightness(0.6) grayscale(0.4);
@@ -93,7 +92,7 @@
     .nav-logo:hover {
       opacity: 0.6;
       filter: brightness(1) grayscale(0);
-      transform: scale(1.1);
+      transform: translateY(-50%) scale(1.1);
     }
 
     /* ── LANGUAGE SWITCHER (ukryty — zastąpiony przez .lang-toggle) ── */
@@ -507,15 +506,12 @@
       transform: scale(1.15);
     }
 
-    /* Lang toggle — sliding switch (desktop: prawy dolny róg).
-       position:fixed = stoi w miejscu, przy zwężaniu okna jest ucinany
-       (nie przesuwa się z poziomym scrollowaniem — to zachowanie zamierzone). */
+    /* Lang toggle — sliding switch (desktop: prawa strona navbara) */
     .lang-toggle {
-      position: fixed;
-      /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
-         lang-switcher nie ucieka poza prawą krawędź. */
-      right: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
-      bottom: 0.65rem;
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 11;
       display: flex;
       width: 52px;
@@ -537,7 +533,7 @@
     .lang-toggle:hover {
       opacity: 0.6;
       filter: brightness(1) grayscale(0);
-      transform: scale(1.1);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .lang-knob {
@@ -2201,15 +2197,14 @@
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
       <span id="langLabel">PL</span>
     </button>
-  </nav>
-
-  <div class="hero">
-    <!-- lang-toggle ZOSTAJE poza .hero-inner — jest position:fixed i nie ma się skalować -->
     <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
       <span class="lang-knob"></span>
       <span class="lang-label lang-pl">PL</span>
       <span class="lang-label lang-en">EN</span>
     </button>
+  </nav>
+
+  <div class="hero">
     <div class="hero-inner">
     <div class="app-wrapper">
     <div class="app-showcase" id="appShowcase">
