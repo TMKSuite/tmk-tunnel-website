@@ -525,19 +525,16 @@
       transform: scale(1.15);
     }
 
-    /* Lang toggle — sliding switch (desktop: navbar).
-       .lang-toggle-wrap trzyma position:fixed + right/bottom (reaguje na scroll w JS),
-       .lang-toggle ma tylko wygląd (hover scale nie koliduje z JS transform). */
-    .lang-toggle-wrap {
+    /* Lang toggle — sliding switch (desktop: prawy dolny róg).
+       position:fixed = stoi w miejscu, przy zwężaniu okna jest ucinany
+       (nie przesuwa się z poziomym scrollowaniem — to zachowanie zamierzone). */
+    .lang-toggle {
       position: fixed;
+      /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
+         lang-switcher nie ucieka poza prawą krawędź. */
       right: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
       bottom: 0.65rem;
       z-index: 11;
-      display: flex;
-      animation: fadeInNav 1s 0.3s ease both;
-    }
-
-    .lang-toggle {
       display: flex;
       width: 52px;
       height: 28px;
@@ -549,12 +546,13 @@
       padding: 0;
       align-items: center;
       overflow: hidden;
+      animation: fadeInNav 1s 0.3s ease both;
       opacity: 0.25;
       filter: brightness(0.6) grayscale(0.4);
       transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
     }
 
-    .lang-toggle-wrap:hover .lang-toggle {
+    .lang-toggle:hover {
       opacity: 0.6;
       filter: brightness(1) grayscale(0);
       transform: scale(1.1);
@@ -2258,11 +2256,11 @@
     </a>
   </div>
 
-    <span class="lang-toggle-wrap"><button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
+    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
       <span class="lang-knob"></span>
       <span class="lang-label lang-pl">PL</span>
       <span class="lang-label lang-en">EN</span>
-    </button></span>
+    </button>
     <div class="production-panel open" id="productionPanel">
       <button class="news-toggle" id="newsToggle">
         <span class="news-dot"></span>
@@ -3270,23 +3268,20 @@
         }
       });
 
-      // ── Sync elementów fixed z poziomym scrollowaniem ──
+      // ── Sync navbar z poziomym scrollowaniem ──
       // Przy wąskim oknie (<1000px) body ma min-width i pojawia się poziomy pasek.
-      // Elementy position:fixed są przyklejone do viewportu — translateX(-scrollX)
-      // przenosi je razem z treścią.
+      // Navbar jest position:fixed — translateX(-scrollX) przenosi go razem z treścią.
       (function() {
         var nav = document.querySelector('.nav-left');
-        var lang = document.querySelector('.lang-toggle-wrap');
+        if (!nav) return;
 
-        function syncScroll() {
+        function syncNavScroll() {
           var sx = window.scrollX || window.pageXOffset || 0;
-          var offset = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
-          if (nav) nav.style.transform = offset;
-          if (lang) lang.style.transform = offset;
+          nav.style.transform = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
         }
 
-        window.addEventListener('scroll', syncScroll, {passive: true});
-        syncScroll();
+        window.addEventListener('scroll', syncNavScroll, {passive: true});
+        syncNavScroll();
       })();
     })();
   </script>
