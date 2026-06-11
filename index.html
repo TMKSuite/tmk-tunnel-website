@@ -2032,14 +2032,16 @@
           transform: translateY(-50%);
           z-index: 10;
         }
-        .stats-mobile-item::after {
+        .stats-mobile .stats-mobile-item::after {
           content: '';
+          position: absolute;
           top: auto;
           left: 10%;
           right: 10%;
           bottom: -0.22rem;
           width: auto;
           height: 1px;
+          background: rgba(212, 168, 67, 0.2);
         }
         .stats-mobile-value { font-size: 1.82rem; }
         .stats-mobile-label { font-size: 0.55rem; }
