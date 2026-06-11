@@ -71,45 +71,9 @@
       transform: translateY(-50%) scale(1.1);
     }
 
-    /* ── LANGUAGE SWITCHER (prawy dolny róg navbara) ── */
+    /* ── LANGUAGE SWITCHER (ukryty — zastąpiony przez .lang-toggle) ── */
     .nav-lang {
-      position: absolute;
-      right: 1.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 11;
-      opacity: 0.25;
-      filter: brightness(0.6) grayscale(0.4);
-      transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
-      animation: fadeInNav 1s 0.3s ease both;
-      display: flex;
-      align-items: center;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .nav-lang svg {
-      display: block;
-      width: 15px;
-      height: 15px;
-      fill: var(--color-accent);
-    }
-
-    .nav-lang span {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.5rem;
-      font-weight: 500;
-      color: var(--color-accent);
-      letter-spacing: 0.08em;
-      margin-left: 4px;
-    }
-
-    .nav-lang:hover {
-      opacity: 0.6;
-      filter: brightness(1) grayscale(0);
-      transform: translateY(-50%) scale(1.1);
+      display: none;
     }
 
     /* ── NAVBAR NA DOLE (domyslny desktop) ── */
@@ -131,9 +95,9 @@
       align-items: center;
       gap: 2rem;
       padding: 1rem 2rem;
-      background: rgba(0, 0, 0, 0.9);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(212, 168, 67, 0.2);
+      background: linear-gradient(135deg, rgba(0,0,0,0.97) 0%, rgba(40,30,10,0.97) 50%, rgba(0,0,0,0.97) 100%);
+      backdrop-filter: blur(16px);
+      border-top: 2px solid rgba(212, 168, 67, 0.25);
       width: 100vw;
       box-sizing: border-box;
     }
@@ -205,6 +169,9 @@
     .nav-link:hover,
     .nav-link.active {
       color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 2px;
     }
 
     .nav-link:hover::before,
@@ -498,10 +465,64 @@
       transform: scale(1.15);
     }
 
-    /* Lang toggle — ukryty na desktopie */
+    /* Lang toggle — sliding switch (desktop: navbar) */
     .lang-toggle {
-      display: none;
+      position: fixed;
+      right: 1.5rem;
+      bottom: 1.2rem;
+      z-index: 11;
+      display: flex;
+      width: 52px;
+      height: 28px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(212, 168, 67, 0.35);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      padding: 0;
+      align-items: center;
+      overflow: hidden;
+      animation: fadeInNav 1s 0.3s ease both;
+      opacity: 0.25;
+      filter: brightness(0.6) grayscale(0.4);
+      transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
     }
+
+    .lang-toggle:hover {
+      opacity: 0.6;
+      filter: brightness(1) grayscale(0);
+      transform: scale(1.1);
+    }
+
+    .lang-knob {
+      position: absolute;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1;
+    }
+
+    .lang-toggle.en .lang-knob {
+      transform: translateX(24px);
+    }
+
+    .lang-label {
+      position: absolute;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: rgba(230, 237, 243, 0.4);
+      z-index: 0;
+      transition: color 0.3s ease;
+      pointer-events: none;
+    }
+
+    .lang-pl { left: 6px; }
+    .lang-en { right: 6px; }
 
     /* Statystyki mobilne — ukryte na desktopie */
     .stats-mobile {
