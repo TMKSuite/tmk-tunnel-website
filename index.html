@@ -3250,11 +3250,15 @@
     // więc współczynnik skali liczymy tu i wstawiamy jako zmienną --hero-scale.
     (function() {
       var DESIGN_WIDTH = 1980;
+      var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
+                              // strona przestaje się kurczyć i włącza poziomy scroll
       function updateHeroScale() {
         // clientWidth (bez pionowego paska) — żeby skalowane płótno dokładnie
         // wypełniało szerokość okna i nie wystawało o szerokość scrollbara.
+        // Dolna granica MIN_CANVAS — żeby hero NIE kurczyło się dalej niż reszta
+        // strony (inaczej rozjeżdżałoby się względem sekcji poniżej).
         var vw = document.documentElement.clientWidth || window.innerWidth;
-        var s = Math.min(1, vw / DESIGN_WIDTH);
+        var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
         document.documentElement.style.setProperty('--hero-scale', String(s));
       }
       window.addEventListener('resize', updateHeroScale, { passive: true });
