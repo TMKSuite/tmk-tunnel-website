@@ -64,7 +64,7 @@
       position: fixed;
       /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
          logo nie ucieka poza lewą krawędź. */
-      left: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
+      left: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
       bottom: calc(0.65rem - 4px);
       z-index: 11;
       opacity: 0.25;
@@ -209,7 +209,7 @@
       position: absolute;
       /* 4rem = margines kolumny treści (.page-section padding), żeby przy zoomie
          element mieścił się w tej samej szerokości co baner w "O mnie". */
-      right: 4rem;
+      right: 2rem;
       top: 1.5rem;
       z-index: 10;
       display: flex;
@@ -221,7 +221,7 @@
     /* ── CO NOWEGO (lewy górny róg) ── */
     .production-panel {
       position: absolute;
-      left: 4rem;
+      left: 2rem;
       top: 1.5rem;
       z-index: 10;
       animation: fadeInNav 1s 0.4s ease both;
@@ -389,7 +389,7 @@
     /* ── TECH STACK ── */
     .tech-stack {
       position: absolute;
-      left: 4rem;
+      left: 2rem;
       bottom: 4.2rem;
       z-index: 10;
       display: flex;
@@ -483,7 +483,7 @@
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
       position: absolute;
-      left: 4rem;
+      left: 2rem;
       top: 50%;
       transform: translateY(-50%);
       z-index: 10;
@@ -516,7 +516,7 @@
       position: fixed;
       /* max(0px, ...) — przy wąskim oknie formuła nie zejdzie poniżej 0,
          lang-switcher nie ucieka poza prawą krawędź. */
-      right: max(0px, min(4rem, calc(50vw - 500px + 4rem)));
+      right: max(0px, min(2rem, calc(50vw - 500px + 2rem)));
       bottom: 0.65rem;
       z-index: 11;
       display: flex;
@@ -682,7 +682,7 @@
     /* ── SEKCJE PONIŻEJ HERO ── */
     .page-section {
       min-height: 100vh;
-      padding: 0 4rem 6rem 4rem;
+      padding: 0 2rem 6rem 2rem;
       position: relative;
     }
 
@@ -1052,7 +1052,7 @@
 
     /* ── SEKCJA O MNIE ── */
     .about-section {
-      padding: 0 4rem 4rem;
+      padding: 0 2rem 4rem;
     }
 
     .about-banner {
