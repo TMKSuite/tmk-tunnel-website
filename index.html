@@ -3205,7 +3205,8 @@
         if (extra > 0) el.scrollLeft = extra / 2;
       }
       window.addEventListener('load', centerCanvasX);
-      window.addEventListener('resize', centerCanvasX, { passive: true });
+      // resize NIE centruje — przy zwężaniu okna elementy mają być ucinane,
+      // a nie uciekać razem z krawędzią.
       centerCanvasX();
     })();
 
