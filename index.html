@@ -635,17 +635,42 @@
     }
 
     /* ── HERO ── */
+    /* .hero = ramka mieszcząca (pełna szerokość okna, tło, przycinanie).
+       .hero-inner = skalowane „płótno" o stałej szerokości projektowej (1980px),
+       które maleje proporcjonalnie razem z oknem (--hero-scale ustawia JS).
+       Dzięki temu wszystkie elementy hero zmniejszają się zachowując proporcje,
+       zamiast być przycinane przy zwężaniu okna. */
     .hero {
-      min-width: 1980px;
-      position: relative;  /* kontekst dla absolute children, NIE body */
+      position: relative;  /* kontekst dla .hero-inner i .lang-toggle (fixed), NIE body */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 100vh;
+      /* Wysokość maleje razem ze skalą — sekcja poniżej (O MNIE) dosuwa się od razu,
+         bez pustej luki. Przy oknie ≥1980px skala = 1, czyli pełne 100vh jak dotąd. */
+      height: calc(100vh * var(--hero-scale, 1));
       background: radial-gradient(ellipse at center, #000000 85%, #0a0f14 100%);
       overflow: hidden;
+    }
+
+    .hero-inner {
+      position: absolute;
+      top: 0;
+      /* Centrowanie przez left:50% + translateX(-50%) — działa też, gdy płótno
+         (1980px) jest SZERSZE niż okno (margin:auto by go nie wycentrował, tylko
+         przykleił do lewej i wypchnął prawą stronę poza ekran). */
+      left: 50%;
+      /* Powyżej 1980px = pełna szerokość okna (rogi trzymają się krawędzi, jak dotąd).
+         Poniżej 1980px = zamrożone 1980px, a transform skaluje całość do szerokości okna. */
+      width: max(100%, 1980px);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateX(-50%) scale(var(--hero-scale, 1));
+      transform-origin: top center;
     }
 
 
@@ -1584,6 +1609,11 @@
         padding: 5rem 1rem 140px;
         background: radial-gradient(ellipse at center, #000000 85%, #0a0f14 100%);
       }
+      /* Na urządzeniach dotykowych WYŁĄCZAMY skalowane płótno — display:contents
+         rozpuszcza wrapper, a jego dzieci wracają do flexa .hero (układ mobilny). */
+      .hero-inner {
+        display: contents;
+      }
       .logo-container img {
         width: min(398px, 109vw);
         height: auto;
@@ -2174,6 +2204,13 @@
   </nav>
 
   <div class="hero">
+    <!-- lang-toggle ZOSTAJE poza .hero-inner — jest position:fixed i nie ma się skalować -->
+    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
+      <span class="lang-knob"></span>
+      <span class="lang-label lang-pl">PL</span>
+      <span class="lang-label lang-en">EN</span>
+    </button>
+    <div class="hero-inner">
     <div class="app-wrapper">
     <div class="app-showcase" id="appShowcase">
       <div class="app-item active" data-name="TorekMarketKiller"
@@ -2239,11 +2276,6 @@
     </a>
   </div>
 
-    <button class="lang-toggle" id="langSwitcherMobile" aria-label="Zmień język">
-      <span class="lang-knob"></span>
-      <span class="lang-label lang-pl">PL</span>
-      <span class="lang-label lang-en">EN</span>
-    </button>
     <div class="production-panel open" id="productionPanel">
       <button class="news-toggle" id="newsToggle">
         <span class="news-dot"></span>
@@ -2290,6 +2322,7 @@
       <div class="tech-item"><img src="/assets/icons/cloudflare.svg" alt="Cloudflare" width="18" height="18"><span class="tech-label">Cloudflare</span></div>
       <div class="tech-item"><img src="/assets/icons/tradingview.svg" alt="TradingView" width="18" height="18"><span class="tech-label">TradingView</span></div>
     </div>
+    </div><!-- /.hero-inner -->
   </div>
 
 
@@ -3209,6 +3242,23 @@
       // resize NIE centruje — przy zwężaniu okna elementy mają być ucinane,
       // a nie uciekać razem z krawędzią.
       centerCanvasX();
+    })();
+
+    // ── Skalowanie sekcji HERO proporcjonalnie do szerokości okna ──
+    // Poniżej 1980px (szerokość projektowa) całe „płótno" hero zmniejsza się
+    // zachowując proporcje. CSS nie umie podzielić długości przez długość,
+    // więc współczynnik skali liczymy tu i wstawiamy jako zmienną --hero-scale.
+    (function() {
+      var DESIGN_WIDTH = 1980;
+      function updateHeroScale() {
+        // clientWidth (bez pionowego paska) — żeby skalowane płótno dokładnie
+        // wypełniało szerokość okna i nie wystawało o szerokość scrollbara.
+        var vw = document.documentElement.clientWidth || window.innerWidth;
+        var s = Math.min(1, vw / DESIGN_WIDTH);
+        document.documentElement.style.setProperty('--hero-scale', String(s));
+      }
+      window.addEventListener('resize', updateHeroScale, { passive: true });
+      updateHeroScale();
     })();
 
     // ── Nawigacja klawiaturą: strzałki lewo/prawo ──
