@@ -3254,14 +3254,16 @@
 
       // ── Sync navbar z poziomym scrollowaniem ──
       // Przy wąskim oknie (<1000px) body ma min-width i pojawia się poziomy pasek.
-      // Navbar jest position:fixed — translateX(-scrollX) przenosi go razem z treścią.
+      // Navbar jest position:fixed; left:0 — przesuwamy go przez zmianę left
+      // (NIE transform, bo transform na rodzicu zepsułby position:fixed dzieci,
+      //  np. logo które ma być fixed do viewportu jak lang-switcher).
       (function() {
         var nav = document.querySelector('.nav-left');
         if (!nav) return;
 
         function syncNavScroll() {
           var sx = window.scrollX || window.pageXOffset || 0;
-          nav.style.transform = sx > 0 ? 'translateX(' + (-sx) + 'px)' : '';
+          nav.style.left = sx > 0 ? (-sx) + 'px' : '';
         }
 
         window.addEventListener('scroll', syncNavScroll, {passive: true});
