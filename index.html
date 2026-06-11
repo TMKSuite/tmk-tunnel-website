@@ -1911,21 +1911,12 @@
         }
         .nav-link {
           font-size: 0.96rem;
-          padding-left: 1rem;
+          padding-left: 0;
           letter-spacing: 0.08em;
           grid-row: auto;
           grid-column: auto;
         }
-        .nav-link::before {
-          display: block;
-          width: 4px;
-          height: 4px;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          border-radius: 50%;
-          background: rgba(230, 237, 243, 0.2);
-        }
+        .nav-link::before { display: none; }
         .nav-logo {
           display: flex !important;
           position: absolute;
@@ -1961,11 +1952,6 @@
         .lang-en { right: 5px; }
         .nav-link:hover { color: var(--color-accent); }
         .nav-link.active { color: var(--color-accent); }
-        .nav-link:hover::before,
-        .nav-link.active::before {
-          background: var(--color-accent);
-          box-shadow: 0 0 6px var(--color-accent);
-        }
         .stats-mobile { gap: 0.5rem; }
         .stats-mobile-value { font-size: 1.8rem; }
         .stats-mobile-label { font-size: 0.5rem; }
