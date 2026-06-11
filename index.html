@@ -634,6 +634,16 @@
       text-align: center;
     }
 
+    /* Prawy panel (statystyki + ikony + opis) — płynnie znika przy zwężaniu okna,
+       zamiast płynąć razem z krawędzią. Próg 1100px = powyżej min-width body. */
+    @media (max-width: 1100px) {
+      .app-wrapper {
+        opacity: 0 !important;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+      }
+    }
+
     /* ── HERO ── */
     .hero {
       display: flex;
