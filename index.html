@@ -458,6 +458,17 @@
     .stat-item:nth-child(3) .stat-value { animation-delay: 1s; }
     .stat-item:nth-child(3) .stat-label { animation-delay: 1s, 1s; }
 
+    .stat-item { position: relative; }
+    .stat-item::after {
+      content: '';
+      position: absolute;
+      left: 15%;
+      right: 15%;
+      bottom: -0.25rem;
+      height: 1px;
+      background: rgba(212, 168, 67, 0.2);
+    }
+
     /* ── SOCIAL MEDIA W PRAWYM DOLNYM ROGU ── */
     .social-links {
       position: fixed;
