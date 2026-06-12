@@ -3083,7 +3083,7 @@
           loc: '~33 900',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
-            '<p>TorekMarketKiller (TMK) to platforma do handlu algorytmicznego TradingView → MetaTrader 5. Piąty i ostatni krok w pipeline — live execution na wybranym brokerze. Jeden plik, 33 900 linii kodu, 19 sekcji architektonicznych, 49 klas, 7 równoległych watchdogów. 143+ transakcji na koncie fundowanym FTMO $200k.</p>' +
+            '<p>TorekMarketKiller (TMK) to platforma do handlu algorytmicznego TradingView → MetaTrader 5. Piąty i ostatni krok w pipeline — live execution na wybranym brokerze. Jeden plik, 33 900 linii kodu, 19 sekcji architektonicznych, 49 klas, 7 równoległych watchdogów.</p>' +
             '<p>Alert z TradingView przelatuje przez webhook FastAPI, Cloudflare Tunnel i SignalDispatcher, by wylądować jako realna transakcja na wielu terminalach jednocześnie — lokalnych i zdalnych przez VPS. Człowiek tylko patrzy.</p>' +
             '<h3>Dwie niezależne ścieżki egzekucji</h3>' +
             '<p>Platforma ma dwa fundamentalnie różne kanały wykonywania transakcji — nie ma między nimi skrótu, edytując jeden nie dotykasz automatycznie drugiego:</p>' +
@@ -3107,9 +3107,9 @@
             '<li><strong>15+ endpointów REST API + WebSocket</strong> — POST /webhook (przyjmowanie alertów), GET /api/strategies-config, POST /api/strategies-update (reset licznika), GET /api/strategy-history, POST /api/wyrocznia-config-update, GET /api/live-history-zip (import z MATKI), POST /api/update-trigger, POST /api/license-upload, WebSocket /ws/stream (streaming kont/pozycji).</li>' +
             '</ul>' +
             '<h3>Rola w pipeline TMK</h3>' +
-            '<p>Piąty i ostatni krok. Po napisaniu strategii w TradingView, pobraniu świec (Downloader), wybraniu brokera o feedzie najbliższym TV (Komparator) i skalibrowaniu ryzyka w symulatorze (PC2) — TMK jest miejscem gdzie to wszystko spotyka się z rynkiem. Tylko ustawienia które przetrwały poprzednie etapy trafiają na live. Platforma ma na koncie 143+ transakcji na FTMO $200k challenge.</p>',
+            '<p>Piąty i ostatni krok. Po napisaniu strategii w TradingView, pobraniu świec (Downloader), wybraniu brokera o feedzie najbliższym TV (Komparator) i skalibrowaniu ryzyka w symulatorze (PC2) — TMK jest miejscem gdzie to wszystko spotyka się z rynkiem. Tylko ustawienia które przetrwały poprzednie etapy trafiają na live.</p>',
           bodyEn: '<h3>Description</h3>' +
-            '<p>TorekMarketKiller (TMK) is an algorithmic trading platform TradingView → MetaTrader 5. The fifth and final step in the pipeline — live execution on the selected broker. One file, 33,900 lines of code, 19 architectural sections, 49 classes, 7 parallel watchdogs. 143+ trades on a $200k FTMO funded challenge account.</p>' +
+            '<p>TorekMarketKiller (TMK) is an algorithmic trading platform TradingView → MetaTrader 5. The fifth and final step in the pipeline — live execution on the selected broker. One file, 33,900 lines of code, 19 architectural sections, 49 classes, 7 parallel watchdogs.</p>' +
             '<p>A TradingView alert flies through a FastAPI webhook, Cloudflare Tunnel, and the SignalDispatcher to land as a real trade on multiple terminals simultaneously — local and remote via VPS. A human just watches.</p>' +
             '<h3>Two independent execution paths</h3>' +
             '<p>The platform has two fundamentally different trade execution channels — there\'s no shortcut between them; editing one doesn\'t automatically affect the other:</p>' +
@@ -3133,7 +3133,7 @@
             '<li><strong>15+ REST API endpoints + WebSocket</strong> — POST /webhook (alert intake), GET /api/strategies-config, POST /api/strategies-update (counter reset), GET /api/strategy-history, POST /api/wyrocznia-config-update, GET /api/live-history-zip (import from MASTER), POST /api/update-trigger, POST /api/license-upload, WebSocket /ws/stream (account/position streaming).</li>' +
             '</ul>' +
             '<h3>Role in the TMK pipeline</h3>' +
-            '<p>Fifth and final step. After writing a strategy in TradingView, downloading candles (Downloader), selecting the broker whose feed is closest to TV (Comparator), and calibrating risk in the simulator (PC2) — TMK is where it all meets the market. Only settings that survived the previous stages go live. The platform has logged 143+ trades on a $200k FTMO challenge account.</p>',
+            '<p>Fifth and final step. After writing a strategy in TradingView, downloading candles (Downloader), selecting the broker whose feed is closest to TV (Comparator), and calibrating risk in the simulator (PC2) — TMK is where it all meets the market. Only settings that survived the previous stages go live.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">FastAPI</span><span class="tag">MQL5</span><span class="tag">Cloudflare</span><span class="tag">WebSocket</span><span class="tag">GPT-4o</span><span class="tag">RSA</span><span class="tag">Multiprocessing</span><span class="tag">GA+ILS</span><span class="tag">FTMO Live</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">FastAPI</span><span class="tag">MQL5</span><span class="tag">Cloudflare</span><span class="tag">WebSocket</span><span class="tag">GPT-4o</span><span class="tag">RSA</span><span class="tag">Multiprocessing</span><span class="tag">GA+ILS</span><span class="tag">FTMO Live</span>'
         }
