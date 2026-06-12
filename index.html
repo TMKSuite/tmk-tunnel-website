@@ -3368,6 +3368,15 @@
         }
       };
 
+      // ── Treści artykułów ──
+      var ARTICLE_CONTENT = {
+        '1': {
+          bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
+            '<p>Tytuł artykułu nieprzypadkowo nawiązuje właśnie do tego wydarzenia. Chciałbym podzielić się z Wami pewną historią, która — przynajmniej w mojej opinii — ma wbrew pozorom wiele wspólnego z osobą wyżej wspomnianego, mitycznego bohatera.</p>' +
+            '<p>Z racji tego, że jest to mój pierwszy artykuł na stronie i chyba pierwszy w ogóle, to warto byłoby może wyjaśnić kilka kwestii. Po pierwsze — i chyba najważniejsze — wszystkie treści, które tutaj znajdziecie, to moje subiektywne zdanie. Nie prowadzę żadnych szkoleń, niczego nie sprzedaję, nie jestem żadnym guru ani nie posiadam żadnego formalnego wykształcenia kierunkowego dotyczącego finansów, handlu na rynkach walutowych ani żadnych innych. Dzielę się z Wami własnymi przemyśleniami oraz doświadczeniami i chętnie podyskutuję z każdym, kto będzie miał ochotę odnieść się merytorycznie do informacji, które tutaj znajdzie.</p>'
+        }
+      };
+
       function renderAppOverlay(details) {
         var lang = currentLang === 'en' ? 'en' : 'pl';
         document.getElementById('ovBody').innerHTML = details['body' + (lang === 'en' ? 'En' : 'Pl')] || details.bodyPl || '';
@@ -3754,7 +3763,14 @@
           document.getElementById('ovName').textContent = title;
           document.getElementById('ovBadge').textContent = date;
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
-          document.getElementById('ovBody').innerHTML = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>' + buildVoteButtonsHtml(articleId);
+          var content = ARTICLE_CONTENT[articleId];
+          var bodyHtml = '';
+          if (content && content.bodyPl) {
+            bodyHtml = content.bodyPl;
+          } else {
+            bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+          }
+          document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
           document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
           document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
           document.getElementById('ovScreenshots').innerHTML = '';
