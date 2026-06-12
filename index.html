@@ -1757,6 +1757,13 @@
         width: 1px;
         background: rgba(212, 168, 67, 0.2);
       }
+      .stats-mobile-item {
+        opacity: 0;
+        animation: fadeInLink 0.5s ease forwards;
+      }
+      .stats-mobile-item:nth-child(1) { animation-delay: 0.3s; }
+      .stats-mobile-item:nth-child(2) { animation-delay: 0.6s; }
+      .stats-mobile-item:nth-child(3) { animation-delay: 0.9s; }
       .stats-mobile-item .stats-mobile-value {
         animation: statPulse 3s ease-in-out infinite;
       }
