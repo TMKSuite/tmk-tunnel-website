@@ -2062,6 +2062,9 @@
           grid-column: auto;
           position: relative;
         }
+        .nav-link:last-of-type {
+          margin-right: 2rem;
+        }
         .nav-link::before { display: none; }
         .nav-link:not(:last-child)::after {
           display: block;
@@ -2096,7 +2099,7 @@
           transform: translateY(-50%);
         }
         .lang-toggle-nav:hover {
-          transform: translateY(-50%) scale(1.1);
+          transform: translateY(-50%) !important;
         }
         .lang-toggle-mobile {
           display: none;
