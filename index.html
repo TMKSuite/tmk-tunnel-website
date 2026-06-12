@@ -1536,6 +1536,15 @@
       background: rgba(0, 0, 0, 0.8);
     }
 
+    /* Na dotyku nie ma hover — przycisk wraca od razu do stanu spoczynkowego */
+    @media (pointer: coarse) {
+      .lightbox-nav:hover {
+        border-color: rgba(255, 255, 255, 0.1);
+        color: rgba(230, 237, 243, 0.7);
+        background: rgba(0, 0, 0, 0.5);
+      }
+    }
+
     .lightbox-nav-prev { left: 1.5rem; }
     .lightbox-nav-next { right: 1.5rem; }
 
