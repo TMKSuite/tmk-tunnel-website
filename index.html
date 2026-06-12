@@ -3044,6 +3044,8 @@
       if (window._rebuildNews) window._rebuildNews();
       // Update ref list descriptions
       if (window._updateRefLang) window._updateRefLang();
+      // Refresh article overlay if open
+      if (window._refreshArticleOverlay) window._refreshArticleOverlay();
       // Reload Giscus with new language
       if (window._reloadGiscus) window._reloadGiscus();
     }
@@ -3395,6 +3397,7 @@
       // Klik w kartę projektu
       document.querySelectorAll('.project-card').forEach(function(card) {
         card.addEventListener('click', function() {
+          window._currentArticleId = null;
           var name = card.querySelector('.card-name').textContent;
           var icon = card.querySelector('.card-icon img').getAttribute('src');
           var badgeEl = card.querySelector('.card-badge');
@@ -3739,6 +3742,21 @@
     // ── Artykuły: kliknięcie otwiera overlay ──
     (function() {
       // Treści artykułów (klucz = data-article)
+      // Expose for lang switch
+      window._refreshArticleOverlay = function() {
+        var overlay = document.getElementById('appOverlay');
+        if (!overlay.classList.contains('open')) return;
+        var articleId = window._currentArticleId;
+        if (!articleId) return;
+        var content = ARTICLE_CONTENT[articleId];
+        if (!content) return;
+        var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
+        var bodyHtml = content[langKey] || content.bodyPl || '';
+        var votesHtml = document.querySelector('.article-votes-overlay');
+        document.getElementById('ovBody').innerHTML = bodyHtml + (votesHtml ? votesHtml.outerHTML : buildVoteButtonsHtml(articleId));
+        var metaHtml = document.getElementById('ovMeta').innerHTML;
+      };
+
       var ARTICLE_CONTENT = {
         '1': {
           bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
@@ -3751,7 +3769,18 @@
             '<p>Niech pierwszy rzuci kamień ten, kto nigdy nie dał się ponieść fantazji bogactwa i leżenia na plaży z laptopem, popijając drinka. Na szczęście w moim przypadku bardzo szybko się opamiętałem — zanim straciłem jakiekolwiek realne pieniądze.</p>' +
             '<p>Przechodząc dalej — na początku kwietnia 2025 roku stwierdziłem, że nadszedł wreszcie czas na zmiany. Złożyłem wypowiedzenie i zamierzałem poszukać czegoś innego. Miałem na spokojnie przeglądać oferty w czasie okresu wypowiedzenia i zdecydować, czym mógłbym się zająć. Oczywiście o zawodowym zajmowaniu się tradingiem nawet nie myślałem. Jednak wydarzyło się coś, co pchnęło pierwszą kostkę domina…</p>' +
             '<p>Podczas meczu piłki nożnej zerwałem ścięgno Achillesa. Przez ponad 30 lat mojego życia nigdy niczego nie złamałem, nie skręciłem. Moja najpoważniejsza kontuzja to było wybicie małego palca.</p>' +
-            '<p>Kiedy dowiedziałem się, że teraz przez kilka miesięcy będę uziemiony — na początku nie tryskałem optymizmem. Zabieg, gips, orteza, chodzenie o kulach, rehabilitacja — perspektywa takiego spędzenia kilku najbliższych miesięcy nie była zachęcająca.</p>'
+            '<p>Kiedy dowiedziałem się, że teraz przez kilka miesięcy będę uziemiony — na początku nie tryskałem optymizmem. Zabieg, gips, orteza, chodzenie o kulach, rehabilitacja — perspektywa takiego spędzenia kilku najbliższych miesięcy nie była zachęcająca.</p>',
+          bodyEn: '<p>Surely everyone — or at least most of you — has heard the story of Achilles, the greatest warrior of the Trojan War. I won\'t dive into the details of that story, so if anyone hasn\'t heard it yet, I warmly encourage you to catch up in your free time.</p>' +
+            '<p>The title of this article is no accident — it references exactly that event. I\'d like to share a story with you that, at least in my opinion, has more in common with the aforementioned mythical hero than it might seem at first glance.</p>' +
+            '<p>Since this is my first article on the site — and probably my first ever — it\'s probably worth clarifying a few things. First, and perhaps most importantly: everything you\'ll find here is my subjective opinion. I don\'t run any training courses, I\'m not selling anything, I\'m not any kind of guru, and I have no formal education in finance, currency trading, or anything related. I\'m sharing my own thoughts and experiences with you, and I\'m happy to discuss with anyone who wants to engage substantively with the content you\'ll find here.</p>' +
+            '<hr>' +
+            '<p>About 10 years ago, after moving to my current place of residence, I started working at a car engine parts factory. I was 26 at the time. I don\'t want to tell my entire life story here, so I\'ll keep it short — as far as I was concerned, the job was perfectly fine back then. I\'d be lying if I said it was demanding. Looking back now, you basically just had to show up, not be late, and — of course — be sober. Anyone who\'s worked in a factory knows what it\'s like, and if you haven\'t… well, you\'ve got it all ahead of you 😊</p>' +
+            '<p>As the years went by, it started dawning on me more and more that this wasn\'t something I wanted to do with my life. I started getting interested in the Forex market, and — of course — my first sources of knowledge were: the internet, YouTube channels of various creators, and over time, books on trading, the psychology of money, and so on. I have to admit it really pulled me in, although in hindsight I won\'t hide the reasons for that state of affairs.</p>' +
+            '<p>I don\'t think I\'d be far from the truth if I assumed I\'m not the only person in the world who believed that what you see on the internet about trading financial markets is true. It seems absurd to me now, but believe me — back then I genuinely believed that people were making thousands of dollars a day, that they practically never lost money, 90–95% win rates… all you have to do is buy my course 😊</p>' +
+            '<p>Let he who has never been swept away by fantasies of wealth and lying on a beach with a laptop, sipping a drink, cast the first stone. Fortunately, in my case, I came to my senses very quickly — before I lost any real money.</p>' +
+            '<p>Moving on — at the beginning of April 2025, I decided it was finally time for a change. I handed in my notice and planned to look for something else. I was going to casually browse job offers during my notice period and figure out what I could do. Of course, I wasn\'t even thinking about trading professionally. But then something happened that pushed over the first domino…</p>' +
+            '<p>During a football match, I ruptured my Achilles tendon. In over 30 years of my life, I had never broken or sprained anything. My most serious injury up to that point had been dislocating my little toe.</p>' +
+            '<p>When I found out I\'d be grounded for the next several months — I wasn\'t exactly bursting with optimism at first. Surgery, cast, orthosis, walking on crutches, rehabilitation — the prospect of spending the next few months like that wasn\'t exactly appealing.</p>'
         }
       };
 
@@ -3764,6 +3793,7 @@
           var date = card.querySelector('.article-date').textContent;
           var excerpt = card.querySelector('.article-excerpt').textContent;
           var articleId = card.dataset.article;
+          window._currentArticleId = articleId;
 
           document.getElementById('ovIcon').src = '/assets/images/face.png';
           document.getElementById('ovIcon').alt = 'Artykuł';
@@ -3773,9 +3803,11 @@
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
           var content = ARTICLE_CONTENT[articleId];
           var bodyHtml = '';
-          if (content && content.bodyPl) {
-            bodyHtml = content.bodyPl;
-          } else {
+          if (content) {
+            var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
+            bodyHtml = content[langKey] || content.bodyPl || '';
+          }
+          if (!bodyHtml) {
             bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
           }
           document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
