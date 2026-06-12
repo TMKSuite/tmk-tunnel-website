@@ -2279,6 +2279,21 @@
         display: none !important;
       }
     }
+    /* ── Desktop 951-1300px: statystyki pod logo ── */
+    @media (min-width: 951px) and (max-width: 1300px) {
+      .stats-block {
+        display: flex !important;
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        right: auto;
+        bottom: auto;
+        flex-direction: row;
+        gap: 1.8rem;
+        z-index: 10;
+      }
+    }
     </style>
 </head>
 <body>
