@@ -2258,7 +2258,8 @@
         position: fixed;
         top: 1.5rem;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) scale(var(--hero-scale, 1));
+        transform-origin: top center;
         right: auto;
         bottom: auto;
         flex-direction: row;
