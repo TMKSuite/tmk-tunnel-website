@@ -2934,7 +2934,7 @@
             '<li><strong>Auto-zapis CSV</strong> — automatyczna nazwa pliku <code>historia_{symbol}_{interval}.csv</code>, gotowe do użycia w CandleComparisonTMK.</li>' +
             '</ul>' +
             '<h3>Rola w pipeline TMK</h3>' +
-            '<p>Etap -2 w 4-aktowym systemie. Bez tej aplikacji nie ma jak zdobyć danych świecowych z TradingView do porównania z brokerem. CandleComparisonTMK porównuje feed brokera z TV — ale najpierw ktoś musi te dane z TV pobrać. To jest właśnie rola Downloadera: fundament całego due diligence.</p>',
+            '<p>Drugi krok w pipeline TMK. Po napisaniu strategii w TradingView pobierasz dane świecowe z TV, żeby potem w CandleComparisonTMK porównać feedy brokerów MT5 i wybrać ten najbardziej zbliżony do feedu, na którym budowałeś strategię. Bez Downloadera nie ma danych do porównania — to fundament całego due diligence.</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>CandlesDownloaderTMK is a reverse-engineered candle data downloader for TradingView. Account login was never an option — TradingView requires two-factor authentication and throws captchas, making automated login practically impossible. The solution: reverse engineering the guest session.</p>' +
             '<p>The app connects via WebSocket to TradingView servers as <code>unauthorized_user_token</code>, performs a full handshake (<code>set_auth_token</code> → <code>chart_create_session</code> → <code>resolve_symbol</code> → <code>create_series</code>), receives the raw TV protocol stream, parses it into OHLCV structure, and saves it as a CSV file.</p>' +
@@ -2949,7 +2949,7 @@
             '<li><strong>Auto-save CSV</strong> — automatic filename <code>historia_{symbol}_{interval}.csv</code>, ready to use in CandleComparisonTMK.</li>' +
             '</ul>' +
             '<h3>Role in the TMK pipeline</h3>' +
-            '<p>Stage -2 in the 4-act system. Without this app, there\'s no way to get TradingView candle data for broker comparison. CandleComparisonTMK compares the broker feed against TV — but someone has to download the TV data first. That\'s the Downloader\'s job: the foundation of the entire due diligence process.</p>',
+            '<p>Second step in the TMK pipeline. After writing your strategy in TradingView, you download candle data from TV so that CandleComparisonTMK can compare MT5 broker feeds and find the one closest to the feed you built your strategy on. Without the Downloader, there\'s no data to compare — it\'s the foundation of the entire due diligence process.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
         },
@@ -2973,7 +2973,7 @@
             '<li><strong>Eksport raportu TXT</strong> — automatyczna nazwa pliku z nazwami porównywanych plików i timestampem.</li>' +
             '</ul>' +
             '<h3>Rola w pipeline TMK</h3>' +
-            '<p>Etap -1 w 4-aktowym systemie. Konsumuje CSV z TradingView (pobrany przez CandlesDownloaderTMK) i CSV z brokera MT5. Produkuje rankingowy raport rozjazdu per broker. Wynik tej analizy pokazuje, <strong>feed którego brokera jest najbardziej zbliżony do feedu w TradingView</strong>, na którym testowałeś swoją strategię.</p>' +
+            '<p>Trzeci krok w pipeline TMK. Mając już dane z TradingView (pobrane przez CandlesDownloaderTMK) i CSV z brokera MT5, porównujesz feedy i dostajesz raport rozjazdu. Wynik pokazuje, <strong>feed którego brokera jest najbardziej zbliżony do feedu w TradingView</strong>, na którym budowałeś strategię. Na podstawie tej analizy wybierasz brokera do dalszych testów w symulatorze (PC2).</p>' +
             '<p>To etap, który 95% retail-traderów pomija. Biorą pierwszego brokera oferującego challenge i puszczają strategię. Potem szukają odpowiedzi na pytanie "czemu moje SL hituje, a w TV nie?". Ty zmierzyłeś to empirycznie <strong>zanim</strong> zaryzykowałeś pierwsze pieniądze.</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>CandleComparisonTMK is a digital OHLC candle comparator — it measures the empirical divergence between an MT5 broker feed and TradingView data. Instead of raw price differences, it operates in <strong>ticks</strong> — the unit that actually impacts SL/TP levels. Auto CSV format detection, 4-section report, two analysis windows.</p>' +
@@ -2989,7 +2989,7 @@
             '<li><strong>TXT report export</strong> — automatic filename with compared file names and timestamp.</li>' +
             '</ul>' +
             '<h3>Role in the TMK pipeline</h3>' +
-            '<p>Stage -1 in the 4-act system. Consumes TradingView CSV (downloaded by CandlesDownloaderTMK) and broker MT5 CSV. Produces a ranked divergence report per broker. The result of this analysis shows <strong>which broker\'s feed is closest to the TradingView feed</strong> on which you tested your strategy.</p>' +
+            '<p>Third step in the TMK pipeline. With TradingView data already downloaded (via CandlesDownloaderTMK) and MT5 broker CSV, you compare feeds and get a divergence report. The result shows <strong>which broker\'s feed is closest to the TradingView feed</strong> you built your strategy on. Based on this analysis, you pick a broker for further testing in the simulator (PC2).</p>' +
             '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?" You measured it empirically <strong>before</strong> risking your first dollar.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
