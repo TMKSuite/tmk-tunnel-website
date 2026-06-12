@@ -3335,7 +3335,7 @@
       var DESIGN_WIDTH = 1980;
       var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
                               // strona przestaje się kurczyć i włącza poziomy scroll
-      var MIN_LOGO_SCALE = 0.75;  // logo nie kurczy się poniżej 75% oryginału
+      var MIN_LOGO_SCALE = 0.55;  // logo nie kurczy się poniżej 55% oryginału
       function updateHeroScale() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
         var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
