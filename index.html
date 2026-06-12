@@ -3897,6 +3897,8 @@
       }
 
       document.addEventListener('keydown', function(e) {
+        // Ignoruj gdy lightbox otwarty — nawigacja zdjęć ma priorytet
+        if (document.getElementById('lightbox').classList.contains('open')) return;
         // Ignoruj gdy użytkownik jest w polu tekstowym
         var tag = document.activeElement ? document.activeElement.tagName : '';
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
