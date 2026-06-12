@@ -2917,8 +2917,6 @@
         'CandleDownloader': {
           iconCircle: false,
           loc: '~370',
-          buildTimePl: '1 dzień',
-          buildTimeEn: '1 day',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>CandlesDownloaderTMK to reverse-engineered downloader danych świecowych z TradingView. Logowanie przez konto nie wchodziło w grę — TradingView wymaga dwuskładnikowego uwierzytelnienia i rzuca captcha, więc automatyzacja logowania jest praktycznie niemożliwa. Rozwiązanie: reverse engineering sesji gościa.</p>' +
@@ -2956,8 +2954,6 @@
         'CandleComparison': {
           iconCircle: false,
           loc: '~500',
-          buildTimePl: 'około 2 dni',
-          buildTimeEn: 'about 2 days',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>CandleComparisonTMK to cyfrowy komparator świec OHLC — mierzy empiryczny rozjazd między feedem brokera MT5 a danymi TradingView. Zamiast surowych różnic w cenie operuje na <strong>tickach</strong> — jednostce, która realnie wpływa na poziomy SL/TP. Auto-detekcja formatu CSV, raport 4-sekcyjny, dwa okna analizy.</p>' +
@@ -2997,8 +2993,6 @@
         'ClientCreator': {
           iconCircle: false,
           loc: '~540',
-          buildTimePl: '14 dni (w toku)',
-          buildTimeEn: '14 days (in progress)',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>ClientCreator to narzędzie CLI do budowania spersonalizowanych klientów platformy TMK. Czyta główny plik <code>TorekMarketKiller.py</code>, podmienia generyczne placeholder\'y na dane tunelu konkretnego klienta (Cloudflare Tunnel ID, subdomena, klucze JSON), kompiluje przez PyInstaller do pliku <code>.exe</code> i uploaduje na GitHub Releases. Każdy klient dostaje własny release <code>latest-&lt;subdomena&gt;</code> z własnym kanałem auto-update.</p>' +
@@ -3046,8 +3040,6 @@
         'PortfolioCommandCenter': {
           iconCircle: false,
           loc: '~6 700',
-          buildTimePl: 'około miesiąc',
-          buildTimeEn: 'about a month',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>Portfolio Command Center (PC2) to desktopowy symulator portfela strategii tradingowych — sandbox do kalibracji ryzyka przed wdrożeniem na live. Tylko ustawienia, które tu przetrwały testy, idą na konto fundowane. Całość zaprojektowana pod realia prop firm: modele wypłat, stress-testy odpornościowe, audyt kwartalny.</p>' +
@@ -3089,8 +3081,6 @@
         'TorekMarketKiller': {
           iconCircle: false,
           loc: '~33 900',
-          buildTimePl: '12 miesięcy',
-          buildTimeEn: '12 months',
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>TorekMarketKiller (TMK) to platforma do handlu algorytmicznego TradingView → MetaTrader 5. Piąty i ostatni krok w pipeline — live execution na wybranym brokerze. Jeden plik, 33 900 linii kodu, 19 sekcji architektonicznych, 49 klas, 7 równoległych watchdogów. 143+ transakcji na koncie fundowanym FTMO $200k.</p>' +
@@ -3154,7 +3144,6 @@
         document.getElementById('ovBody').innerHTML = details['body' + (lang === 'en' ? 'En' : 'Pl')] || details.bodyPl || '';
         document.getElementById('ovMeta').innerHTML =
           '<div class="overlay-meta-item"><span>' + details.loc + '</span>' + (lang === 'en' ? 'Lines of code' : 'Linii kodu') + '</div>' +
-          '<div class="overlay-meta-item"><span>' + (lang === 'en' ? details.buildTimeEn : details.buildTimePl) + '</span>' + (lang === 'en' ? 'Build time' : 'Czas budowy') + '</div>' +
           '<div class="overlay-meta-item"><span>' + details.env + '</span>' + (lang === 'en' ? 'Environment' : 'Środowisko') + '</div>';
         document.getElementById('ovTags').innerHTML = details['tags' + (lang === 'en' ? 'En' : 'Pl')] || details.tagsPl || '';
       }
