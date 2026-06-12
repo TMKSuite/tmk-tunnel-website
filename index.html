@@ -3368,15 +3368,6 @@
         }
       };
 
-      // ── Treści artykułów ──
-      var ARTICLE_CONTENT = {
-        '1': {
-          bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
-            '<p>Tytuł artykułu nieprzypadkowo nawiązuje właśnie do tego wydarzenia. Chciałbym podzielić się z Wami pewną historią, która — przynajmniej w mojej opinii — ma wbrew pozorom wiele wspólnego z osobą wyżej wspomnianego, mitycznego bohatera.</p>' +
-            '<p>Z racji tego, że jest to mój pierwszy artykuł na stronie i chyba pierwszy w ogóle, to warto byłoby może wyjaśnić kilka kwestii. Po pierwsze — i chyba najważniejsze — wszystkie treści, które tutaj znajdziecie, to moje subiektywne zdanie. Nie prowadzę żadnych szkoleń, niczego nie sprzedaję, nie jestem żadnym guru ani nie posiadam żadnego formalnego wykształcenia kierunkowego dotyczącego finansów, handlu na rynkach walutowych ani żadnych innych. Dzielę się z Wami własnymi przemyśleniami oraz doświadczeniami i chętnie podyskutuję z każdym, kto będzie miał ochotę odnieść się merytorycznie do informacji, które tutaj znajdzie.</p>'
-        }
-      };
-
       function renderAppOverlay(details) {
         var lang = currentLang === 'en' ? 'en' : 'pl';
         document.getElementById('ovBody').innerHTML = details['body' + (lang === 'en' ? 'En' : 'Pl')] || details.bodyPl || '';
@@ -3747,6 +3738,15 @@
 
     // ── Artykuły: kliknięcie otwiera overlay ──
     (function() {
+      // Treści artykułów (klucz = data-article)
+      var ARTICLE_CONTENT = {
+        '1': {
+          bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
+            '<p>Tytuł artykułu nieprzypadkowo nawiązuje właśnie do tego wydarzenia. Chciałbym podzielić się z Wami pewną historią, która — przynajmniej w mojej opinii — ma wbrew pozorom wiele wspólnego z osobą wyżej wspomnianego, mitycznego bohatera.</p>' +
+            '<p>Z racji tego, że jest to mój pierwszy artykuł na stronie i chyba pierwszy w ogóle, to warto byłoby może wyjaśnić kilka kwestii. Po pierwsze — i chyba najważniejsze — wszystkie treści, które tutaj znajdziecie, to moje subiektywne zdanie. Nie prowadzę żadnych szkoleń, niczego nie sprzedaję, nie jestem żadnym guru ani nie posiadam żadnego formalnego wykształcenia kierunkowego dotyczącego finansów, handlu na rynkach walutowych ani żadnych innych. Dzielę się z Wami własnymi przemyśleniami oraz doświadczeniami i chętnie podyskutuję z każdym, kto będzie miał ochotę odnieść się merytorycznie do informacji, które tutaj znajdzie.</p>'
+        }
+      };
+
       document.querySelectorAll('.article-card').forEach(function(card) {
         card.addEventListener('click', function(e) {
           // Nie otwieraj overlayu gdy kliknięto przycisk łapki
