@@ -3335,15 +3335,14 @@
       var DESIGN_WIDTH = 1980;
       var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
                               // strona przestaje się kurczyć i włącza poziomy scroll
-      var MIN_LOGO_SCALE = 0.55;  // logo nie kurczy się poniżej 55% oryginału
+      var LOGO_SHRINK = 0.5;  // logo zmniejsza się o połowę wolniej niż reszta hero
       function updateHeroScale() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
         var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
         document.documentElement.style.setProperty('--hero-scale', String(s));
 
-        // Logo — łagodniejsza skala: większe na węższych ekranach
-        var logoRaw = Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH;
-        var logoScale = Math.min(1, Math.max(MIN_LOGO_SCALE, logoRaw));
+        // Logo — łagodniejsze skalowanie: zmniejsza się tylko w LOGO_SHRINK tempie hero
+        var logoScale = 1 - (1 - s) * LOGO_SHRINK;
         document.documentElement.style.setProperty('--logo-scale', String(logoScale));
       }
       window.addEventListener('resize', updateHeroScale, { passive: true });
