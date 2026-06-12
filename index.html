@@ -2973,7 +2973,7 @@
             '<li><strong>Eksport raportu TXT</strong> — automatyczna nazwa pliku z nazwami porównywanych plików i timestampem.</li>' +
             '</ul>' +
             '<h3>Rola w pipeline TMK</h3>' +
-            '<p>Etap -1 w 4-aktowym systemie. Konsumuje CSV z TradingView (pobrany przez CandlesDownloaderTMK) i CSV z brokera MT5. Produkuje rankingowy raport rozjazdu per broker. Wynik tej analizy decyduje, <strong>u którego brokera odpalasz konto FTMO</strong>, na którym potem ląduje cała egzekucja z TMK.</p>' +
+            '<p>Etap -1 w 4-aktowym systemie. Konsumuje CSV z TradingView (pobrany przez CandlesDownloaderTMK) i CSV z brokera MT5. Produkuje rankingowy raport rozjazdu per broker. Wynik tej analizy pokazuje, <strong>feed którego brokera jest najbardziej zbliżony do feedu w TradingView</strong>, na którym testowałeś swoją strategię.</p>' +
             '<p>To etap, który 95% retail-traderów pomija. Biorą pierwszego brokera oferującego challenge i puszczają strategię. Potem szukają odpowiedzi na pytanie "czemu moje SL hituje, a w TV nie?". Ty zmierzyłeś to empirycznie <strong>zanim</strong> zaryzykowałeś pierwsze pieniądze.</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>CandleComparisonTMK is a digital OHLC candle comparator — it measures the empirical divergence between an MT5 broker feed and TradingView data. Instead of raw price differences, it operates in <strong>ticks</strong> — the unit that actually impacts SL/TP levels. Auto CSV format detection, 4-section report, two analysis windows.</p>' +
@@ -2989,7 +2989,7 @@
             '<li><strong>TXT report export</strong> — automatic filename with compared file names and timestamp.</li>' +
             '</ul>' +
             '<h3>Role in the TMK pipeline</h3>' +
-            '<p>Stage -1 in the 4-act system. Consumes TradingView CSV (downloaded by CandlesDownloaderTMK) and broker MT5 CSV. Produces a ranked divergence report per broker. The result of this analysis determines <strong>which broker you launch your FTMO account with</strong> — the one where TMK\'s entire execution later lands.</p>' +
+            '<p>Stage -1 in the 4-act system. Consumes TradingView CSV (downloaded by CandlesDownloaderTMK) and broker MT5 CSV. Produces a ranked divergence report per broker. The result of this analysis shows <strong>which broker\'s feed is closest to the TradingView feed</strong> on which you tested your strategy.</p>' +
             '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?" You measured it empirically <strong>before</strong> risking your first dollar.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
