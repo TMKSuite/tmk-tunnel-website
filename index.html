@@ -3134,7 +3134,7 @@
         if (animated) return;
         animated = true;
         // Opóźnienia dopasowane do CSS fadeInLink: 0.3s/0.6s/0.9s delay + 0.5s animacja
-        var delays = [1100, 1700, 2300];
+        var delays = [1100, 1700, 2300, 1100, 1700, 2300];
         counters.forEach(function(el, i) {
           setTimeout(function() { animateCounter(el); }, delays[i] || 0);
         });
