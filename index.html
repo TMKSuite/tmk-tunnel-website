@@ -232,8 +232,7 @@
       animation: fadeInNav 1s 0.5s ease both;
       transform: scale(var(--hero-scale, 1));
       transform-origin: top right;
-      transition: opacity 0.35s ease;
-    }
+}
 
     /* ── CO NOWEGO (lewy górny róg) ── */
     .production-panel {
@@ -245,8 +244,7 @@
       max-width: 385px;
       transform: scale(var(--hero-scale, 1));
       transform-origin: top left;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .news-toggle {
       display: flex;
@@ -417,8 +415,7 @@
       animation: fadeInNav 1s 0.7s ease both;
       transform: scale(var(--hero-scale, 1));
       transform-origin: bottom left;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .tech-item {
       display: flex;
@@ -462,8 +459,7 @@
       gap: 0.9rem;
       transform: scale(var(--hero-scale, 1));
       transform-origin: bottom right;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .stat-item {
       font-family: 'Space Grotesk', sans-serif;
@@ -522,8 +518,7 @@
       align-items: center;
       gap: 0.9rem;
       animation: fadeInNav 1s 0.6s ease both;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .social-links a {
       display: flex;
@@ -617,8 +612,7 @@
     /* Statystyki mobilne — ukryte na desktopie */
     .stats-mobile {
       display: none;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .social-links svg {
       width: 35px;
@@ -1245,8 +1239,7 @@
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
+}
 
     .overlay.open {
       opacity: 1;
@@ -2259,31 +2252,31 @@
       .stats-block,
       .social-links,
       .tech-stack {
-        opacity: 0 !important; pointer-events: none !important;
+        display: none !important;
       }
     }
     /* ── Desktop: statystyki ukryte, tylko w mobile ── */
     @media (pointer: fine) {
       .stats-block {
-        opacity: 0 !important; pointer-events: none !important;
+        display: none !important;
       }
     }
     /* ── Desktop wysoki: apki dopiero od 1600px szerokości ── */
     @media (max-width: 1749px) and (min-height: 768px) /* pointer:fine */ {
       .app-wrapper {
-        opacity: 0 !important; pointer-events: none !important;
+        display: none !important;
       }
     }
     /* ── Bardzo niski desktop (<600px): social linki znikają ── */
     @media (max-height: 599px) /* pointer:fine */ {
       .social-links {
-        opacity: 0 !important; pointer-events: none !important;
+        display: none !important;
       }
     }
     /* ── Mobile: stats-mobile tylko do 999px szerokości ── */
     @media (min-width: 1000px) and (pointer: coarse) {
       .stats-mobile {
-        opacity: 0 !important; pointer-events: none !important;
+        display: none !important;
       }
     }
     </style>
