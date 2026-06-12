@@ -2279,11 +2279,11 @@
         display: none !important;
       }
     }
-    /* ── Poniżej 1000px: stats na górze przestają się centrować ── */
+    /* ── Poniżej 1000px: stats zamrożone na środku canvasu 1000px ── */
     @media (max-width: 999px) and (min-height: 768px) and (pointer: fine) {
       .stats-block {
         left: 500px;
-        transform: none;
+        transform: translateX(-50%);
       }
     }
     </style>
