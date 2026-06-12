@@ -3002,8 +3002,14 @@
           env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>ClientCreator to narzędzie CLI do budowania spersonalizowanych klientów platformy TMK. Czyta główny plik <code>TorekMarketKiller.py</code>, podmienia generyczne placeholder\'y na dane tunelu konkretnego klienta (Cloudflare Tunnel ID, subdomena, klucze JSON), kompiluje przez PyInstaller do pliku <code>.exe</code> i uploaduje na GitHub Releases. Każdy klient dostaje własny release <code>latest-&lt;subdomena&gt;</code> z własnym kanałem auto-update.</p>' +
-            '<p><strong>Prace nad GUI trwają.</strong> Obecnie aplikacja działa z linii poleceń, ale w planie jest pełny interfejs graficzny do zarządzania klientami — lista subdomen, stan tuneli, historia buildów, masowe budowanie.</p>' +
-            '<h3>Główne funkcje</h3>' +
+            '<p><strong>Prace nad GUI trwają.</strong> Obecnie aplikacja działa tylko z linii poleceń — podajesz subdomenę, budujesz .exe, decydujesz czy wysłać na GitHub. Trwa przebudowa na pełny interfejs graficzny (PyQt6), spójny wizualnie z resztą narzędzi TMK.</p>' +
+            '<h3>Co jest w budowie</h3>' +
+            '<ul>' +
+            '<li><strong>Warstwa GUI</strong> — wygodny interfejs do zarządzania klientami: lista subdomen, stan tuneli, historia buildów, masowe budowanie. Stylistycznie dopasowany do CandleDownloader i CandleComparison.</li>' +
+            '<li><strong>Sprawdzanie wersji u klienta</strong> — z poziomu aplikacji sprawdzisz jaką wersję platformy ma aktualnie uruchomioną klient na danym tunelu. Żadnego zgadywania — widzisz kto na czym siedzi i decydujesz czy wysłać aktualizację.</li>' +
+            '<li><strong>Samodzielny push release\'a</strong> — jeśli masz już zbudowany .exe w folderze (a np. przy poprzednim budowaniu przez przypadek wybrałeś "nie wysyłaj"), możesz od razu wysłać go na GitHub Releases bez ponownej kompilacji. Koniec z odbudowywaniem .exe tylko po to, żeby wysłać gotowy plik.</li>' +
+            '</ul>' +
+            '<h3>Główne funkcje (obecne)</h3>' +
             '<ul>' +
             '<li><strong>Personalizacja kodu źródłowego</strong> — podmiana placeholder\'ów (<code>##JSON_CONTENT##</code>, <code>##TUNNEL_ID##</code>, <code>##HOSTNAME##</code>, <code>##APP_VERSION##</code>) na dane konkretnego klienta. Timestamp builda ustawiany jako UTC.</li>' +
             '<li><strong>Zarządzanie tunelami Cloudflare</strong> — automatyczne tworzenie nowego tunelu (<code>cloudflared tunnel create</code>), dodawanie rekordu DNS, lub użycie istniejących kluczy jeśli tunel już istnieje.</li>' +
@@ -3016,8 +3022,14 @@
             '<p>ClientCreator to narzędzie do dystrybucji platformy. Zamiast ręcznie kopiować pliki i konfigurować tunele dla każdego klienta, cały proces jest zautomatyzowany: jedna komenda → spersonalizowany .exe → GitHub Releases → klient dostaje powiadomienie o aktualizacji. To jest warstwa "devops" całego systemu — most między kodem źródłowym a działającą instancją u klienta.</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>ClientCreator is a CLI tool for building personalized TMK platform clients. It reads the main <code>TorekMarketKiller.py</code> file, replaces generic placeholders with client-specific tunnel data (Cloudflare Tunnel ID, subdomain, JSON keys), compiles via PyInstaller into a <code>.exe</code>, and uploads to GitHub Releases. Each client gets their own <code>latest-&lt;subdomain&gt;</code> release with their own auto-update channel.</p>' +
-            '<p><strong>GUI development is in progress.</strong> The app currently runs from the command line, but a full graphical interface is planned — subdomain list, tunnel status, build history, batch building.</p>' +
-            '<h3>Main features</h3>' +
+            '<p><strong>GUI development is in progress.</strong> The app currently runs only from the command line — you enter a subdomain, build the .exe, decide whether to upload to GitHub. A full graphical interface (PyQt6) is being built, visually consistent with the rest of the TMK tools.</p>' +
+            '<h3>What\'s being built</h3>' +
+            '<ul>' +
+            '<li><strong>GUI layer</strong> — a comfortable interface for client management: subdomain list, tunnel status, build history, batch building. Styled to match CandleDownloader and CandleComparison.</li>' +
+            '<li><strong>Client version check</strong> — from the app, check what version of the platform a client is currently running on their tunnel. No guessing — you see who\'s on what and decide whether to send an update.</li>' +
+            '<li><strong>Standalone release push</strong> — if you already have a built .exe in the folder (e.g. you accidentally chose "don\'t upload" during the previous build), you can send it to GitHub Releases immediately without recompiling. No more rebuilding an .exe just to upload an already-ready file.</li>' +
+            '</ul>' +
+            '<h3>Main features (current)</h3>' +
             '<ul>' +
             '<li><strong>Source code personalization</strong> — replaces placeholders (<code>##JSON_CONTENT##</code>, <code>##TUNNEL_ID##</code>, <code>##HOSTNAME##</code>, <code>##APP_VERSION##</code>) with client-specific data. Build timestamp set as UTC.</li>' +
             '<li><strong>Cloudflare tunnel management</strong> — automatic tunnel creation (<code>cloudflared tunnel create</code>), DNS record setup, or reuse of existing credentials if the tunnel already exists.</li>' +
