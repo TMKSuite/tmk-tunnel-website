@@ -1724,7 +1724,7 @@
         font-size: 0.72rem;
       }
 
-      /* ── E2. Statystyki mobilne — lewy górny róg ── */
+      /* ── E2. Statystyki mobilne ── */
       .stats-mobile {
         display: flex;
         flex-direction: row;
@@ -2271,6 +2271,12 @@
     /* ── Bardzo niski desktop (<600px): social linki znikają ── */
     @media (max-height: 599px) and (pointer: fine) {
       .social-links {
+        display: none !important;
+      }
+    }
+    /* ── Mobile szerokie (≥768px): ukryj stats-mobile ── */
+    @media (min-width: 768px) and (pointer: coarse) {
+      .stats-mobile {
         display: none !important;
       }
     }
