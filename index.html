@@ -3335,7 +3335,7 @@
       var DESIGN_WIDTH = 1980;
       var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
                               // strona przestaje się kurczyć i włącza poziomy scroll
-      var LOGO_SHRINK = 0.5;  // logo zmniejsza się o połowę wolniej niż reszta hero
+      var LOGO_SHRINK = 1.0;  // logo zmniejsza się o połowę wolniej niż reszta hero
       function updateHeroScale() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
         var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
