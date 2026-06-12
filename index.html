@@ -3391,7 +3391,7 @@
         showImage(currentIndex + delta);
       }
 
-      // Swipe na mobile (tylko 1 palec — pinch zoom nie przerywa)
+      // Swipe na mobile (tylko 1 palec, tylko gdy brak pinch-zoomu)
       (function() {
         var touchStartX = 0;
         var touchCount = 0;
@@ -3400,7 +3400,10 @@
           if (touchCount === 1) touchStartX = e.touches[0].clientX;
         }, {passive: true});
         lightbox.addEventListener('touchend', function(e) {
-          if (touchCount === 1) {
+          // Jeśli zdjęcie jest przybliżone (pinch zoom), pojedynczy palec
+          // służy do przesuwania się po powiększonym obrazie — NIE zmieniaj zdjęcia
+          var scale = window.visualViewport ? window.visualViewport.scale : 1;
+          if (touchCount === 1 && scale <= 1.01) {
             var diff = touchStartX - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 25) {
               navigate(diff > 0 ? 1 : -1);
