@@ -232,6 +232,7 @@
       animation: fadeInNav 1s 0.5s ease both;
       transform: scale(var(--hero-scale, 1));
       transform-origin: top right;
+      transition: opacity 0.35s ease;
     }
 
     /* ── CO NOWEGO (lewy górny róg) ── */
@@ -244,6 +245,7 @@
       max-width: 385px;
       transform: scale(var(--hero-scale, 1));
       transform-origin: top left;
+      transition: opacity 0.35s ease;
     }
 
     .news-toggle {
@@ -415,6 +417,7 @@
       animation: fadeInNav 1s 0.7s ease both;
       transform: scale(var(--hero-scale, 1));
       transform-origin: bottom left;
+      transition: opacity 0.35s ease;
     }
 
     .tech-item {
@@ -459,6 +462,7 @@
       gap: 0.9rem;
       transform: scale(var(--hero-scale, 1));
       transform-origin: bottom right;
+      transition: opacity 0.35s ease;
     }
 
     .stat-item {
@@ -518,6 +522,7 @@
       align-items: center;
       gap: 0.9rem;
       animation: fadeInNav 1s 0.6s ease both;
+      transition: opacity 0.35s ease;
     }
 
     .social-links a {
@@ -612,6 +617,7 @@
     /* Statystyki mobilne — ukryte na desktopie */
     .stats-mobile {
       display: none;
+      transition: opacity 0.35s ease;
     }
 
     .social-links svg {
@@ -2253,25 +2259,29 @@
       .stats-block,
       .social-links,
       .tech-stack {
-        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
       }
     }
     /* ── Desktop: statystyki ukryte, tylko w mobile ── */
     @media (pointer: fine) {
       .stats-block {
-        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
       }
     }
     /* ── Desktop wysoki: apki dopiero od 1600px szerokości ── */
     @media (max-width: 1749px) and (min-height: 768px) and (pointer: fine) {
       .app-wrapper {
-        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
       }
     }
     /* ── Bardzo niski desktop (<600px): social linki znikają ── */
     @media (max-height: 599px) and (pointer: fine) {
       .social-links {
-        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
       }
     }
     /* ── Mobile szerokie (≥768px): ukryj stats-mobile ── */
