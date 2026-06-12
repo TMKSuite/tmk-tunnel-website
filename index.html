@@ -2912,6 +2912,59 @@
         if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
       });
 
+      // ── APP_DETAILS: dane aplikacji do overlayu ──
+      var APP_DETAILS = {
+        'CandleDownloader': {
+          iconCircle: false,
+          loc: '~370',
+          buildTimePl: '1 dzień',
+          buildTimeEn: '1 day',
+          env: 'Python 3.12',
+          bodyPl: '<h3>Opis</h3>' +
+            '<p>CandlesDownloaderTMK to reverse-engineered downloader danych świecowych z TradingView. Logowanie przez konto nie wchodziło w grę — TradingView wymaga dwuskładnikowego uwierzytelnienia i rzuca captcha, więc automatyzacja logowania jest praktycznie niemożliwa. Rozwiązanie: reverse engineering sesji gościa.</p>' +
+            '<p>Aplikacja łączy się przez WebSocket z serwerami TradingView jako <code>unauthorized_user_token</code>, przeprowadza pełny handshake (<code>set_auth_token</code> → <code>chart_create_session</code> → <code>resolve_symbol</code> → <code>create_series</code>), odbiera surowy strumień protokołu TV, parsuje go do struktury OHLCV i zapisuje jako plik CSV.</p>' +
+            '<h3>Główne funkcje</h3>' +
+            '<ul>' +
+            '<li><strong>Reverse-engineered protokół WebSocket TV</strong> — własna implementacja framingu <code>~m~</code>, sekwencji komend i parsowania wiadomości <code>timescale_update</code>. Protokół został rozpracowany przez sniffing w DevTools — TradingView nie publikuje swojej specyfikacji.</li>' +
+            '<li><strong>Obejście 2FA i captcha</strong> — aplikacja działa jako anonimowa sesja gościa (<code>unauthorized_user_token</code>), całkowicie pomijając konieczność logowania. To nie był wybór — to była konieczność: dwuskładnikowe uwierzytelnienie i captcha uniemożliwiają automatyczne logowanie na konto.</li>' +
+            '<li><strong>13 interwałów</strong> — od 1 minuty do monthly (1m, 3m, 5m, 15m, 30m, 45m, 1h, 2h, 3h, 4h, daily, weekly, monthly).</li>' +
+            '<li><strong>Dowolne giełdy</strong> — OANDA, FX, BINANCE, NASDAQ i każda inna obsługiwana przez TradingView.</li>' +
+            '<li><strong>Multi-threading</strong> — QRunnable + QThreadPool, GUI nie zamarza podczas pobierania.</li>' +
+            '<li><strong>Live konsola</strong> — każdy krok procesu (handshake, parsowanie, podsumowanie) widoczny na żywo.</li>' +
+            '<li><strong>Auto-zapis CSV</strong> — automatyczna nazwa pliku <code>historia_{symbol}_{interval}.csv</code>, gotowe do użycia w CandleComparisonTMK.</li>' +
+            '</ul>' +
+            '<h3>Rola w pipeline TMK</h3>' +
+            '<p>Etap -2 w 4-aktowym systemie. Bez tej aplikacji nie ma jak zdobyć danych świecowych z TradingView do porównania z brokerem. CandleComparisonTMK porównuje feed brokera z TV — ale najpierw ktoś musi te dane z TV pobrać. To jest właśnie rola Downloadera: fundament całego due diligence.</p>',
+          bodyEn: '<h3>Description</h3>' +
+            '<p>CandlesDownloaderTMK is a reverse-engineered candle data downloader for TradingView. Account login was never an option — TradingView requires two-factor authentication and throws captchas, making automated login practically impossible. The solution: reverse engineering the guest session.</p>' +
+            '<p>The app connects via WebSocket to TradingView servers as <code>unauthorized_user_token</code>, performs a full handshake (<code>set_auth_token</code> → <code>chart_create_session</code> → <code>resolve_symbol</code> → <code>create_series</code>), receives the raw TV protocol stream, parses it into OHLCV structure, and saves it as a CSV file.</p>' +
+            '<h3>Main features</h3>' +
+            '<ul>' +
+            '<li><strong>Reverse-engineered TV WebSocket protocol</strong> — custom implementation of <code>~m~</code> framing, command sequence, and <code>timescale_update</code> message parsing. The protocol was figured out through DevTools sniffing — TradingView doesn\'t publish its specification.</li>' +
+            '<li><strong>2FA & captcha bypass</strong> — the app operates as an anonymous guest session (<code>unauthorized_user_token</code>), completely bypassing the need to log in. This wasn\'t a choice — it was a necessity: two-factor authentication and captcha make automated account login impossible.</li>' +
+            '<li><strong>13 intervals</strong> — from 1 minute to monthly (1m, 3m, 5m, 15m, 30m, 45m, 1h, 2h, 3h, 4h, daily, weekly, monthly).</li>' +
+            '<li><strong>Any exchange</strong> — OANDA, FX, BINANCE, NASDAQ, and any other supported by TradingView.</li>' +
+            '<li><strong>Multi-threading</strong> — QRunnable + QThreadPool, the GUI doesn\'t freeze during download.</li>' +
+            '<li><strong>Live console</strong> — every step of the process (handshake, parsing, summary) is visible in real time.</li>' +
+            '<li><strong>Auto-save CSV</strong> — automatic filename <code>historia_{symbol}_{interval}.csv</code>, ready to use in CandleComparisonTMK.</li>' +
+            '</ul>' +
+            '<h3>Role in the TMK pipeline</h3>' +
+            '<p>Stage -2 in the 4-act system. Without this app, there\'s no way to get TradingView candle data for broker comparison. CandleComparisonTMK compares the broker feed against TV — but someone has to download the TV data first. That\'s the Downloader\'s job: the foundation of the entire due diligence process.</p>',
+          tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
+          tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
+        }
+      };
+
+      function renderAppOverlay(details) {
+        var lang = currentLang === 'en' ? 'en' : 'pl';
+        document.getElementById('ovBody').innerHTML = details['body' + (lang === 'en' ? 'En' : 'Pl')] || details.bodyPl || '';
+        document.getElementById('ovMeta').innerHTML =
+          '<div class="overlay-meta-item"><span>' + details.loc + '</span>' + (lang === 'en' ? 'Lines of code' : 'Linii kodu') + '</div>' +
+          '<div class="overlay-meta-item"><span>' + (lang === 'en' ? details.buildTimeEn : details.buildTimePl) + '</span>' + (lang === 'en' ? 'Build time' : 'Czas budowy') + '</div>' +
+          '<div class="overlay-meta-item"><span>' + details.env + '</span>' + (lang === 'en' ? 'Environment' : 'Środowisko') + '</div>';
+        document.getElementById('ovTags').innerHTML = details['tags' + (lang === 'en' ? 'En' : 'Pl')] || details.tagsPl || '';
+      }
+
       // Klik w kartę projektu
       document.querySelectorAll('.project-card').forEach(function(card) {
         card.addEventListener('click', function() {
@@ -2920,16 +2973,26 @@
           var badgeEl = card.querySelector('.card-badge');
           var badgeText = badgeEl ? badgeEl.textContent : '';
           var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
+          var details = APP_DETAILS[name];
 
           document.getElementById('ovIcon').src = icon;
           document.getElementById('ovIcon').alt = name;
-          document.getElementById('ovIconWrap').classList.remove('circle');
+          if (details && details.iconCircle) {
+            document.getElementById('ovIconWrap').classList.add('circle');
+          } else {
+            document.getElementById('ovIconWrap').classList.remove('circle');
+          }
           document.getElementById('ovName').textContent = name;
           document.getElementById('ovBadge').textContent = badgeText;
           document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
-          document.getElementById('ovBody').innerHTML = '<h3>Opis aplikacji</h3><p>Pełny opis <strong>' + name + '</strong> pojawi się tutaj. Będzie zawierał szczegółowe informacje o tym co robi aplikacja, jakie problemy rozwiązuje, jakie narzędzia były użyte, ile czasu zajęło jej zbudowanie.</p><h3>Główne funkcje</h3><ul><li>Funkcja pierwsza — opis działania</li><li>Funkcja druga — opis działania</li><li>Funkcja trzecia — opis działania</li></ul><h3>Tech stack</h3><p>Lista technologii i narzędzi użytych w projekcie.</p>';
-          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>~XX XXX</span>Linii kodu</div><div class="overlay-meta-item"><span>X miesięcy</span>Czas budowy</div><div class="overlay-meta-item"><span>Python 3.12</span>Środowisko</div>';
-          document.getElementById('ovTags').innerHTML = '<span class="tag">Python</span><span class="tag">LLM</span><span class="tag">AI-powered</span>';
+
+          if (details) {
+            renderAppOverlay(details);
+          } else {
+            document.getElementById('ovBody').innerHTML = '<h3>Opis aplikacji</h3><p>Pełny opis <strong>' + name + '</strong> pojawi się tutaj.</p>';
+            document.getElementById('ovMeta').innerHTML = '';
+            document.getElementById('ovTags').innerHTML = '';
+          }
 
           openOverlay();
         });
