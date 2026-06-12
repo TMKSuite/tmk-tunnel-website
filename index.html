@@ -3380,7 +3380,7 @@
         }, {passive: true});
         lightbox.addEventListener('touchend', function(e) {
           var diff = touchStartX - e.changedTouches[0].clientX;
-          if (Math.abs(diff) > 50) {
+          if (Math.abs(diff) > 25) {
             navigate(diff > 0 ? 1 : -1);
           }
         });
@@ -3390,8 +3390,8 @@
         lightbox.classList.remove('open');
       });
 
-      document.getElementById('lightboxPrev').addEventListener('click', function() { navigate(-1); });
-      document.getElementById('lightboxNext').addEventListener('click', function() { navigate(1); });
+      document.getElementById('lightboxPrev').addEventListener('click', function() { navigate(-1); this.blur(); });
+      document.getElementById('lightboxNext').addEventListener('click', function() { navigate(1); this.blur(); });
 
       lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) lightbox.classList.remove('open');
