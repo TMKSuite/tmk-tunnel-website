@@ -457,7 +457,7 @@
       flex-direction: column;
       align-items: center;
       gap: 0.9rem;
-      transform: scale(var(--hero-scale, 1));
+      transform: scale(var(--stats-scale, 1));
       transform-origin: bottom right;
     }
 
@@ -3329,8 +3329,8 @@
       var DESIGN_WIDTH = 1980;
       var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
                               // strona przestaje się kurczyć i włącza poziomy scroll
-      var LOGO_SHRINK = 1.0;         // logo zmniejsza się w tym samym tempie co hero
       var LOGO_DESIGN = 1500;        // powyżej 1500px logo zawsze 100%, poniżej zaczyna się skalować
+      var STATS_DESIGN = 1400;       // statystyki zaczynają się skalować później (poniżej 1400px)
       function updateHeroScale() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
         var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
@@ -3339,6 +3339,10 @@
         // Logo — pełny rozmiar powyżej LOGO_DESIGN, poniżej skaluje się proporcjonalnie
         var logoScale = Math.min(1, Math.max(vw, MIN_CANVAS) / LOGO_DESIGN);
         document.documentElement.style.setProperty('--logo-scale', String(logoScale));
+
+        // Statystyki — skalują się później niż apki (poniżej STATS_DESIGN)
+        var statsScale = Math.min(1, Math.max(vw, MIN_CANVAS) / STATS_DESIGN);
+        document.documentElement.style.setProperty('--stats-scale', String(statsScale));
       }
       window.addEventListener('resize', updateHeroScale, { passive: true });
       updateHeroScale();
