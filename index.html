@@ -2250,21 +2250,10 @@
     @media (max-width: 1365px) and (min-height: 900px) and (pointer: fine) {
       .production-panel,
       .app-wrapper,
+      .stats-block,
       .social-links,
       .tech-stack {
         display: none !important;
-      }
-      .stats-block {
-        position: fixed;
-        top: 3.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        right: auto;
-        bottom: auto;
-        flex-direction: row;
-        gap: 1.8rem;
-        display: flex !important;
-        z-index: 10;
       }
     }
     /* ── Niski desktop (<745px): statystyki znikają ── */
@@ -2277,13 +2266,6 @@
     @media (max-height: 599px) and (pointer: fine) {
       .social-links {
         display: none !important;
-      }
-    }
-    /* ── Poniżej 1000px: stats zamrożone na środku canvasu 1000px ── */
-    @media (max-width: 999px) and (min-height: 900px) and (pointer: fine) {
-      .stats-block {
-        left: 500px;
-        transform: translateX(-50%);
       }
     }
     </style>
