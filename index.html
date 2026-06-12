@@ -1437,7 +1437,7 @@
     }
 
     /* ── TELEFON W PIONIE: navbar na dole ── */
-    @media (max-width: 950px) and (min-height: 500px) /* TEST */ {
+    @media (max-width: 950px) and (min-height: 500px) and (pointer: coarse) {
       .nav-left {
         min-width: 0;
         position: fixed;
@@ -1497,7 +1497,7 @@
        Mysz = pointer: fine = zawsze desktop, niezależnie od szerokości okna.
        Zwężanie okna na kompie NIE wchodzi w mobile (okno ucina widok).
        ══════════════════════════════════════════ */
-    @media (max-width: 950px), (max-height: 500px) /* TEST */ {
+    @media (max-width: 950px) and (pointer: coarse), (max-height: 500px) and (pointer: coarse) {
 
       /* ── A. Global ── */
       html, body {
