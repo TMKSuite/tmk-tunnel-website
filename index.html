@@ -3042,6 +3042,49 @@
             '<p>ClientCreator is the distribution layer for the platform. Instead of manually copying files and configuring tunnels for each client, the entire process is automated: one command → personalized .exe → GitHub Releases → client gets an update notification. It\'s the "devops" layer of the system — the bridge between source code and a running instance at the client\'s side.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>'
+        },
+        'PortfolioCommandCenter': {
+          iconCircle: false,
+          loc: '~6 700',
+          buildTimePl: 'około miesiąc',
+          buildTimeEn: 'about a month',
+          env: 'Python 3.13',
+          bodyPl: '<h3>Opis</h3>' +
+            '<p>Portfolio Command Center (PC2) to desktopowy symulator portfela strategii tradingowych — sandbox do kalibracji ryzyka przed wdrożeniem na live. Tylko ustawienia, które tu przetrwały testy, idą na konto fundowane. Całość zaprojektowana pod realia prop firm: modele wypłat, stress-testy odpornościowe, audyt kwartalny.</p>' +
+            '<p>Aplikacja przyjmuje pliki CSV ze strategii (z TradingView lub endoszkielety z TMK), przeprowadza optymalizację wag ryzyka algorytmem GA+ILS, wykonuje Walk-Forward (czasowy lub transakcyjny), modeluje wypłaty według regulaminu prop firm i generuje pełne raporty HTML/TXT z 50+ metrykami.</p>' +
+            '<h3>Główne funkcje</h3>' +
+            '<ul>' +
+            '<li><strong>Hybrydowy optymalizator GA + ILS</strong> — faza 1: algorytm genetyczny (selekcja turniejowa k=3, crossover uniform, mutacja gaussowska, elityzm 10%). Faza 2: N równoległych Iterated Local Search z restartami "leap" i transferami wag. Multiprocessing na wszystkich rdzeniach, cache fitness, cooperative cancellation. Tryb HYPER-TURBO dla Challenge.</li>' +
+            '<li><strong>Walk-Forward</strong> — dwa tryby: czasowy (reoptymalizacja co N miesięcy, okno kroczące/rozszerzane) i transakcyjny (reoptymalizacja co N transakcji). Time-weighting decay dla starszych transakcji, fallback <code>last_valid_weights</code>, <code>final_weights_info</code> z rekomendacją wag do live tradingu.</li>' +
+            '<li><strong>3 modele wypłat prop firm</strong> — Kwartalny (standard: wypłata na koniec kwartału, reset 100%, High Water Mark), Profit-Trigger (snajper EOD: wypłata na koniec dnia po cooldownie), Random (chaos stress-test). Prowizja 20% (FTMO-style), audyt kwartalny z sztywnym ID, Sunday Reset.</li>' +
+            '<li><strong>Tryb Challenge 2-etapowy</strong> — Etap 1 z celem zysku, po zaliczeniu reset 100% i Etap 2 z drugim celem. Hardcoded limit DD -10%. Wealth Speed — czas do osiągnięcia celów +5/10/15/20/25/50% majątku.</li>' +
+            '<li><strong>Stress-testy odpornościowe 3 poziomów</strong> — Poziom 1: Dane (losowe usuwanie X% transakcji, flip wygranych na straty). Poziom 2: Sekwencja (sabotaż treningowy przed GA). Poziom 3: Ryzyko startu (Multi-Start Rolling — X przesunięć daty startu). Meta-raport z Survival Rate i pass rate.</li>' +
+            '<li><strong>50+ metryk</strong> — CAGR, Max Drawdown (Peak-to-Valley), Calmar Ratio, Ulcer Index, Sharpe, Sortino, Beta vs EUR/USD, Alpha. Win Rate, Payoff Ratio, Profit Factor, Expectancy. Streak Analysis, Drought/Posucha, Collision Days, Max Daily Risk. Best/Worst Day, Yearly Compounding, Fixed Base.</li>' +
+            '<li><strong>Matcher Live vs Backtest</strong> — porównuje transakcje live z MT5 do backtestowych endoszkieletów. Delta_R (różnica w jednostkach R), Delta_Pips (fizyczne pipsy poślizgu). Status DIVERGENCE przy medianie > 2 pipsy. Eksport dziennika różnic do CSV.</li>' +
+            '<li><strong>Raporty HTML i TXT</strong> — interaktywne wykresy Plotly (krzywa equity, underwater, histogram zwrotów, calendar heatmap, macierz korelacji Spearmana). Jinja2 template, dark mode CSS, single self-contained HTML. Raport TXT Microscope z metadanymi DNA testu.</li>' +
+            '<li><strong>GUI PyQt6</strong> — 3 główne zakładki (Konstruktor Portfela, Konfiguracja, Matcher), 6 sub-zakładek. Dark theme, QThread worker — GUI nie zamarza podczas wielogodzinnych optymalizacji. Save/Load portfela do <code>.tmkportfolio</code> (JSON).</li>' +
+            '</ul>' +
+            '<h3>Rola w pipeline TMK</h3>' +
+            '<p>Czwarty krok. Po napisaniu strategii w TradingView, pobraniu świec (Downloader) i wybraniu brokera o feedzie najbliższym TV (Komparator), PC2 jest miejscem gdzie kalibrujesz ryzyko. Walk-Forward pokazuje czy strategie działają poza próbką, stress-testy czy są odporne na losowe zdarzenia, a modele wypłat — czy da się z tego żyć według regulaminu prop firm. Tylko konfiguracja która przejdzie przez PC2 ląduje na platformie TMK.</p>',
+          bodyEn: '<h3>Description</h3>' +
+            '<p>Portfolio Command Center (PC2) is a desktop strategy portfolio simulator — a risk calibration sandbox before going live. Only settings that survive testing here go to a funded account. The entire system is designed for prop firm reality: payout models, robustness stress tests, quarterly audits.</p>' +
+            '<p>The app takes strategy CSV files (from TradingView or TMK endoskeletons), runs risk weight optimization via a GA+ILS algorithm, performs Walk-Forward analysis (time-based or trade-based), models payouts according to prop firm rules, and generates full HTML/TXT reports with 50+ metrics.</p>' +
+            '<h3>Main features</h3>' +
+            '<ul>' +
+            '<li><strong>Hybrid GA + ILS optimizer</strong> — Phase 1: genetic algorithm (tournament selection k=3, uniform crossover, Gaussian mutation, 10% elitism). Phase 2: N parallel Iterated Local Search runs with "leap" restarts and weight transfers. Multiprocessing across all cores, fitness cache, cooperative cancellation. HYPER-TURBO mode for Challenge.</li>' +
+            '<li><strong>Walk-Forward</strong> — two modes: time-based (reoptimization every N months, rolling/expanding window) and trade-based (reoptimization every N trades). Time-weighting decay for older trades, <code>last_valid_weights</code> fallback, <code>final_weights_info</code> with live trading weight recommendations.</li>' +
+            '<li><strong>3 prop firm payout models</strong> — Quarterly (standard: payout at quarter end, 100% reset, High Water Mark), Profit-Trigger (EOD sniper: payout at day end after cooldown), Random (chaos stress test). 20% commission (FTMO-style), quarterly audit with rigid ID, Sunday Reset.</li>' +
+            '<li><strong>2-stage Challenge mode</strong> — Stage 1 with profit target, after passing — 100% reset and Stage 2 with second target. Hardcoded -10% DD limit. Wealth Speed — time to reach +5/10/15/20/25/50% total wealth milestones.</li>' +
+            '<li><strong>3-level robustness stress tests</strong> — Level 1: Data (random removal of X% trades, flip wins to losses). Level 2: Sequence (training sabotage before GA). Level 3: Start risk (Multi-Start Rolling — X start date shifts). Meta-report with Survival Rate and pass rate.</li>' +
+            '<li><strong>50+ metrics</strong> — CAGR, Max Drawdown (Peak-to-Valley), Calmar Ratio, Ulcer Index, Sharpe, Sortino, Beta vs EUR/USD, Alpha. Win Rate, Payoff Ratio, Profit Factor, Expectancy. Streak Analysis, Drought, Collision Days, Max Daily Risk. Best/Worst Day, Yearly Compounding, Fixed Base.</li>' +
+            '<li><strong>Live vs Backtest Matcher</strong> — compares live MT5 trades to backtest endoskeletons. Delta_R (R-unit difference), Delta_Pips (physical slippage pips). DIVERGENCE warning when median > 2 pips. CSV export of difference journal.</li>' +
+            '<li><strong>HTML & TXT reports</strong> — interactive Plotly charts (equity curve, underwater, returns histogram, calendar heatmap, Spearman correlation matrix). Jinja2 template, dark mode CSS, single self-contained HTML file. TXT Microscope report with test DNA metadata.</li>' +
+            '<li><strong>PyQt6 GUI</strong> — 3 main tabs (Portfolio Builder, Configuration, Matcher), 6 sub-tabs. Dark theme, QThread worker — GUI doesn\'t freeze during hours-long optimizations. Save/Load portfolio via <code>.tmkportfolio</code> (JSON).</li>' +
+            '</ul>' +
+            '<h3>Role in the TMK pipeline</h3>' +
+            '<p>Fourth step. After writing a strategy in TradingView, downloading candles (Downloader), and selecting a broker whose feed is closest to TV (Comparator), PC2 is where you calibrate risk. Walk-Forward shows whether strategies work out-of-sample, stress tests show whether they survive random events, and payout models show whether you can make a living under prop firm rules. Only a configuration that passes through PC2 lands on the TMK platform.</p>',
+          tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">scipy</span><span class="tag">GA+ILS</span><span class="tag">Walk-Forward</span><span class="tag">Plotly</span><span class="tag">Multiprocessing</span><span class="tag">Prop Firm</span>',
+          tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">scipy</span><span class="tag">GA+ILS</span><span class="tag">Walk-Forward</span><span class="tag">Plotly</span><span class="tag">Multiprocessing</span><span class="tag">Prop Firm</span>'
         }
       };
 
