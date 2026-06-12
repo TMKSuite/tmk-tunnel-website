@@ -2555,7 +2555,7 @@
         <div class="card-name">ClientCreator</div>
         <div class="card-desc" data-i18n="projects.clientcreator">Narzędzie do budowania klientów .exe. Kompilacja PyInstaller, podpisywanie kodu, auto-update przez GitHub Releases.</div>
         <div class="card-meta">
-          <span class="card-stat"><span class="val">~1 100</span> LOC</span>
+          <span class="card-stat"><span class="val">~540</span> LOC</span>
           <span class="card-badge badge-wip" data-i18n="projects.badge_wip">W toku</span>
         </div>
       </div>
@@ -2993,6 +2993,43 @@
             '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?" You measured it empirically <strong>before</strong> risking your first dollar.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
+        },
+        'ClientCreator': {
+          iconCircle: false,
+          loc: '~540',
+          buildTimePl: '14 dni (w toku)',
+          buildTimeEn: '14 days (in progress)',
+          env: 'Python 3.13',
+          bodyPl: '<h3>Opis</h3>' +
+            '<p>ClientCreator to narzędzie CLI do budowania spersonalizowanych klientów platformy TMK. Czyta główny plik <code>TorekMarketKiller.py</code>, podmienia generyczne placeholder\'y na dane tunelu konkretnego klienta (Cloudflare Tunnel ID, subdomena, klucze JSON), kompiluje przez PyInstaller do pliku <code>.exe</code> i uploaduje na GitHub Releases. Każdy klient dostaje własny release <code>latest-&lt;subdomena&gt;</code> z własnym kanałem auto-update.</p>' +
+            '<p><strong>Prace nad GUI trwają.</strong> Obecnie aplikacja działa z linii poleceń, ale w planie jest pełny interfejs graficzny do zarządzania klientami — lista subdomen, stan tuneli, historia buildów, masowe budowanie.</p>' +
+            '<h3>Główne funkcje</h3>' +
+            '<ul>' +
+            '<li><strong>Personalizacja kodu źródłowego</strong> — podmiana placeholder\'ów (<code>##JSON_CONTENT##</code>, <code>##TUNNEL_ID##</code>, <code>##HOSTNAME##</code>, <code>##APP_VERSION##</code>) na dane konkretnego klienta. Timestamp builda ustawiany jako UTC.</li>' +
+            '<li><strong>Zarządzanie tunelami Cloudflare</strong> — automatyczne tworzenie nowego tunelu (<code>cloudflared tunnel create</code>), dodawanie rekordu DNS, lub użycie istniejących kluczy jeśli tunel już istnieje.</li>' +
+            '<li><strong>Kompilacja PyInstaller</strong> — onefile, windowed, noconsole. Z pełnym zestawem hidden imports (certifi, numpy, pandas, matplotlib, PyQt6, uvicorn, wsproto) i zasobami (icon.ico, logo.png, TMK_Watchdog.exe). Wykluczone testy pandas/matplotlib i zbędne moduły PyQtGraph dla mniejszego pliku.</li>' +
+            '<li><strong>Upload na GitHub Releases</strong> — per-subdomena release (<code>latest-&lt;klient&gt;</code>), automatyczne usuwanie starych assetów, pasek postępu uploadu z rozmiarem w MB.</li>' +
+            '<li><strong>version.json</strong> — osobny plik z timestampem builda, uploadowany razem z .exe. Platforma klienta porównuje go ze swoją APP_VERSION przy sprawdzaniu aktualizacji.</li>' +
+            '<li><strong>Auto-trigger aktualizacji</strong> — POST na <code>/api/update-trigger</code> tunelu klienta. Jeśli platforma działa, od razu sprawdza i pobiera nową wersję. Jeśli nie — sprawdzi przy następnym uruchomieniu.</li>' +
+            '</ul>' +
+            '<h3>Rola w ekosystemie TMK</h3>' +
+            '<p>ClientCreator to narzędzie do dystrybucji platformy. Zamiast ręcznie kopiować pliki i konfigurować tunele dla każdego klienta, cały proces jest zautomatyzowany: jedna komenda → spersonalizowany .exe → GitHub Releases → klient dostaje powiadomienie o aktualizacji. To jest warstwa "devops" całego systemu — most między kodem źródłowym a działającą instancją u klienta.</p>',
+          bodyEn: '<h3>Description</h3>' +
+            '<p>ClientCreator is a CLI tool for building personalized TMK platform clients. It reads the main <code>TorekMarketKiller.py</code> file, replaces generic placeholders with client-specific tunnel data (Cloudflare Tunnel ID, subdomain, JSON keys), compiles via PyInstaller into a <code>.exe</code>, and uploads to GitHub Releases. Each client gets their own <code>latest-&lt;subdomain&gt;</code> release with their own auto-update channel.</p>' +
+            '<p><strong>GUI development is in progress.</strong> The app currently runs from the command line, but a full graphical interface is planned — subdomain list, tunnel status, build history, batch building.</p>' +
+            '<h3>Main features</h3>' +
+            '<ul>' +
+            '<li><strong>Source code personalization</strong> — replaces placeholders (<code>##JSON_CONTENT##</code>, <code>##TUNNEL_ID##</code>, <code>##HOSTNAME##</code>, <code>##APP_VERSION##</code>) with client-specific data. Build timestamp set as UTC.</li>' +
+            '<li><strong>Cloudflare tunnel management</strong> — automatic tunnel creation (<code>cloudflared tunnel create</code>), DNS record setup, or reuse of existing credentials if the tunnel already exists.</li>' +
+            '<li><strong>PyInstaller compilation</strong> — onefile, windowed, noconsole. Full set of hidden imports (certifi, numpy, pandas, matplotlib, PyQt6, uvicorn, wsproto) and assets (icon.ico, logo.png, TMK_Watchdog.exe). Tests and unused PyQtGraph modules excluded for smaller file size.</li>' +
+            '<li><strong>GitHub Releases upload</strong> — per-subdomain release (<code>latest-&lt;client&gt;</code>), automatic cleanup of old assets, upload progress bar with MB size.</li>' +
+            '<li><strong>version.json</strong> — separate file with build timestamp, uploaded alongside the .exe. The client\'s platform compares it against its own APP_VERSION when checking for updates.</li>' +
+            '<li><strong>Auto-update trigger</strong> — POST to the client\'s tunnel <code>/api/update-trigger</code>. If the platform is running, it immediately checks for and downloads the new version. If not — it will check on next startup.</li>' +
+            '</ul>' +
+            '<h3>Role in the TMK ecosystem</h3>' +
+            '<p>ClientCreator is the distribution layer for the platform. Instead of manually copying files and configuring tunnels for each client, the entire process is automated: one command → personalized .exe → GitHub Releases → client gets an update notification. It\'s the "devops" layer of the system — the bridge between source code and a running instance at the client\'s side.</p>',
+          tagsPl: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>',
+          tagsEn: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>'
         }
       };
 
