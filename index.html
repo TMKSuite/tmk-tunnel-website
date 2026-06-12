@@ -230,6 +230,8 @@
       flex-direction: column;
       align-items: center;
       animation: fadeInNav 1s 0.5s ease both;
+      transform: scale(var(--hero-scale, 1));
+      transform-origin: top right;
     }
 
     /* ── CO NOWEGO (lewy górny róg) ── */
@@ -240,6 +242,8 @@
       z-index: 10;
       animation: fadeInNav 1s 0.4s ease both;
       max-width: 385px;
+      transform: scale(var(--hero-scale, 1));
+      transform-origin: top left;
     }
 
     .news-toggle {
@@ -409,6 +413,8 @@
       display: flex;
       gap: 1.6rem;
       animation: fadeInNav 1s 0.7s ease both;
+      transform: scale(var(--hero-scale, 1));
+      transform-origin: bottom left;
     }
 
     .tech-item {
@@ -441,13 +447,18 @@
       letter-spacing: 0.04em;
     }
 
-    /* ── STATYSTYKI (w app-wrapper, wysrodkowane jak panel opisu) ── */
+    /* ── STATYSTYKI (prawy dolny róg hero, niezależny origin) ── */
     .stats-block {
-      margin-top: 5.6rem;
+      position: absolute;
+      right: 2rem;
+      bottom: 5.5rem;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.9rem;
+      transform: scale(var(--hero-scale, 1));
+      transform-origin: bottom right;
     }
 
     .stat-item {
@@ -499,7 +510,8 @@
       position: absolute;
       left: 2rem;
       top: 50%;
-      transform: translateY(-50%);
+      transform: translateY(-50%) scale(var(--hero-scale, 1));
+      transform-origin: center left;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -694,8 +706,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transform: translateX(-50%) scale(var(--hero-scale, 1));
-      transform-origin: center center;
+      transform: translateX(-50%);
     }
 
 
@@ -703,6 +714,8 @@
       position: relative;
       z-index: 1;
       animation: fadeInScale 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transform: scale(var(--logo-scale, 1));
+      transform-origin: center center;
     }
 
     @keyframes fadeInScale {
@@ -1471,6 +1484,7 @@
         justify-content: flex-start;
         padding-top: 12vh;
       }
+      .logo-container { transform: none !important; }
       .logo-container img {
         width: min(398px, 109vw);
         height: auto;
@@ -1654,6 +1668,15 @@
          rozpuszcza wrapper, a jego dzieci wracają do flexa .hero (układ mobilny). */
       .hero-inner {
         display: contents;
+      }
+      /* Wyłącz skalowanie desktopowe na mobile — logo sterowane przez width/height */
+      .logo-container {
+        transform: none !important;
+      }
+      /* Wyłącz skalowanie float elementów — mobile używa własnego pozycjonowania */
+      .production-panel, .app-wrapper, .tech-stack, .social-links, .stats-block {
+        transform: none !important;
+        transform-origin: unset !important;
       }
       .logo-container img {
         width: min(398px, 109vw);
@@ -2258,7 +2281,7 @@
       <span class="lang-label lang-pl">PL</span>
       <span class="lang-label lang-en">EN</span>
     </button>
-    <div class="hero-inner">
+    <!-- Pływające elementy hero (poza hero-inner — niezależne originy skalowania) -->
     <div class="app-wrapper">
     <div class="app-showcase" id="appShowcase">
       <div class="app-item active" data-name="TorekMarketKiller"
@@ -2295,6 +2318,7 @@
       <span class="desc-body"></span>
       <span class="desc-footer" data-i18n="desc.footer">Każda z nich zbudowana w 100% przy użyciu modeli językowych</span>
     </div>
+  </div><!-- /.app-wrapper -->
 
     <div class="stats-block">
       <div class="stat-item">
@@ -2310,7 +2334,6 @@
         <div class="stat-label" data-i18n="stats.loc">Linii kodu AI</div>
       </div>
     </div>
-  </div>
 
   <div class="social-links">
     <a href="https://github.com/TMKSuite" target="_blank" rel="noopener" title="GitHub">
@@ -2334,15 +2357,6 @@
         <div class="news-slot" id="newsSlot0"></div>
         <div class="news-slot" id="newsSlot1"></div>
       </div>
-    </div>
-
-    <div class="logo-container">
-      <img
-        src="/assets/images/logo-hero.webp"
-        alt="TMK Suite Logo"
-        width="1600"
-        height="1519"
-      >
     </div>
 
     <!-- Statystyki mobilne (w hero, pod logo) -->
@@ -2369,6 +2383,16 @@
       <div class="tech-item"><img src="/assets/icons/deepseek.svg" alt="DeepSeek" width="18" height="18"><span class="tech-label">DeepSeek</span></div>
       <div class="tech-item"><img src="/assets/icons/cloudflare.svg" alt="Cloudflare" width="18" height="18"><span class="tech-label">Cloudflare</span></div>
       <div class="tech-item"><img src="/assets/icons/tradingview.svg" alt="TradingView" width="18" height="18"><span class="tech-label">TradingView</span></div>
+    </div>
+
+    <div class="hero-inner">
+    <div class="logo-container">
+      <img
+        src="/assets/images/logo-hero.webp"
+        alt="TMK Suite Logo"
+        width="1600"
+        height="1519"
+      >
     </div>
     </div><!-- /.hero-inner -->
   </div>
@@ -3262,7 +3286,7 @@
     // ── Scroll: płynne zanikanie elementów przy scrollowaniu w dół ──
     (function() {
       var FADE_DISTANCE = 350;
-      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack, .stats-mobile, .lang-toggle-mobile');
+      var floatingEls = document.querySelectorAll('.production-panel, .app-wrapper, .social-links, .tech-stack, .stats-block, .stats-mobile, .lang-toggle-mobile');
       var ticking = false;
 
       function onScroll() {
@@ -3311,14 +3335,16 @@
       var DESIGN_WIDTH = 1980;
       var MIN_CANVAS = 1000;  // = body { min-width: 1000px } — poniżej tego cała
                               // strona przestaje się kurczyć i włącza poziomy scroll
+      var MIN_LOGO_SCALE = 0.75;  // logo nie kurczy się poniżej 75% oryginału
       function updateHeroScale() {
-        // clientWidth (bez pionowego paska) — żeby skalowane płótno dokładnie
-        // wypełniało szerokość okna i nie wystawało o szerokość scrollbara.
-        // Dolna granica MIN_CANVAS — żeby hero NIE kurczyło się dalej niż reszta
-        // strony (inaczej rozjeżdżałoby się względem sekcji poniżej).
         var vw = document.documentElement.clientWidth || window.innerWidth;
         var s = Math.min(1, Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH);
         document.documentElement.style.setProperty('--hero-scale', String(s));
+
+        // Logo — łagodniejsza skala: większe na węższych ekranach
+        var logoRaw = Math.max(vw, MIN_CANVAS) / DESIGN_WIDTH;
+        var logoScale = Math.min(1, Math.max(MIN_LOGO_SCALE, logoRaw));
+        document.documentElement.style.setProperty('--logo-scale', String(logoScale));
       }
       window.addEventListener('resize', updateHeroScale, { passive: true });
       updateHeroScale();
