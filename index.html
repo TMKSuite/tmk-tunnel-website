@@ -962,6 +962,41 @@
     .article-card.hidden-by-search {
       display: none;
     }
+    .article-votes {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+      opacity: 0.5;
+      transition: opacity 0.35s ease;
+    }
+    .article-card:hover .article-votes {
+      opacity: 1;
+    }
+    .article-votes-overlay {
+      margin-top: 2rem;
+      opacity: 1;
+      justify-content: flex-start;
+    }
+    .vote-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: border-color 0.35s ease, background 0.35s ease, transform 0.2s ease;
+      line-height: 1;
+      user-select: none;
+    }
+    .vote-btn:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      transform: scale(1.1);
+    }
+    .vote-btn.active {
+      border-color: rgba(212, 168, 67, 0.3);
+      background: rgba(212, 168, 67, 0.08);
+    }
     .articles-list {
       width: min(1900px, 95%);
       margin: 0 auto;
@@ -2743,6 +2778,10 @@
           <time class="article-date">10.06.2026</time>
           <h3 class="article-title">Paradoks Achillesa czyli wysoka "stopa" zwrotu z przypadku</h3>
           <p class="article-excerpt">Rok temu nie miałem pojęcia o kodowaniu. Dziś mam system, który sam handluje na wielu terminalach MT5. To nie jest historia o technologii — to historia o tym, co się dzieje gdy zamiast Netflixa wybierasz rozmowę z AI.</p>
+          <div class="article-votes" data-article="1">
+            <button class="vote-btn vote-like" data-vote="like" aria-label="Lubię to">👍</button>
+            <button class="vote-btn vote-dislike" data-vote="dislike" aria-label="Nie lubię">👎</button>
+          </div>
         </article>
       </div>
     </details>
@@ -3627,13 +3666,87 @@
       });
     })();
 
+    // ── Artykuły: łapki (localStorage) ──
+    var ARTICLE_VOTE_KEY = 'tmk-article-votes'; // { "1": "like"|"dislike" } lub {}
+
+    function getArticleVotes() {
+      try { return JSON.parse(localStorage.getItem(ARTICLE_VOTE_KEY)) || {}; }
+      catch(e) { return {}; }
+    }
+    function saveArticleVotes(votes) {
+      try { localStorage.setItem(ARTICLE_VOTE_KEY, JSON.stringify(votes)); }
+      catch(e) {}
+    }
+    function getArticleVote(articleId) {
+      return getArticleVotes()[articleId] || null;
+    }
+    function setArticleVote(articleId, vote) {
+      var votes = getArticleVotes();
+      if (votes[articleId] === vote) {
+        delete votes[articleId]; // toggle off
+      } else {
+        votes[articleId] = vote;
+      }
+      saveArticleVotes(votes);
+      refreshAllVoteButtons();
+      if (document.getElementById('appOverlay').classList.contains('open')) {
+        refreshOverlayVoteButtons();
+      }
+    }
+    function refreshAllVoteButtons() {
+      var votes = getArticleVotes();
+      document.querySelectorAll('.article-votes').forEach(function(el) {
+        var id = el.dataset.article;
+        var current = votes[id] || null;
+        el.querySelectorAll('.vote-btn').forEach(function(btn) {
+          btn.classList.toggle('active', btn.dataset.vote === current);
+        });
+      });
+    }
+    function buildVoteButtonsHtml(articleId) {
+      var current = getArticleVote(articleId);
+      var likeActive = current === 'like' ? ' active' : '';
+      var dislikeActive = current === 'dislike' ? ' active' : '';
+      return '<div class="article-votes article-votes-overlay" data-article="' + articleId + '">' +
+        '<button class="vote-btn vote-like' + likeActive + '" data-vote="like" aria-label="Lubię to">👍</button>' +
+        '<button class="vote-btn vote-dislike' + dislikeActive + '" data-vote="dislike" aria-label="Nie lubię">👎</button>' +
+        '</div>';
+    }
+    function refreshOverlayVoteButtons() {
+      var overlayVotes = document.querySelector('.article-votes-overlay');
+      if (!overlayVotes) return;
+      var id = overlayVotes.dataset.article;
+      var current = getArticleVote(id);
+      overlayVotes.querySelectorAll('.vote-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.vote === current);
+      });
+    }
+
+    // Delegowane kliknięcie łapek (karta + overlay)
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.vote-btn');
+      if (!btn) return;
+      e.stopPropagation();
+      e.preventDefault();
+      var votesWrap = btn.closest('.article-votes');
+      if (!votesWrap) return;
+      setArticleVote(votesWrap.dataset.article, btn.dataset.vote);
+    });
+
+    // Restore on load
+    refreshAllVoteButtons();
+
     // ── Artykuły: kliknięcie otwiera overlay ──
     (function() {
       document.querySelectorAll('.article-card').forEach(function(card) {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function(e) {
+          // Nie otwieraj overlayu gdy kliknięto przycisk łapki
+          if (e.target.closest('.vote-btn')) return;
+
           var title = card.querySelector('.article-title').textContent;
           var date = card.querySelector('.article-date').textContent;
           var excerpt = card.querySelector('.article-excerpt').textContent;
+          var articleId = card.dataset.article;
 
           document.getElementById('ovIcon').src = '/assets/images/face.png';
           document.getElementById('ovIcon').alt = 'Artykuł';
@@ -3641,7 +3754,7 @@
           document.getElementById('ovName').textContent = title;
           document.getElementById('ovBadge').textContent = date;
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
-          document.getElementById('ovBody').innerHTML = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+          document.getElementById('ovBody').innerHTML = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>' + buildVoteButtonsHtml(articleId);
           document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
           document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
           document.getElementById('ovScreenshots').innerHTML = '';
