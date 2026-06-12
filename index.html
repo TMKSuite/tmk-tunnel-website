@@ -2952,6 +2952,47 @@
             '<p>Stage -2 in the 4-act system. Without this app, there\'s no way to get TradingView candle data for broker comparison. CandleComparisonTMK compares the broker feed against TV — but someone has to download the TV data first. That\'s the Downloader\'s job: the foundation of the entire due diligence process.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
+        },
+        'CandleComparison': {
+          iconCircle: false,
+          loc: '~500',
+          buildTimePl: 'około 2 dni',
+          buildTimeEn: 'about 2 days',
+          env: 'Python 3.13',
+          bodyPl: '<h3>Opis</h3>' +
+            '<p>CandleComparisonTMK to cyfrowy komparator świec OHLC — mierzy empiryczny rozjazd między feedem brokera MT5 a danymi TradingView. Zamiast surowych różnic w cenie operuje na <strong>tickach</strong> — jednostce, która realnie wpływa na poziomy SL/TP. Auto-detekcja formatu CSV, raport 4-sekcyjny, dwa okna analizy.</p>' +
+            '<p>Aplikacja przyjmuje dwa pliki CSV (broker + TradingView), automatycznie wykrywa format (MT5 tab-separated vs TV/FXCM comma-separated), scala po indeksie czasu z opcjonalnym przesunięciem czasowym, przelicza różnice HIGH/LOW na ticki i generuje raport diagnostyczny.</p>' +
+            '<h3>Główne funkcje</h3>' +
+            '<ul>' +
+            '<li><strong>Auto-detekcja formatu CSV</strong> — inspekcja pierwszej linii: <code>&lt;DATE&gt;</code> + <code>&lt;TIME&gt;</code> → MT5 (tab-separated, utf-16/utf-8 fallback), inny nagłówek → TV/FXCM (comma-separated, Unix timestamp lub ISO). Nie musisz ręcznie wybierać formatu.</li>' +
+            '<li><strong>Tick-normalizacja</strong> — różnice między HIGH/LOW liczone w tickach (np. 0.00001 dla EURUSD, 0.01 dla XAUUSD), nie w surowej cenie. To jest jednostka, która ma znaczenie dla SL/TP — tick, nie pip czy cent.</li>' +
+            '<li><strong>Raport 4-sekcyjny</strong> — (1) Średnie różnice absolutne: typowy przypadek. (2) Ekstrema: maksymalny rozjazd z dokładnym timestampem — wiesz kiedy konkretnie się rozjechało. (3) Rozkład skumulowany: "85% świec ≤ 2 ticki, 0.5% > 10 ticków" — to jest informacja operacyjna, nie ciekawostka. (4) Systematyczny bias kierunkowy: czy broker konsekwentnie pokazuje wyższe/niższe ceny niż TV — próg 0.15 ticka odróżniający bias od szumu.</li>' +
+            '<li><strong>Dwa równoległe raporty</strong> — cała doba 24h + filtrowane okno handlowe (np. 08:00-20:00 UTC). Ważne, bo spready brokera rozjeżdżają się poza główną sesją.</li>' +
+            '<li><strong>Korekta czasowa</strong> — konfigurowalne przesunięcie ±24h dla strefy czasowej brokera vs TV UTC. Inner join po indeksie — porównujesz tylko świece istniejące w obu źródłach.</li>' +
+            '<li><strong>Multi-threading</strong> — QRunnable + QThreadPool, GUI nie zamarza podczas analizy.</li>' +
+            '<li><strong>Eksport raportu TXT</strong> — automatyczna nazwa pliku z nazwami porównywanych plików i timestampem.</li>' +
+            '</ul>' +
+            '<h3>Rola w pipeline TMK</h3>' +
+            '<p>Etap -1 w 4-aktowym systemie. Konsumuje CSV z TradingView (pobrany przez CandlesDownloaderTMK) i CSV z brokera MT5. Produkuje rankingowy raport rozjazdu per broker. Wynik tej analizy decyduje, <strong>u którego brokera odpalasz konto FTMO</strong>, na którym potem ląduje cała egzekucja z TMK.</p>' +
+            '<p>To etap, który 95% retail-traderów pomija. Biorą pierwszego brokera oferującego challenge i puszczają strategię. Potem szukają odpowiedzi na pytanie "czemu moje SL hituje, a w TV nie?". Ty zmierzyłeś to empirycznie <strong>zanim</strong> zaryzykowałeś pierwsze pieniądze.</p>',
+          bodyEn: '<h3>Description</h3>' +
+            '<p>CandleComparisonTMK is a digital OHLC candle comparator — it measures the empirical divergence between an MT5 broker feed and TradingView data. Instead of raw price differences, it operates in <strong>ticks</strong> — the unit that actually impacts SL/TP levels. Auto CSV format detection, 4-section report, two analysis windows.</p>' +
+            '<p>The app takes two CSV files (broker + TradingView), automatically detects the format (MT5 tab-separated vs TV/FXCM comma-separated), merges on time index with optional time shift, converts HIGH/LOW differences to ticks, and generates a diagnostic report.</p>' +
+            '<h3>Main features</h3>' +
+            '<ul>' +
+            '<li><strong>Auto CSV format detection</strong> — first-line inspection: <code>&lt;DATE&gt;</code> + <code>&lt;TIME&gt;</code> → MT5 (tab-separated, utf-16/utf-8 fallback), other headers → TV/FXCM (comma-separated, Unix timestamp or ISO). No manual format selection needed.</li>' +
+            '<li><strong>Tick-normalization</strong> — HIGH/LOW differences calculated in ticks (e.g. 0.00001 for EURUSD, 0.01 for XAUUSD), not raw price. This is the unit that matters for SL/TP — ticks, not pips or cents.</li>' +
+            '<li><strong>4-section report</strong> — (1) Mean absolute differences: the typical case. (2) Extremes: maximum divergence with exact timestamp — you know precisely when it blew out. (3) Cumulative distribution: "85% of candles ≤ 2 ticks, 0.5% > 10 ticks" — this is operational intel, not trivia. (4) Systematic directional bias: whether the broker consistently shows higher/lower prices than TV — a 0.15 tick threshold separating bias from noise.</li>' +
+            '<li><strong>Two parallel reports</strong> — full 24h day + filtered trading window (e.g. 08:00–20:00 UTC). Critical because broker spreads diverge outside the main session.</li>' +
+            '<li><strong>Time shift correction</strong> — configurable ±24h offset for broker timezone vs TV UTC. Inner join on index — only candles present in both sources are compared.</li>' +
+            '<li><strong>Multi-threading</strong> — QRunnable + QThreadPool, the GUI doesn\'t freeze during analysis.</li>' +
+            '<li><strong>TXT report export</strong> — automatic filename with compared file names and timestamp.</li>' +
+            '</ul>' +
+            '<h3>Role in the TMK pipeline</h3>' +
+            '<p>Stage -1 in the 4-act system. Consumes TradingView CSV (downloaded by CandlesDownloaderTMK) and broker MT5 CSV. Produces a ranked divergence report per broker. The result of this analysis determines <strong>which broker you launch your FTMO account with</strong> — the one where TMK\'s entire execution later lands.</p>' +
+            '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?" You measured it empirically <strong>before</strong> risking your first dollar.</p>',
+          tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
+          tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
         }
       };
 
