@@ -2253,7 +2253,7 @@
     }
 
     /* ── Wąski desktop (≤1365px): tylko logo w hero ── */
-    @media (max-width: 1365px) and (min-height: 900px) and (pointer: fine) {
+    @media (max-width: 1365px) and (min-height: 900px) /* pointer:fine */ {
       .production-panel,
       .app-wrapper,
       .stats-block,
@@ -2269,13 +2269,13 @@
       }
     }
     /* ── Desktop wysoki: apki dopiero od 1600px szerokości ── */
-    @media (max-width: 1749px) and (min-height: 768px) and (pointer: fine) {
+    @media (max-width: 1749px) and (min-height: 768px) /* pointer:fine */ {
       .app-wrapper {
         opacity: 0 !important; pointer-events: none !important;
       }
     }
     /* ── Bardzo niski desktop (<600px): social linki znikają ── */
-    @media (max-height: 599px) and (pointer: fine) {
+    @media (max-height: 599px) /* pointer:fine */ {
       .social-links {
         opacity: 0 !important; pointer-events: none !important;
       }
