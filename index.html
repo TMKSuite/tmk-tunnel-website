@@ -2279,6 +2279,13 @@
         display: none !important;
       }
     }
+    /* ── Poniżej 1000px: stats na górze przestają się centrować ── */
+    @media (max-width: 999px) and (min-height: 768px) and (pointer: fine) {
+      .stats-block {
+        left: 500px;
+        transform: none;
+      }
+    }
     </style>
 </head>
 <body>
