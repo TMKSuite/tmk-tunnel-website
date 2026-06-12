@@ -1509,6 +1509,36 @@
       color: var(--color-accent);
     }
 
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      cursor: pointer;
+      color: rgba(230, 237, 243, 0.7);
+      font-size: 1.8rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      z-index: 201;
+      user-select: none;
+    }
+
+    .lightbox-nav:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .lightbox-nav-prev { left: 1.5rem; }
+    .lightbox-nav-next { right: 1.5rem; }
+
     .screenshots-empty {
       font-family: 'Inter', sans-serif;
       font-size: 1.17rem;
@@ -2798,6 +2828,8 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightboxClose" aria-label="Zamknij">✕</button>
+    <button class="lightbox-nav lightbox-nav-prev" id="lightboxPrev" aria-label="Poprzednie">◂</button>
+    <button class="lightbox-nav lightbox-nav-next" id="lightboxNext" aria-label="Następne">▸</button>
     <img id="lightboxImg" src="" alt="">
   </div>
 
@@ -3304,32 +3336,58 @@
       });
     })();
 
-    // ── Lightbox: kliknięcie w miniaturkę otwiera pełny obraz ──
+    // ── Lightbox: nawigacja między screenshotami ──
     (function() {
       var lightbox = document.getElementById('lightbox');
       var lightboxImg = document.getElementById('lightboxImg');
       var lightboxClose = document.getElementById('lightboxClose');
+      var currentThumbs = [];
+      var currentIndex = -1;
 
-      // Delegacja — screenshoty są dodawane dynamicznie przez renderAppOverlay
+      function getThumbs() {
+        return document.querySelectorAll('.screenshot-thumb');
+      }
+
+      function showImage(index) {
+        var thumbs = getThumbs();
+        if (thumbs.length === 0) return;
+        currentThumbs = Array.prototype.slice.call(thumbs);
+        currentIndex = (index + thumbs.length) % thumbs.length;
+        lightboxImg.src = currentThumbs[currentIndex].src;
+        lightbox.classList.add('open');
+      }
+
+      // Delegacja — kliknięcie w miniaturkę
       document.getElementById('overlayPanel').addEventListener('click', function(e) {
         if (e.target.classList.contains('screenshot-thumb')) {
-          lightboxImg.src = e.target.src;
-          lightbox.classList.add('open');
+          var thumbs = getThumbs();
+          for (var i = 0; i < thumbs.length; i++) {
+            if (thumbs[i] === e.target) { showImage(i); return; }
+          }
         }
       });
+
+      function navigate(delta) {
+        if (!lightbox.classList.contains('open')) return;
+        showImage(currentIndex + delta);
+      }
 
       lightboxClose.addEventListener('click', function() {
         lightbox.classList.remove('open');
       });
+
+      document.getElementById('lightboxPrev').addEventListener('click', function() { navigate(-1); });
+      document.getElementById('lightboxNext').addEventListener('click', function() { navigate(1); });
 
       lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) lightbox.classList.remove('open');
       });
 
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('open')) {
-          lightbox.classList.remove('open');
-        }
+        if (!lightbox.classList.contains('open')) return;
+        if (e.key === 'Escape') lightbox.classList.remove('open');
+        if (e.key === 'ArrowRight') navigate(1);
+        if (e.key === 'ArrowLeft') navigate(-1);
       });
     })();
 
