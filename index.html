@@ -2919,7 +2919,7 @@
           loc: '~370',
           buildTimePl: '1 dzień',
           buildTimeEn: '1 day',
-          env: 'Python 3.12',
+          env: 'Python 3.13',
           bodyPl: '<h3>Opis</h3>' +
             '<p>CandlesDownloaderTMK to reverse-engineered downloader danych świecowych z TradingView. Logowanie przez konto nie wchodziło w grę — TradingView wymaga dwuskładnikowego uwierzytelnienia i rzuca captcha, więc automatyzacja logowania jest praktycznie niemożliwa. Rozwiązanie: reverse engineering sesji gościa.</p>' +
             '<p>Aplikacja łączy się przez WebSocket z serwerami TradingView jako <code>unauthorized_user_token</code>, przeprowadza pełny handshake (<code>set_auth_token</code> → <code>chart_create_session</code> → <code>resolve_symbol</code> → <code>create_series</code>), odbiera surowy strumień protokołu TV, parsuje go do struktury OHLCV i zapisuje jako plik CSV.</p>' +
