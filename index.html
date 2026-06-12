@@ -2259,31 +2259,31 @@
       .stats-block,
       .social-links,
       .tech-stack {
-        display: none !important;
+        opacity: 0 !important; pointer-events: none !important;
       }
     }
     /* ── Desktop: statystyki ukryte, tylko w mobile ── */
     @media (pointer: fine) {
       .stats-block {
-        display: none !important;
+        opacity: 0 !important; pointer-events: none !important;
       }
     }
     /* ── Desktop wysoki: apki dopiero od 1600px szerokości ── */
     @media (max-width: 1749px) and (min-height: 768px) and (pointer: fine) {
       .app-wrapper {
-        display: none !important;
+        opacity: 0 !important; pointer-events: none !important;
       }
     }
     /* ── Bardzo niski desktop (<600px): social linki znikają ── */
     @media (max-height: 599px) and (pointer: fine) {
       .social-links {
-        display: none !important;
+        opacity: 0 !important; pointer-events: none !important;
       }
     }
     /* ── Mobile: stats-mobile tylko do 999px szerokości ── */
     @media (min-width: 1000px) and (pointer: coarse) {
       .stats-mobile {
-        display: none !important;
+        opacity: 0 !important; pointer-events: none !important;
       }
     }
     </style>
