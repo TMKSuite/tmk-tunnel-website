@@ -2250,10 +2250,21 @@
     @media (max-width: 1365px) and (min-height: 768px) and (pointer: fine) {
       .production-panel,
       .app-wrapper,
-      .stats-block,
       .social-links,
       .tech-stack {
         display: none !important;
+      }
+      .stats-block {
+        position: fixed;
+        top: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        bottom: auto;
+        flex-direction: row;
+        gap: 1.8rem;
+        display: flex !important;
+        z-index: 10;
       }
     }
     /* ── Niski desktop (<745px): statystyki znikają ── */
