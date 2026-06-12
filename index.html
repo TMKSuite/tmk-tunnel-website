@@ -2244,7 +2244,19 @@
           font-size: 0.32rem;
         }
       }
-    }</style>
+    }
+
+    /* ── Wąski desktop (≤1365px): tylko logo w hero ── */
+    @media (max-width: 1365px) and (pointer: fine) {
+      .production-panel,
+      .app-wrapper,
+      .stats-block,
+      .social-links,
+      .tech-stack {
+        display: none !important;
+      }
+    }
+    </style>
 </head>
 <body>
   <div id="top"></div>
