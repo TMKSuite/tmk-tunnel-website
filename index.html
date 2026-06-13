@@ -1005,6 +1005,11 @@
       gap: 1.5rem;
     }
 
+    a.article-card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
     .article-card {
       background: rgba(255, 255, 255, 0.015);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -2774,7 +2779,7 @@
         <input type="text" class="article-search" id="articleSearch" data-i18n-placeholder="articles.search_placeholder" placeholder="Szukaj po tytule lub dacie...">
       </div>
       <div class="articles-list" id="articlesList">
-        <article class="article-card" data-article="1">
+        <a href="/artykul/paradoks-achillesa-wysoka-stopa-zwrotu" class="article-card" data-article="1" data-slug-pl="paradoks-achillesa-wysoka-stopa-zwrotu" data-slug-en="achilles-paradox-high-return-rate">
           <time class="article-date">10.06.2026</time>
           <h3 class="article-title">Paradoks Achillesa czyli wysoka "stopa" zwrotu z przypadku</h3>
           <p class="article-excerpt">Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>
@@ -2782,7 +2787,7 @@
             <button class="vote-btn vote-like" data-vote="like" aria-label="Lubię to">👍</button>
             <button class="vote-btn vote-dislike" data-vote="dislike" aria-label="Nie lubię">👎</button>
           </div>
-        </article>
+        </a>
       </div>
     </details>
   </section>
@@ -3046,6 +3051,8 @@
       if (window._updateRefLang) window._updateRefLang();
       // Refresh article overlay if open
       if (window._refreshArticleOverlay) window._refreshArticleOverlay();
+      // Update article URL when language changes while article overlay is open
+      if (window._currentArticleId && window._refreshArticleUrl) window._refreshArticleUrl(lang);
       // Reload Giscus with new language
       if (window._reloadGiscus) window._reloadGiscus();
     }
@@ -3115,6 +3122,8 @@
       var overlay = document.getElementById('appOverlay');
       var closeBtn = document.getElementById('overlayClose');
       var panel = document.getElementById('overlayPanel');
+      var defaultTitle = document.title;
+      var defaultDesc = document.querySelector('meta[name="description"]') ? document.querySelector('meta[name="description"]').getAttribute('content') : '';
 
       function openOverlay() {
         overlay.classList.add('open');
@@ -3124,7 +3133,25 @@
       function closeOverlay() {
         overlay.classList.remove('open');
         document.body.style.overflow = '';
+
+        // Jeśli jesteśmy na URL-u artykułu — wyczyść URL i przywróć meta
+        var isArticleUrl = /\/artykul\//.test(window.location.pathname) || /\/en\/article\//.test(window.location.pathname);
+        if (window._currentArticleId || isArticleUrl) {
+          window._currentArticleId = null;
+          // Wróć do bazowego URL (zachowaj hash jeśli jest)
+          var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '');
+          if (window.history.pushState) {
+            window.history.pushState(null, '', basePath + window.location.hash);
+          }
+          // Przywróć domyślny title i description
+          document.title = defaultTitle;
+          var metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', defaultDesc);
+        }
       }
+
+      // Expose for popstate / external use
+      window._closeOverlay = closeOverlay;
 
       closeBtn.addEventListener('click', closeOverlay);
 
@@ -3759,6 +3786,8 @@
 
       var ARTICLE_CONTENT = {
         '1': {
+          slugPl: 'paradoks-achillesa-wysoka-stopa-zwrotu',
+          slugEn: 'achilles-paradox-high-return-rate',
           bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
             '<p>Tytuł artykułu nieprzypadkowo nawiązuje właśnie do tego wydarzenia. Chciałbym podzielić się z Wami pewną historią, która — przynajmniej w mojej opinii — ma wbrew pozorom wiele wspólnego z osobą wyżej wspomnianego, mitycznego bohatera.</p>' +
             '<p>Z racji tego, że jest to mój pierwszy artykuł na stronie i chyba pierwszy w ogóle, to warto byłoby może wyjaśnić kilka kwestii. Po pierwsze — i chyba najważniejsze — wszystkie treści, które tutaj znajdziecie, to moje subiektywne zdanie. Nie prowadzę żadnych szkoleń, niczego nie sprzedaję, nie jestem żadnym guru ani nie posiadam żadnego formalnego wykształcenia kierunkowego dotyczącego finansów, handlu na rynkach walutowych ani żadnych innych. Dzielę się z Wami własnymi przemyśleniami oraz doświadczeniami i chętnie podyskutuję z każdym, kto będzie miał ochotę odnieść się merytorycznie do informacji, które tutaj znajdzie.</p>' +
@@ -3783,11 +3812,14 @@
             '<p>When I found out I\'d be grounded for the next several months — I wasn\'t exactly bursting with optimism at first. Surgery, cast, orthosis, walking on crutches, rehabilitation — the prospect of spending the next few months like that wasn\'t exactly appealing.</p>'
         }
       };
+      window.ARTICLE_CONTENT = ARTICLE_CONTENT;
 
       document.querySelectorAll('.article-card').forEach(function(card) {
         card.addEventListener('click', function(e) {
           // Nie otwieraj overlayu gdy kliknięto przycisk łapki
           if (e.target.closest('.vote-btn')) return;
+
+          e.preventDefault();
 
           var title = card.querySelector('.article-title').textContent;
           var date = card.querySelector('.article-date').textContent;
@@ -3795,13 +3827,33 @@
           var articleId = card.dataset.article;
           window._currentArticleId = articleId;
 
+          // URL zależny od języka
+          var content = ARTICLE_CONTENT[articleId];
+          var articleUrl = '/';
+          if (content) {
+            if (currentLang === 'en' && content.slugEn) {
+              articleUrl = '/en/article/' + content.slugEn;
+            } else if (content.slugPl) {
+              articleUrl = '/artykul/' + content.slugPl;
+            }
+          }
+
+          // pushState — zmiana URL bez przeładowania
+          if (window.history.pushState && articleUrl !== '/') {
+            window.history.pushState({type: 'article', id: articleId, lang: currentLang}, '', articleUrl);
+          }
+
+          // Dynamiczny title + meta description
+          document.title = title + ' — TMK Suite';
+          var metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', excerpt);
+
           document.getElementById('ovIcon').src = '/assets/images/face.png';
           document.getElementById('ovIcon').alt = 'Artykuł';
           document.getElementById('ovIconWrap').classList.add('circle');
           document.getElementById('ovName').textContent = title;
           document.getElementById('ovBadge').textContent = date;
           document.getElementById('ovBadge').className = 'oh-badge badge-wip';
-          var content = ARTICLE_CONTENT[articleId];
           var bodyHtml = '';
           if (content) {
             var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
@@ -3819,7 +3871,161 @@
           document.body.style.overflow = 'hidden';
         });
       });
+
+      // Aktualizuj URL artykułu przy zmianie języka (replaceState, nie pushState)
+      window._refreshArticleUrl = function(lang) {
+        var articleId = window._currentArticleId;
+        if (!articleId) return;
+        var content = ARTICLE_CONTENT[articleId];
+        if (!content) return;
+        var slug = lang === 'en' ? content.slugEn : content.slugPl;
+        if (!slug) return;
+        var prefix = lang === 'en' ? '/en/article/' : '/artykul/';
+        var state = {type: 'article', id: articleId, lang: lang};
+        if (window.history.replaceState) {
+          window.history.replaceState(state, '', prefix + slug);
+        }
+        // Zaktualizuj title przy zmianie języka
+        var card = document.querySelector('.article-card[data-article="' + articleId + '"]');
+        if (card) {
+          var title = card.querySelector('.article-title').textContent;
+          document.title = title + ' — TMK Suite';
+        }
+      };
+
+      // Otwórz artykuł z URL przy bezpośrednim wejściu
+      window._openArticleFromUrl = function() {
+        var path = window.location.pathname;
+        var isArticle = false;
+        var slug = '';
+        var isEn = false;
+
+        var plMatch = path.match(/^\/artykul\/(.+)$/);
+        var enMatch = path.match(/^\/en\/article\/(.+)$/);
+
+        if (plMatch) {
+          isArticle = true;
+          slug = plMatch[1];
+          isEn = false;
+        } else if (enMatch) {
+          isArticle = true;
+          slug = enMatch[1];
+          isEn = true;
+        }
+
+        if (!isArticle) return false;
+
+        // Znajdź artykuł po slugu
+        var foundId = null;
+        for (var id in ARTICLE_CONTENT) {
+          var c = ARTICLE_CONTENT[id];
+          var targetSlug = isEn ? c.slugEn : c.slugPl;
+          if (targetSlug === slug) {
+            foundId = id;
+            break;
+          }
+        }
+
+        if (!foundId) return false;
+
+        // Jeśli EN — zmień język
+        if (isEn && currentLang !== 'en') {
+          switchLang('en');
+        } else if (!isEn && currentLang !== 'pl') {
+          switchLang('pl');
+        }
+
+        // Zasymuluj kliknięcie kafelka
+        var card = document.querySelector('.article-card[data-article="' + foundId + '"]');
+        if (!card) return false;
+
+        window._currentArticleId = foundId;
+        var title = card.querySelector('.article-title').textContent;
+        var date = card.querySelector('.article-date').textContent;
+        var excerpt = card.querySelector('.article-excerpt').textContent;
+        var content = ARTICLE_CONTENT[foundId];
+
+        // Ustaw URL poprawnie (bez pushState, bo już tu jesteśmy)
+        if (window.history.replaceState) {
+          window.history.replaceState({type: 'article', id: foundId, lang: currentLang}, '', path);
+        }
+
+        // Dynamiczny title + meta description
+        document.title = title + ' — TMK Suite';
+        var metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', excerpt);
+
+        // Wypełnij overlay
+        document.getElementById('ovIcon').src = '/assets/images/face.png';
+        document.getElementById('ovIcon').alt = 'Artykuł';
+        document.getElementById('ovIconWrap').classList.add('circle');
+        document.getElementById('ovName').textContent = title;
+        document.getElementById('ovBadge').textContent = date;
+        document.getElementById('ovBadge').className = 'oh-badge badge-wip';
+        var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
+        var bodyHtml = content ? (content[langKey] || content.bodyPl || '') : '';
+        if (!bodyHtml) {
+          bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+        }
+        document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(foundId);
+        document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
+        document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+        document.getElementById('ovScreenshots').innerHTML = '';
+
+        document.getElementById('appOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+
+        return true;
+      };
     })();
+
+    // ── Artykuły: popstate + init URL detection ──
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.type === 'article') {
+        // Back/forward do artykułu — otwórz overlay
+        var articleId = e.state.id;
+        var card = document.querySelector('.article-card[data-article="' + articleId + '"]');
+        if (card) {
+          // Zmień język jeśli trzeba
+          var needLang = e.state.lang || 'pl';
+          if (needLang !== currentLang) {
+            switchLang(needLang);
+          }
+          // Symuluj kliknięcie (bez pushState, bo to popstate)
+          window._currentArticleId = articleId;
+          var title = card.querySelector('.article-title').textContent;
+          var date = card.querySelector('.article-date').textContent;
+          var excerpt = card.querySelector('.article-excerpt').textContent;
+          var content = window.ARTICLE_CONTENT[articleId];
+          document.title = title + ' — TMK Suite';
+          var metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', excerpt);
+          document.getElementById('ovIcon').src = '/assets/images/face.png';
+          document.getElementById('ovIcon').alt = 'Artykuł';
+          document.getElementById('ovIconWrap').classList.add('circle');
+          document.getElementById('ovName').textContent = title;
+          document.getElementById('ovBadge').textContent = date;
+          document.getElementById('ovBadge').className = 'oh-badge badge-wip';
+          var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
+          var bodyHtml = content ? (content[langKey] || content.bodyPl || '') : '';
+          if (!bodyHtml) {
+            bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+          }
+          document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
+          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
+          document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+          document.getElementById('ovScreenshots').innerHTML = '';
+          document.getElementById('appOverlay').classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+      } else {
+        // Back/forward z artykułu — zamknij overlay
+        if (window._closeOverlay) window._closeOverlay();
+      }
+    });
+
+    // Przy starcie sprawdź URL — jeśli /artykul/... to otwórz od razu
+    if (window._openArticleFromUrl) window._openArticleFromUrl();
 
     // ── Tech stack: cykliczne podświetlanie ──
     (function() {
