@@ -358,6 +358,14 @@
       color: rgba(230, 237, 243, 0.45);
       line-height: 1.3;
     }
+    a.news-link {
+      text-decoration: none;
+      color: rgba(230, 237, 243, 0.45);
+      transition: color 0.3s ease;
+    }
+    a.news-link:hover {
+      color: var(--color-accent);
+    }
 
     .app-showcase {
       display: flex;
@@ -3072,9 +3080,9 @@
       var panel = document.getElementById('productionPanel');
       var slot0 = document.getElementById('newsSlot0');
       var slot1 = document.getElementById('newsSlot1');
-      // Dane wpisów (data, tekst PL, tekst EN)
+      // Dane wpisów (data, tekst PL, tekst EN, opcjonalnie url)
       var entries = [
-        { date: '13.06', pl: 'Nowy artykuł: Paradoks Achillesa czyli wysoka "stopa" zwrotu z przypadku', en: 'New article: The Achilles Paradox — high "rate" of return by accident' },
+        { date: '13.06', pl: 'Nowy artykuł: Paradoks Achillesa czyli wysoka "stopa" zwrotu z przypadku', en: 'New article: The Achilles Paradox — high "rate" of return by accident', urlPl: '/artykul/paradoks-achillesa-wysoka-stopa-zwrotu', urlEn: '/en/article/achilles-paradox-high-return-rate' },
         { date: '13.06', pl: 'Start nowej witryny TMK Suite', en: 'New TMK Suite website launched' }
       ];
       var current = 0;
@@ -3084,7 +3092,14 @@
 
       function buildSlot(entry) {
         var lang = currentLang === 'en' ? 'en' : 'pl';
-        return '<span class="news-date">' + entry.date + '</span><span class="news-text">' + entry[lang] + '</span>';
+        var url = entry['url' + (lang === 'en' ? 'En' : 'Pl')];
+        var text = '<span class="news-date">' + entry.date + '</span>';
+        if (url) {
+          text += '<a href="' + url + '" class="news-text news-link">' + entry[lang] + '</a>';
+        } else {
+          text += '<span class="news-text">' + entry[lang] + '</span>';
+        }
+        return text;
       }
 
       function updateSlots() {
