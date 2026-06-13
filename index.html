@@ -3068,6 +3068,8 @@
       if (window._rebuildNews) window._rebuildNews();
       // Update ref list descriptions
       if (window._updateRefLang) window._updateRefLang();
+      // Refresh article card text (title + excerpt)
+      if (window._refreshArticleCardText) window._refreshArticleCardText();
       // Refresh article overlay if open
       if (window._refreshArticleOverlay) window._refreshArticleOverlay();
       // Update article URL when language changes while article overlay is open
@@ -3990,13 +3992,43 @@
         var bodyHtml = content[langKey] || content.bodyPl || '';
         var votesHtml = document.querySelector('.article-votes-overlay');
         document.getElementById('ovBody').innerHTML = bodyHtml + (votesHtml ? votesHtml.outerHTML : buildVoteButtonsHtml(articleId));
-        var metaHtml = document.getElementById('ovMeta').innerHTML;
+        // Aktualizuj tytuł w overlayu
+        var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
+        var title = content[titleKey] || content.titlePl || '';
+        if (title) {
+          document.getElementById('ovName').textContent = title;
+          document.title = title + ' — TMK Suite';
+        }
+      };
+
+      // Aktualizuj tekst na kafelku artykułu przy zmianie języka
+      window._refreshArticleCardText = function() {
+        var card = document.querySelector('.article-card[data-article="1"]');
+        if (!card) return;
+        var content = ARTICLE_CONTENT['1'];
+        if (!content) return;
+        var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
+        var excerptKey = currentLang === 'en' ? 'excerptEn' : 'excerptPl';
+        var title = content[titleKey] || content.titlePl || '';
+        var excerpt = content[excerptKey] || content.excerptPl || '';
+        if (title) {
+          var titleEl = card.querySelector('.article-title');
+          if (titleEl) titleEl.textContent = title;
+        }
+        if (excerpt) {
+          var excerptEl = card.querySelector('.article-excerpt');
+          if (excerptEl) excerptEl.textContent = excerpt;
+        }
       };
 
       var ARTICLE_CONTENT = {
         '1': {
           slugPl: 'paradoks-achillesa-wysoka-stopa-zwrotu',
           slugEn: 'achilles-paradox-high-return-rate',
+          titlePl: 'Paradoks Achillesa czyli wysoka "stopa" zwrotu z przypadku',
+          titleEn: 'The Achilles Paradox — high "rate" of return by accident',
+          excerptPl: 'Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.',
+          excerptEn: 'Surely everyone — or at least most of you — has heard the story of Achilles, the greatest warrior of the Trojan War. I won\'t dive into the details of that story, so if anyone hasn\'t heard it yet, I warmly encourage you to catch up in your free time.',
           bodyPl: '<p>Z pewnością każdy z Was, a na pewno większość, słyszała historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>' +
             '<p>Tytuł artykułu nieprzypadkowo nawiązuje właśnie do tego wydarzenia. Chciałbym podzielić się z Wami pewną historią, która — przynajmniej w mojej opinii — ma wbrew pozorom wiele wspólnego z osobą wyżej wspomnianego, mitycznego bohatera.</p>' +
             '<p>Z racji tego, że jest to mój pierwszy artykuł na stronie i chyba pierwszy w ogóle, to warto byłoby może wyjaśnić kilka kwestii. Po pierwsze — i chyba najważniejsze — wszystkie treści, które tutaj znajdziecie, to moje subiektywne zdanie. Nie prowadzę żadnych szkoleń, niczego nie sprzedaję, nie jestem żadnym guru ani nie posiadam żadnego formalnego wykształcenia kierunkowego dotyczącego finansów, handlu na rynkach walutowych ani żadnych innych. Dzielę się z Wami własnymi przemyśleniami oraz doświadczeniami i chętnie podyskutuję z każdym, kto będzie miał ochotę odnieść się merytorycznie do informacji, które tutaj znajdzie.</p>' +
