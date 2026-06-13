@@ -3148,10 +3148,10 @@
         if (window._currentArticleId || window._currentProjectName || isArticleUrl || isProjectUrl) {
           window._currentArticleId = null;
           window._currentProjectName = null;
-          // Wróć do bazowego URL (zachowaj hash jeśli jest)
+          // Wróć do bazowego URL (zachowaj hash jeśli jest, replaceState NIE pushState)
           var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
-          if (window.history.pushState) {
-            window.history.pushState(null, '', basePath + window.location.hash);
+          if (window.history.replaceState) {
+            window.history.replaceState(null, '', basePath + window.location.hash);
           }
           // Przywróć domyślny title i description
           document.title = defaultTitle;
@@ -4472,7 +4472,9 @@
           };
           if (window.history.replaceState && urlHashes[id]) {
             var hash = urlHashes[id][currentLang] || id;
-            window.history.replaceState(null, '', '#' + hash);
+            // Odetnij ścieżkę artykułu/projektu jeśli jest — żeby nie zostało /artykul/slug#pomysly
+            var cleanPath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+            window.history.replaceState(null, '', cleanPath + '#' + hash);
           }
 
           clickUnlockTimer = setTimeout(function() {
