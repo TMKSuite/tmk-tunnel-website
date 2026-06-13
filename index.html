@@ -4382,6 +4382,7 @@
       var activeId = null;
       var clickLock = false;        // blokuje updateActive na czas animacji klika
       var clickUnlockTimer = null;
+      var lastHashSection = null;   // ostatnia sekcja dla której zaktualizowano hash URL
 
       function getLinkForSection(id) {
         return document.querySelector('.nav-link[href="#' + id + '"]');
@@ -4430,6 +4431,30 @@
         }
         // found === null = jesteśmy w hero → czyści podświetlenie
         setActive(found);
+
+        // Aktualizuj hash w URL przy scrollowaniu (tylko gdy sekcja się zmieniła)
+        if (found !== lastHashSection) {
+          lastHashSection = found;
+          var urlHashes = {
+            about:    { pl: 'o-mnie',   en: 'about' },
+            projects: { pl: 'projekty', en: 'projects' },
+            articles: { pl: 'artykuly', en: 'articles' },
+            ideas:    { pl: 'pomysly',  en: 'ideas' },
+            contact:  { pl: 'kontakt',  en: 'contact' }
+          };
+          if (found && urlHashes[found] && window.history.replaceState) {
+            var hash = urlHashes[found][currentLang] || found;
+            // Odetnij ścieżkę artykułu/projektu
+            var cleanPath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+            if (!cleanPath || cleanPath === '') cleanPath = '/';
+            window.history.replaceState(null, '', cleanPath + '#' + hash);
+          } else if (!found && window.history.replaceState) {
+            // Hero — wyczyść hash
+            var cleanPath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+            if (!cleanPath || cleanPath === '') cleanPath = '/';
+            window.history.replaceState(null, '', cleanPath);
+          }
+        }
       }
 
       function onScrollActive() {
