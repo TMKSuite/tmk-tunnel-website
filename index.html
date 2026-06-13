@@ -3148,10 +3148,12 @@
         if (window._currentArticleId || window._currentProjectName || isArticleUrl || isProjectUrl) {
           window._currentArticleId = null;
           window._currentProjectName = null;
-          // Wróć do bazowego URL (zachowaj hash jeśli jest, replaceState NIE pushState)
+          // Wróć do bazowego URL z zapamiętanym hashem sekcji (replaceState NIE pushState)
           var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+          var restoreHash = window._lastSectionHash || window.location.hash || '';
+          window._lastSectionHash = null;
           if (window.history.replaceState) {
-            window.history.replaceState(null, '', basePath + window.location.hash);
+            window.history.replaceState(null, '', basePath + restoreHash);
           }
           // Przywróć domyślny title i description
           document.title = defaultTitle;
@@ -3469,7 +3471,8 @@
             }
           }
 
-          // pushState
+          // pushState — zapamiętaj hash sekcji (raz, przy pierwszym kliknięciu)
+          if (!window._lastSectionHash) window._lastSectionHash = window.location.hash || '';
           if (window.history.pushState && projectUrl !== '/') {
             window.history.pushState({type: 'project', id: name, lang: currentLang}, '', projectUrl);
           }
@@ -4023,7 +4026,8 @@
             }
           }
 
-          // pushState — zmiana URL bez przeładowania
+          // pushState — zmiana URL bez przeładowania. Zapamiętaj hash sekcji (raz, przy pierwszym kliknięciu)
+          if (!window._lastSectionHash) window._lastSectionHash = window.location.hash || '';
           if (window.history.pushState && articleUrl !== '/') {
             window.history.pushState({type: 'article', id: articleId, lang: currentLang}, '', articleUrl);
           }
