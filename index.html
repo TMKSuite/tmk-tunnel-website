@@ -778,6 +778,11 @@
       margin: 0 auto;
     }
 
+    a.project-card {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
     .project-card {
       background: rgba(255, 255, 255, 0.015);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -2707,7 +2712,7 @@
 
     <div class="projects-grid">
       <!-- TMK -->
-      <div class="project-card">
+      <a href="/projekt/torek-market-killer" class="project-card" data-slug-pl="torek-market-killer" data-slug-en="torek-market-killer">
         <div class="card-icon"><img src="/assets/images/icon-tmk.png" alt="TMK" width="48" height="48"></div>
         <div class="card-name">TorekMarketKiller</div>
         <div class="card-desc" data-i18n="projects.tmk">Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie.</div>
@@ -2715,10 +2720,10 @@
           <span class="card-stat"><span class="val">~33 900</span> LOC</span>
           <span class="card-badge badge-live" data-i18n="projects.badge_live">Live</span>
         </div>
-      </div>
+      </a>
 
       <!-- PC2 -->
-      <div class="project-card">
+      <a href="/projekt/portfolio-command-center" class="project-card" data-slug-pl="portfolio-command-center" data-slug-en="portfolio-command-center">
         <div class="card-icon"><img src="/assets/images/icon-pc2.png" alt="PC2" width="48" height="48"></div>
         <div class="card-name">PortfolioCommandCenter</div>
         <div class="card-desc" data-i18n="projects.pc2">Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne, testy odporności.</div>
@@ -2726,10 +2731,10 @@
           <span class="card-stat"><span class="val">~6 700</span> LOC</span>
           <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
         </div>
-      </div>
+      </a>
 
       <!-- Komparator -->
-      <div class="project-card">
+      <a href="/projekt/candle-comparison" class="project-card" data-slug-pl="candle-comparison" data-slug-en="candle-comparison">
         <div class="card-icon"><img src="/assets/images/icon-comparator.png" alt="Komparator" width="48" height="48"></div>
         <div class="card-name">CandleComparison</div>
         <div class="card-desc" data-i18n="projects.comparator">Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, auto-detekcja formatu CSV.</div>
@@ -2737,10 +2742,10 @@
           <span class="card-stat"><span class="val">~500</span> LOC</span>
           <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
         </div>
-      </div>
+      </a>
 
       <!-- Downloader -->
-      <div class="project-card">
+      <a href="/projekt/candles-downloader" class="project-card" data-slug-pl="candles-downloader" data-slug-en="candles-downloader">
         <div class="card-icon"><img src="/assets/images/icon-downloader.png" alt="Downloader" width="48" height="48"></div>
         <div class="card-name">CandleDownloader</div>
         <div class="card-desc" data-i18n="projects.downloader">Pobieranie danych świecowych z TradingView przez WebSocket. Eksport do CSV, interwały od 1 min do monthly.</div>
@@ -2748,14 +2753,14 @@
           <span class="card-stat"><span class="val">~370</span> LOC</span>
           <span class="card-badge badge-stable" data-i18n="projects.badge_stable">Stabilny</span>
         </div>
-      </div>
+      </a>
     </div>
 
     <h3 class="group-heading" data-i18n="projects.group_wip">W toku</h3>
 
     <div class="projects-grid projects-grid--centered">
       <!-- ClientCreator -->
-      <div class="project-card">
+      <a href="/projekt/client-creator" class="project-card" data-slug-pl="client-creator" data-slug-en="client-creator">
         <div class="card-icon"><img src="/assets/images/icon-clientcreator.png?v=1" alt="ClientCreator" width="48" height="48"></div>
         <div class="card-name">ClientCreator</div>
         <div class="card-desc" data-i18n="projects.clientcreator">Narzędzie do budowania klientów .exe. Kompilacja PyInstaller, podpisywanie kodu, auto-update przez GitHub Releases.</div>
@@ -2763,7 +2768,7 @@
           <span class="card-stat"><span class="val">~540</span> LOC</span>
           <span class="card-badge badge-wip" data-i18n="projects.badge_wip">W toku</span>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -3053,6 +3058,9 @@
       if (window._refreshArticleOverlay) window._refreshArticleOverlay();
       // Update article URL when language changes while article overlay is open
       if (window._currentArticleId && window._refreshArticleUrl) window._refreshArticleUrl(lang);
+      // Update project URL + refresh project overlay when language changes while project overlay is open
+      if (window._currentProjectName && window._refreshProjectUrl) window._refreshProjectUrl(lang);
+      if (window._currentProjectName && window._refreshProjectOverlay) window._refreshProjectOverlay();
       // Reload Giscus with new language
       if (window._reloadGiscus) window._reloadGiscus();
     }
@@ -3134,12 +3142,14 @@
         overlay.classList.remove('open');
         document.body.style.overflow = '';
 
-        // Jeśli jesteśmy na URL-u artykułu — wyczyść URL i przywróć meta
+        // Jeśli jesteśmy na URL-u artykułu lub projektu — wyczyść URL i przywróć meta
         var isArticleUrl = /\/artykul\//.test(window.location.pathname) || /\/en\/article\//.test(window.location.pathname);
-        if (window._currentArticleId || isArticleUrl) {
+        var isProjectUrl = /\/projekt\//.test(window.location.pathname) || /\/en\/project\//.test(window.location.pathname);
+        if (window._currentArticleId || window._currentProjectName || isArticleUrl || isProjectUrl) {
           window._currentArticleId = null;
+          window._currentProjectName = null;
           // Wróć do bazowego URL (zachowaj hash jeśli jest)
-          var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '');
+          var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
           if (window.history.pushState) {
             window.history.pushState(null, '', basePath + window.location.hash);
           }
@@ -3168,6 +3178,8 @@
       // ── APP_DETAILS: dane aplikacji do overlayu ──
       var APP_DETAILS = {
         'CandleDownloader': {
+          slugPl: 'candles-downloader',
+          slugEn: 'candles-downloader',
           iconCircle: false,
           loc: '~370',
           env: 'Python 3.13',
@@ -3206,6 +3218,8 @@
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">WebSocket</span><span class="tag">pandas</span><span class="tag">Reverse Engineering</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
         },
         'CandleComparison': {
+          slugPl: 'candle-comparison',
+          slugEn: 'candle-comparison',
           iconCircle: false,
           loc: '~500',
           env: 'Python 3.13',
@@ -3246,6 +3260,8 @@
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
         },
         'ClientCreator': {
+          slugPl: 'client-creator',
+          slugEn: 'client-creator',
           iconCircle: false,
           loc: '~540',
           env: 'Python 3.13',
@@ -3294,6 +3310,8 @@
           tagsEn: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>'
         },
         'PortfolioCommandCenter': {
+          slugPl: 'portfolio-command-center',
+          slugEn: 'portfolio-command-center',
           iconCircle: false,
           loc: '~6 700',
           env: 'Python 3.13',
@@ -3336,6 +3354,8 @@
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">scipy</span><span class="tag">GA+ILS</span><span class="tag">Walk-Forward</span><span class="tag">Plotly</span><span class="tag">Multiprocessing</span><span class="tag">Prop Firm</span>'
         },
         'TorekMarketKiller': {
+          slugPl: 'torek-market-killer',
+          slugEn: 'torek-market-killer',
           iconCircle: false,
           loc: '~33 900',
           env: 'Python 3.13',
@@ -3421,16 +3441,44 @@
         }
       }
 
+      // Expose for popstate / external use
+      window.APP_DETAILS = APP_DETAILS;
+
       // Klik w kartę projektu
       document.querySelectorAll('.project-card').forEach(function(card) {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+
           window._currentArticleId = null;
           var name = card.querySelector('.card-name').textContent;
+          window._currentProjectName = name;
           var icon = card.querySelector('.card-icon img').getAttribute('src');
           var badgeEl = card.querySelector('.card-badge');
           var badgeText = badgeEl ? badgeEl.textContent : '';
           var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
           var details = APP_DETAILS[name];
+
+          // URL z sluga
+          var slug = '';
+          var projectUrl = '/';
+          if (details) {
+            slug = (currentLang === 'en' && details.slugEn) ? details.slugEn : (details.slugPl || '');
+            if (slug) {
+              var prefix = currentLang === 'en' ? '/en/project/' : '/projekt/';
+              projectUrl = prefix + slug;
+            }
+          }
+
+          // pushState
+          if (window.history.pushState && projectUrl !== '/') {
+            window.history.pushState({type: 'project', id: name, lang: currentLang}, '', projectUrl);
+          }
+
+          // Dynamiczny title + meta description
+          document.title = name + ' — TMK Suite';
+          var descEl = card.querySelector('.card-desc');
+          var metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc && descEl) metaDesc.setAttribute('content', descEl.textContent);
 
           document.getElementById('ovIcon').src = icon;
           document.getElementById('ovIcon').alt = name;
@@ -3454,6 +3502,142 @@
           openOverlay();
         });
       });
+    })();
+
+    // ── Projekty: URL detection + refresh ──
+    (function() {
+      // Otwórz projekt z URL przy bezpośrednim wejściu
+      window._openProjectFromUrl = function() {
+        var path = window.location.pathname;
+        var isProject = false;
+        var slug = '';
+        var isEn = false;
+
+        var plMatch = path.match(/^\/projekt\/(.+)$/);
+        var enMatch = path.match(/^\/en\/project\/(.+)$/);
+
+        if (plMatch) {
+          isProject = true;
+          slug = plMatch[1];
+          isEn = false;
+        } else if (enMatch) {
+          isProject = true;
+          slug = enMatch[1];
+          isEn = true;
+        }
+
+        if (!isProject) return false;
+
+        // Znajdź projekt po slugu
+        var foundName = null;
+        var details = window.APP_DETAILS;
+        if (details) {
+          for (var name in details) {
+            var d = details[name];
+            var targetSlug = isEn ? d.slugEn : d.slugPl;
+            if (targetSlug === slug) {
+              foundName = name;
+              break;
+            }
+          }
+        }
+
+        if (!foundName) return false;
+
+        // Ustaw język
+        if (isEn && currentLang !== 'en') {
+          switchLang('en');
+        } else if (!isEn && currentLang !== 'pl') {
+          switchLang('pl');
+        }
+
+        // Zasymuluj kliknięcie karty
+        var card = document.querySelector('.project-card .card-name');
+        // Znajdź kartę po nazwie
+        var allCards = document.querySelectorAll('.project-card');
+        var targetCard = null;
+        allCards.forEach(function(c) {
+          var cn = c.querySelector('.card-name');
+          if (cn && cn.textContent === foundName) targetCard = c;
+        });
+        if (!targetCard) return false;
+
+        window._currentArticleId = null;
+        window._currentProjectName = foundName;
+        var icon = targetCard.querySelector('.card-icon img').getAttribute('src');
+        var badgeEl = targetCard.querySelector('.card-badge');
+        var badgeText = badgeEl ? badgeEl.textContent : '';
+        var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
+        var d = details[foundName];
+
+        // URL już jest — replaceState
+        if (window.history.replaceState) {
+          window.history.replaceState({type: 'project', id: foundName, lang: currentLang}, '', path);
+        }
+
+        // Dynamiczny title + meta
+        document.title = foundName + ' — TMK Suite';
+        var descEl = targetCard.querySelector('.card-desc');
+        var metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc && descEl) metaDesc.setAttribute('content', descEl.textContent);
+
+        // Wypełnij overlay
+        document.getElementById('ovIcon').src = icon;
+        document.getElementById('ovIcon').alt = foundName;
+        if (d && d.iconCircle) {
+          document.getElementById('ovIconWrap').classList.add('circle');
+        } else {
+          document.getElementById('ovIconWrap').classList.remove('circle');
+        }
+        document.getElementById('ovName').textContent = foundName;
+        document.getElementById('ovBadge').textContent = badgeText;
+        document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
+
+        if (d) {
+          renderAppOverlay(d);
+        } else {
+          document.getElementById('ovBody').innerHTML = '<h3>Opis aplikacji</h3><p>Pełny opis <strong>' + foundName + '</strong> pojawi się tutaj.</p>';
+          document.getElementById('ovMeta').innerHTML = '';
+          document.getElementById('ovTags').innerHTML = '';
+        }
+
+        document.getElementById('appOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+
+        return true;
+      };
+
+      // Aktualizuj URL projektu przy zmianie języka
+      window._refreshProjectUrl = function(lang) {
+        var projectName = window._currentProjectName;
+        if (!projectName) return;
+        var details = window.APP_DETAILS;
+        if (!details) return;
+        var d = details[projectName];
+        if (!d) return;
+        var slug = lang === 'en' ? d.slugEn : d.slugPl;
+        if (!slug) return;
+        var prefix = lang === 'en' ? '/en/project/' : '/projekt/';
+        var state = {type: 'project', id: projectName, lang: lang};
+        if (window.history.replaceState) {
+          window.history.replaceState(state, '', prefix + slug);
+        }
+        // Zaktualizuj title przy zmianie języka
+        document.title = projectName + ' — TMK Suite';
+      };
+
+      // Odśwież treść overlayu projektu przy zmianie języka
+      window._refreshProjectOverlay = function() {
+        var overlay = document.getElementById('appOverlay');
+        if (!overlay.classList.contains('open')) return;
+        var projectName = window._currentProjectName;
+        if (!projectName) return;
+        var details = window.APP_DETAILS;
+        if (!details) return;
+        var d = details[projectName];
+        if (!d) return;
+        renderAppOverlay(d);
+      };
     })();
 
     // ── Lightbox: nawigacja między screenshotami ──
@@ -3826,6 +4010,7 @@
           var excerpt = card.querySelector('.article-excerpt').textContent;
           var articleId = card.dataset.article;
           window._currentArticleId = articleId;
+          window._currentProjectName = null;
 
           // URL zależny od języka
           var content = ARTICLE_CONTENT[articleId];
@@ -4018,14 +4203,60 @@
           document.getElementById('appOverlay').classList.add('open');
           document.body.style.overflow = 'hidden';
         }
+      } else if (e.state && e.state.type === 'project') {
+        // Back/forward do projektu — otwórz overlay
+        var projectName = e.state.id;
+        var allCards = document.querySelectorAll('.project-card');
+        var targetCard = null;
+        allCards.forEach(function(c) {
+          var cn = c.querySelector('.card-name');
+          if (cn && cn.textContent === projectName) targetCard = c;
+        });
+        if (targetCard) {
+          var needLang = e.state.lang || 'pl';
+          if (needLang !== currentLang) {
+            switchLang(needLang);
+          }
+          window._currentArticleId = null;
+          window._currentProjectName = projectName;
+          var icon = targetCard.querySelector('.card-icon img').getAttribute('src');
+          var badgeEl = targetCard.querySelector('.card-badge');
+          var badgeText = badgeEl ? badgeEl.textContent : '';
+          var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
+          var details = window.APP_DETAILS ? window.APP_DETAILS[projectName] : null;
+          var descEl = targetCard.querySelector('.card-desc');
+          document.title = projectName + ' — TMK Suite';
+          var metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc && descEl) metaDesc.setAttribute('content', descEl.textContent);
+          document.getElementById('ovIcon').src = icon;
+          document.getElementById('ovIcon').alt = projectName;
+          if (details && details.iconCircle) {
+            document.getElementById('ovIconWrap').classList.add('circle');
+          } else {
+            document.getElementById('ovIconWrap').classList.remove('circle');
+          }
+          document.getElementById('ovName').textContent = projectName;
+          document.getElementById('ovBadge').textContent = badgeText;
+          document.getElementById('ovBadge').className = 'oh-badge badge-' + badgeClass.replace('badge-', '');
+          if (details) {
+            renderAppOverlay(details);
+          } else {
+            document.getElementById('ovBody').innerHTML = '<h3>Opis aplikacji</h3><p>Pełny opis <strong>' + projectName + '</strong> pojawi się tutaj.</p>';
+            document.getElementById('ovMeta').innerHTML = '';
+            document.getElementById('ovTags').innerHTML = '';
+          }
+          document.getElementById('appOverlay').classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
       } else {
-        // Back/forward z artykułu — zamknij overlay
+        // Back/forward z artykułu/projektu — zamknij overlay
         if (window._closeOverlay) window._closeOverlay();
       }
     });
 
-    // Przy starcie sprawdź URL — jeśli /artykul/... to otwórz od razu
+    // Przy starcie sprawdź URL — jeśli /artykul/... lub /projekt/... to otwórz od razu
     if (window._openArticleFromUrl) window._openArticleFromUrl();
+    if (window._openProjectFromUrl) window._openProjectFromUrl();
 
     // ── Tech stack: cykliczne podświetlanie ──
     (function() {
