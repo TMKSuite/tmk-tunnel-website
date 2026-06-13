@@ -3150,6 +3150,7 @@
           window._currentProjectName = null;
           // Wróć do bazowego URL z zapamiętanym hashem sekcji (replaceState NIE pushState)
           var basePath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+          if (!basePath || basePath === '') basePath = '/';
           var restoreHash = window._lastSectionHash || window.location.hash || '';
           window._lastSectionHash = null;
           if (window.history.replaceState) {
@@ -4478,6 +4479,7 @@
             var hash = urlHashes[id][currentLang] || id;
             // Odetnij ścieżkę artykułu/projektu jeśli jest — żeby nie zostało /artykul/slug#pomysly
             var cleanPath = window.location.pathname.replace(/\/artykul\/.*$/, '').replace(/\/en\/article\/.*$/, '').replace(/\/projekt\/.*$/, '').replace(/\/en\/project\/.*$/, '');
+            if (!cleanPath || cleanPath === '') cleanPath = '/';
             window.history.replaceState(null, '', cleanPath + '#' + hash);
           }
 
