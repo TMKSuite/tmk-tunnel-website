@@ -1116,6 +1116,10 @@
       line-height: 1.15;
       cursor: pointer;
     }
+    a.ref-item {
+      text-decoration: none;
+      color: rgba(230, 237, 243, 0.35);
+    }
 
     .ref-item::before {
       content: '• ';
@@ -2815,11 +2819,11 @@
     <details class="projects-ref">
       <summary data-i18n="ideas.ref_title">Projekty — spis treści</summary>
       <div class="projects-ref-list" id="refList">
-        <span class="ref-item" data-app="TorekMarketKiller" data-icon="/assets/images/icon-tmk.png" data-desc-pl="automatyzacja TradingView → MT5" data-desc-en="TradingView → MT5 automation"><strong>TorekMarketKiller</strong> — <span class="ref-desc">automatyzacja TradingView → MT5</span></span>
-        <span class="ref-item" data-app="PortfolioCommandCenter" data-icon="/assets/images/icon-pc2.png" data-desc-pl="symulator portfela" data-desc-en="portfolio simulator"><strong>PortfolioCommandCenter</strong> — <span class="ref-desc">symulator portfela</span></span>
-        <span class="ref-item" data-app="CandleComparison" data-icon="/assets/images/icon-comparator.png" data-desc-pl="porównanie danych świecowych" data-desc-en="candle data comparison"><strong>CandleComparison</strong> — <span class="ref-desc">porównanie danych świecowych</span></span>
-        <span class="ref-item" data-app="CandleDownloader" data-icon="/assets/images/icon-downloader.png" data-desc-pl="pobieranie świec z TV" data-desc-en="candle download from TV"><strong>CandleDownloader</strong> — <span class="ref-desc">pobieranie świec z TV</span></span>
-        <span class="ref-item" data-app="ClientCreator" data-icon="/assets/images/icon-clientcreator.png?v=1" data-desc-pl="budowanie .exe (w toku)" data-desc-en=".exe builder (WIP)"><strong>ClientCreator</strong> — <span class="ref-desc">budowanie .exe (w toku)</span></span>
+        <a href="/projekt/torek-market-killer" class="ref-item" data-app="TorekMarketKiller" data-icon="/assets/images/icon-tmk.png" data-desc-pl="automatyzacja TradingView → MT5" data-desc-en="TradingView → MT5 automation"><strong>TorekMarketKiller</strong> — <span class="ref-desc">automatyzacja TradingView → MT5</span></a>
+        <a href="/projekt/portfolio-command-center" class="ref-item" data-app="PortfolioCommandCenter" data-icon="/assets/images/icon-pc2.png" data-desc-pl="symulator portfela" data-desc-en="portfolio simulator"><strong>PortfolioCommandCenter</strong> — <span class="ref-desc">symulator portfela</span></a>
+        <a href="/projekt/candle-comparison" class="ref-item" data-app="CandleComparison" data-icon="/assets/images/icon-comparator.png" data-desc-pl="porównanie danych świecowych" data-desc-en="candle data comparison"><strong>CandleComparison</strong> — <span class="ref-desc">porównanie danych świecowych</span></a>
+        <a href="/projekt/candles-downloader" class="ref-item" data-app="CandleDownloader" data-icon="/assets/images/icon-downloader.png" data-desc-pl="pobieranie świec z TV" data-desc-en="candle download from TV"><strong>CandleDownloader</strong> — <span class="ref-desc">pobieranie świec z TV</span></a>
+        <a href="/projekt/client-creator" class="ref-item" data-app="ClientCreator" data-icon="/assets/images/icon-clientcreator.png?v=1" data-desc-pl="budowanie .exe (w toku)" data-desc-en=".exe builder (WIP)"><strong>ClientCreator</strong> — <span class="ref-desc">budowanie .exe (w toku)</span></a>
       </div>
     </details>
 
@@ -3849,7 +3853,8 @@
     })();
     (function() {
       document.querySelectorAll('.ref-item[data-app]').forEach(function(ref) {
-        ref.addEventListener('click', function() {
+        ref.addEventListener('click', function(e) {
+          e.preventDefault();
           var name = ref.dataset.app;
           // Znajdź kartę projektu o tej samej nazwie i kliknij
           var cards = document.querySelectorAll('.project-card');
