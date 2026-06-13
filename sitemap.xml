@@ -1,33 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Strona główna -->
   <url>
-    <loc>https://tmk-tunnel.pl/</loc>
+    <loc>https://www.tmk-tunnel.pl/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- ARTYKUŁY -->
   <url>
-    <loc>https://tmk-tunnel.pl/projekty/platforma.html</loc>
+    <loc>https://www.tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tmk-tunnel.pl/en/article/achilles-paradox-high-return-rate"/>
   </url>
   <url>
-    <loc>https://tmk-tunnel.pl/projekty/symulator.html</loc>
+    <loc>https://www.tmk-tunnel.pl/en/article/achilles-paradox-high-return-rate</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tmk-tunnel.pl/en/article/achilles-paradox-high-return-rate"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu"/>
   </url>
+
+  <!-- PROJEKTY — PL -->
   <url>
-    <loc>https://tmk-tunnel.pl/projekty/komparator.html</loc>
+    <loc>https://www.tmk-tunnel.pl/projekt/torek-market-killer</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tmk-tunnel.pl/projekty/downloader.html</loc>
+    <loc>https://www.tmk-tunnel.pl/projekt/portfolio-command-center</loc>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tmk-tunnel.pl/artykuly/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://www.tmk-tunnel.pl/projekt/candle-comparison</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/projekt/candles-downloader</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/projekt/client-creator</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- PROJEKTY — EN -->
+  <url>
+    <loc>https://www.tmk-tunnel.pl/en/project/torek-market-killer</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/en/project/portfolio-command-center</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/en/project/candle-comparison</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/en/project/candles-downloader</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.tmk-tunnel.pl/en/project/client-creator</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
