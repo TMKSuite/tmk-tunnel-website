@@ -3944,6 +3944,14 @@
         });
       });
     }
+    function getArticleMetaHtml(date) {
+      var label = currentLang === 'en' ? 'Publication date' : 'Data publikacji';
+      return '<div class="overlay-meta-item"><span>' + date + '</span>' + label + '</div>';
+    }
+    function getArticleTagsHtml() {
+      var articleLabel = currentLang === 'en' ? 'Article' : 'Artykuł';
+      return '<span class="tag">' + articleLabel + '</span><span class="tag">AI</span><span class="tag">Trading</span>';
+    }
     function buildVoteButtonsHtml(articleId) {
       var current = getArticleVote(articleId);
       var likeActive = current === 'like' ? ' active' : '';
@@ -3998,6 +4006,13 @@
         if (title) {
           document.getElementById('ovName').textContent = title;
           document.title = title + ' — TMK Suite';
+        }
+        // Aktualizuj meta i tagi
+        var card = document.querySelector('.article-card[data-article="' + articleId + '"]');
+        if (card) {
+          var date = card.querySelector('.article-date').textContent;
+          document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
+          document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
         }
       };
 
@@ -4150,8 +4165,8 @@
             bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
           }
           document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
-          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
-          document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+          document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
+          document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
 
           document.getElementById('appOverlay').classList.add('open');
@@ -4299,8 +4314,8 @@
             bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
           }
           document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
-          document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span>' + date + '</span>Data publikacji</div>';
-          document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+          document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
+          document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
           document.getElementById('appOverlay').classList.add('open');
           document.body.style.overflow = 'hidden';
