@@ -3527,7 +3527,7 @@
         document.getElementById('ovMeta').innerHTML =
           '<div class="overlay-meta-item"><span>' + details.loc + '</span>' + (lang === 'en' ? 'Lines of code' : 'Linii kodu') + '</div>' +
           '<div class="overlay-meta-item"><span>' + details.env + '</span>' + (lang === 'en' ? 'Environment' : 'Środowisko') + '</div>';
-        document.getElementById('ovTags').innerHTML = details['tags' + (lang === 'en' ? 'En' : 'Pl')] || details.tagsPl || '';
+        document.getElementById('ovTags').innerHTML = '';
 
         // Screenshoty
         var shots = details.screenshots || [];

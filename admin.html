@@ -726,17 +726,6 @@
         <input type="text" id="edProjectDescEn" placeholder="Trading automation platform...">
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label>Tagi (PL) — oddzielone przecinkiem</label>
-          <input type="text" id="edProjectTagsPl" placeholder="Python, MT5, FastAPI">
-        </div>
-        <div class="form-group">
-          <label>Tagi (EN) — oddzielone przecinkiem</label>
-          <input type="text" id="edProjectTagsEn" placeholder="Python, MT5, FastAPI">
-        </div>
-      </div>
-
       <div class="form-group">
         <label>Screenshoty — ścieżki oddzielone przecinkiem</label>
         <input type="text" id="edProjectScreenshots" placeholder="/assets/screenshots/tmk/01.png, /assets/screenshots/tmk/02.png">
@@ -2144,8 +2133,6 @@ function editProject(idx) {
   setVal('edProjectSlugEn', p.slugEn||'');
   setVal('edProjectDescPl', p.descPl||'');
   setVal('edProjectDescEn', p.descEn||'');
-  setVal('edProjectTagsPl', (p.tagsPl||[]).join(', '));
-  setVal('edProjectTagsEn', (p.tagsEn||[]).join(', '));
   setVal('edProjectScreenshots', (p.screenshots||[]).join(', '));
   setVal('edProjectBodyPl', p.bodyPl||'');
   setVal('edProjectBodyEn', p.bodyEn||'');
@@ -2181,8 +2168,8 @@ function publishProject() {
     slugEn: getVal('edProjectSlugEn'),
     descPl: getVal('edProjectDescPl'),
     descEn: getVal('edProjectDescEn'),
-    tagsPl: getVal('edProjectTagsPl').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
-    tagsEn: getVal('edProjectTagsEn').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    tagsPl: [],
+    tagsEn: [],
     screenshots: getVal('edProjectScreenshots').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
     bodyPl: getVal('edProjectBodyPl'),
     bodyEn: getVal('edProjectBodyEn')
@@ -2199,7 +2186,7 @@ function publishProject() {
 }
 
 function clearProjectForm() {
-  ['edProjectIdx','edProjectName','edProjectId','edProjectGroup','edProjectBadges','edProjectIcon','edProjectLoc','edProjectEnv','edProjectIconCircle','edProjectSlugPl','edProjectSlugEn','edProjectDescPl','edProjectDescEn','edProjectTagsPl','edProjectTagsEn','edProjectScreenshots','edProjectBodyPl','edProjectBodyEn'].forEach(function(id){ setVal(id,''); });
+  ['edProjectIdx','edProjectName','edProjectId','edProjectGroup','edProjectBadges','edProjectIcon','edProjectLoc','edProjectEnv','edProjectIconCircle','edProjectSlugPl','edProjectSlugEn','edProjectDescPl','edProjectDescEn','edProjectScreenshots','edProjectBodyPl','edProjectBodyEn'].forEach(function(id){ setVal(id,''); });
   document.getElementById('edProjectGroup').value = 'done';
   document.getElementById('edProjectIconCircle').value = '0';
 }
