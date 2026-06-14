@@ -5010,23 +5010,21 @@
           if (hEl && I18N[currentLang] && I18N[currentLang]['projects.heading']) hEl.innerHTML = I18N[currentLang]['projects.heading'];
           if (sEl && I18N[currentLang] && I18N[currentLang]['projects.subheading']) sEl.innerHTML = I18N[currentLang]['projects.subheading'];
 
-          // Merge into APP_DETAILS for overlay
+          // Merge into APP_DETAILS for overlay — JSON z panelu admina jest źródłem prawdy
           d.projects.forEach(function(p) {
-            APP_DETAILS[p.name] = APP_DETAILS[p.name] || {}; // keep existing if already defined
-            if (!APP_DETAILS[p.name].bodyPl) {
-              APP_DETAILS[p.name] = {
-                slugPl: p.slugPl,
-                slugEn: p.slugEn,
-                iconCircle: p.iconCircle || false,
-                loc: p.loc,
-                env: p.env,
-                screenshots: p.screenshots || [],
-                bodyPl: p.bodyPl || '',
-                bodyEn: p.bodyEn || '',
-                tagsPl: (p.tagsPl||[]).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join(''),
-                tagsEn: (p.tagsEn||[]).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join('')
-              };
-            }
+            var key = p.name;
+            APP_DETAILS[key] = {
+              slugPl: p.slugPl || (APP_DETAILS[key] && APP_DETAILS[key].slugPl) || '',
+              slugEn: p.slugEn || (APP_DETAILS[key] && APP_DETAILS[key].slugEn) || '',
+              iconCircle: p.iconCircle || false,
+              loc: p.loc || (APP_DETAILS[key] && APP_DETAILS[key].loc) || '',
+              env: p.env || (APP_DETAILS[key] && APP_DETAILS[key].env) || '',
+              screenshots: (p.screenshots && p.screenshots.length) ? p.screenshots : (APP_DETAILS[key] && APP_DETAILS[key].screenshots) || [],
+              bodyPl: p.bodyPl || (APP_DETAILS[key] && APP_DETAILS[key].bodyPl) || '',
+              bodyEn: p.bodyEn || (APP_DETAILS[key] && APP_DETAILS[key].bodyEn) || '',
+              tagsPl: (p.tagsPl && p.tagsPl.length) ? p.tagsPl.map(function(t){ return '<span class=\"tag\">' + t + '</span>'; }).join('') : ((APP_DETAILS[key] && APP_DETAILS[key].tagsPl) || ''),
+              tagsEn: (p.tagsEn && p.tagsEn.length) ? p.tagsEn.map(function(t){ return '<span class=\"tag\">' + t + '</span>'; }).join('') : ((APP_DETAILS[key] && APP_DETAILS[key].tagsEn) || '')
+            };
           });
           window.APP_DETAILS = APP_DETAILS;
 
