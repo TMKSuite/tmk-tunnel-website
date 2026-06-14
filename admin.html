@@ -211,6 +211,7 @@
     <button class="tab" data-tab="about" onclick="switchTab('about')">O mnie</button>
     <button class="tab" data-tab="contact" onclick="switchTab('contact')">Kontakt</button>
     <button class="tab" data-tab="projects" onclick="switchTab('projects')">Projekty</button>
+    <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">Pomysły</button>
   </div>
 
   <!-- ARTICLES TAB -->
@@ -749,6 +750,25 @@
     </div>
   </div>
 
+  <!-- IDEAS TAB -->
+  <div id="tab-ideas" style="display:none">
+    <div style="margin-bottom:1rem;">
+      <span style="font-size:0.8rem;color:rgba(230,237,243,0.3)">Sekcja POMYSŁY używa Giscus (GitHub Discussions) do komentarzy. Tutaj zmieniasz tylko nagłówek i podtytuł.</span>
+    </div>
+    <div id="ideasMsgBox"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Nagłówek (PL)</label><input type="text" id="edIdeasHeadingPl" placeholder="Pomysły"></div>
+      <div class="form-group"><label>Nagłówek (EN)</label><input type="text" id="edIdeasHeadingEn" placeholder="Ideas"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Podtytuł (PL)</label><input type="text" id="edIdeasSubheadingPl" placeholder="Masz pomysł?..."></div>
+      <div class="form-group"><label>Podtytuł (EN)</label><input type="text" id="edIdeasSubheadingEn" placeholder="Got an idea?..."></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="publishIdeas()">Opublikuj</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -811,9 +831,11 @@ function switchTab(tab) {
   document.getElementById('tab-about').style.display = tab === 'about' ? 'block' : 'none';
   document.getElementById('tab-contact').style.display = tab === 'contact' ? 'block' : 'none';
   document.getElementById('tab-projects').style.display = tab === 'projects' ? 'block' : 'none';
+  document.getElementById('tab-ideas').style.display = tab === 'ideas' ? 'block' : 'none';
   if (tab === 'about') loadAbout();
   if (tab === 'contact') loadContact();
   if (tab === 'projects') loadProjects();
+  if (tab === 'ideas') loadIdeas();
 }
 
 // ══════════ DATA ══════════
@@ -1966,6 +1988,38 @@ function clearProjectForm() {
 
 function showProjMsg(msg, type) {
   var box = document.getElementById('projectsMsgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+// ══════════ IDEAS (POMYSŁY) ══════════
+var ideasData = null;
+
+function loadIdeas() {
+  fetchJSON('/data/ideas.json', function(data) {
+    ideasData = data || { headingPl:'Pomysły', headingEn:'Ideas', subheadingPl:'', subheadingEn:'' };
+    setVal('edIdeasHeadingPl', ideasData.headingPl||'');
+    setVal('edIdeasHeadingEn', ideasData.headingEn||'');
+    setVal('edIdeasSubheadingPl', ideasData.subheadingPl||'');
+    setVal('edIdeasSubheadingEn', ideasData.subheadingEn||'');
+  });
+}
+
+function publishIdeas() {
+  ideasData = {
+    headingPl: getVal('edIdeasHeadingPl'),
+    headingEn: getVal('edIdeasHeadingEn'),
+    subheadingPl: getVal('edIdeasSubheadingPl'),
+    subheadingEn: getVal('edIdeasSubheadingEn')
+  };
+  saveAndPush('data/ideas.json', ideasData, 'Aktualizacja POMYSŁY', function() {
+    showIdeasMsg('Opublikowano!', 'ok');
+  });
+}
+
+function showIdeasMsg(msg, type) {
+  var box = document.getElementById('ideasMsgBox');
   box.className = 'msg msg-' + type;
   box.textContent = msg;
   setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
