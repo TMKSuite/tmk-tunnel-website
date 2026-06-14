@@ -3500,11 +3500,13 @@
         // Screenshoty
         var shots = details.screenshots || [];
         var shotsContainer = document.getElementById('ovScreenshots');
+        var appName = window._currentProjectName || '';
         if (shots.length > 0) {
           var heading = lang === 'en' ? 'Screenshots' : 'Zrzuty ekranu';
           var html = '<div class="screenshots-heading">' + heading + '</div><div class="screenshots-grid">';
-          shots.forEach(function(src) {
-            html += '<img class="screenshot-thumb" src="' + src + '" alt="" loading="lazy">';
+          shots.forEach(function(src, i) {
+            var alt = appName ? appName + ' — screenshot ' + (i + 1) : 'Screenshot ' + (i + 1);
+            html += '<img class="screenshot-thumb" src="' + src + '" alt="' + alt + '" loading="lazy">';
           });
           html += '</div>';
           shotsContainer.innerHTML = html;
@@ -3730,7 +3732,9 @@
         if (thumbs.length === 0) return;
         currentThumbs = Array.prototype.slice.call(thumbs);
         currentIndex = (index + thumbs.length) % thumbs.length;
-        lightboxImg.src = currentThumbs[currentIndex].src;
+        var thumb = currentThumbs[currentIndex];
+        lightboxImg.src = thumb.src;
+        lightboxImg.alt = thumb.alt || '';
         lightbox.classList.add('open');
       }
 
