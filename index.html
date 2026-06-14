@@ -4700,11 +4700,16 @@
         if (statsMobile) observer.observe(statsMobile);
       }
 
-      // Reakcja na resize — gdy mobile stats się pojawią, odpal animację
-      var mobileMql = window.matchMedia('(max-width: 999px)');
-      mobileMql.addEventListener('change', function(e) {
-        if (e.matches) tryAnimateMobile();
-      });
+      // Reakcja na pojawienie się mobile stats — ResizeObserver wykrywa zmianę display:none → flex
+      if (statsMobile) {
+        var resizeObserver = new ResizeObserver(function(entries) {
+          var entry = entries[0];
+          if (entry && entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+            tryAnimateMobile();
+          }
+        });
+        resizeObserver.observe(statsMobile);
+      }
     })();
 
     // Logo w navbarze — scroll na górę + usuń podświetlenie zakładek
