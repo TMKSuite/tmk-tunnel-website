@@ -731,6 +731,14 @@
       <div class="form-group">
         <label>Screenshoty — ścieżki oddzielone przecinkiem</label>
         <input type="text" id="edProjectScreenshots" placeholder="/assets/screenshots/tmk/01.png, /assets/screenshots/tmk/02.png">
+        <div style="margin-top:0.3rem;">
+          <div id="projScreenshotDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:6px;padding:0.6rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;font-size:0.75rem;">
+            Upuść screenshot(y) tutaj lub kliknij, aby dodać<br>
+            <span style="font-size:0.65rem;">(PNG, JPG, WebP — max 2MB każdy)</span>
+            <input type="file" id="projScreenshotFile" accept="image/png,image/jpeg,image/webp" multiple style="display:none" onchange="handleProjScreenshots(event)">
+          </div>
+          <div id="projScreenshotStatus" style="margin-top:0.3rem;font-size:0.75rem;color:rgba(230,237,243,0.3);"></div>
+        </div>
       </div>
 
       <div class="form-group">
@@ -2432,6 +2440,100 @@ function showHomeMsg(msg, type) {
   box.className = 'msg msg-' + type;
   box.textContent = msg;
   setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+// ── Project Screenshot Upload ──
+(function() {
+  var dz = document.getElementById('projScreenshotDropZone');
+  var fi = document.getElementById('projScreenshotFile');
+  if (!dz || !fi) return;
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.style.borderColor = 'var(--accent)'; });
+  dz.addEventListener('dragleave', function() { dz.style.borderColor = ''; });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); dz.style.borderColor = '';
+    if (e.dataTransfer.files.length) uploadProjScreenshots(e.dataTransfer.files);
+  });
+})();
+
+function handleProjScreenshots(e) {
+  if (e.target.files.length) uploadProjScreenshots(e.target.files);
+}
+
+function uploadProjScreenshots(files) {
+  var statusEl = document.getElementById('projScreenshotStatus');
+  var total = files.length;
+  var done = 0;
+  var urls = [];
+
+  statusEl.textContent = 'Wysyłanie ' + total + ' plik(ów)...';
+  statusEl.style.color = 'var(--accent)';
+
+  function uploadNext(idx) {
+    if (idx >= total) {
+      // All done — append URLs to screenshots field
+      var input = document.getElementById('edProjectScreenshots');
+      var existing = input.value.trim();
+      var newUrls = urls.join(', ');
+      input.value = existing ? (existing + ', ' + newUrls) : newUrls;
+      statusEl.textContent = 'Wysłano ' + done + '/' + total + '! URL-e dodane do pola.';
+      statusEl.style.color = 'var(--success)';
+      // Also update the homeData model if editing
+      var projIdx = parseInt(document.getElementById('edProjectIdx').value);
+      if (projIdx >= 0 && projectsData && projectsData.projects[projIdx]) {
+        projectsData.projects[projIdx].screenshots = input.value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+      return;
+    }
+
+    var file = files[idx];
+    if (file.size > 2 * 1024 * 1024) {
+      statusEl.textContent = 'Plik ' + file.name + ' za duży (>2MB), pomijam...';
+      done++;
+      uploadNext(idx + 1);
+      return;
+    }
+    var ext = file.name.split('.').pop().toLowerCase();
+    if (['png','jpg','jpeg','webp'].indexOf(ext) === -1) {
+      statusEl.textContent = 'Plik ' + file.name + ' — niedozwolony format, pomijam...';
+      done++;
+      uploadNext(idx + 1);
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function() {
+      var b64 = reader.result.split(',')[1];
+      var filename = 'screenshot_' + Date.now() + '_' + idx + '.' + (ext==='jpeg'?'jpg':ext);
+      var path = 'assets/images/screenshots/' + filename;
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', WORKER_URL, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          try {
+            var resp = JSON.parse(xhr.responseText);
+            if (resp.success) {
+              urls.push('/' + path);
+              done++;
+              statusEl.textContent = 'Wysłano ' + done + '/' + total + ': ' + file.name;
+            } else {
+              statusEl.textContent = 'Błąd uploadu ' + file.name + ': ' + (resp.error||'');
+              statusEl.style.color = 'var(--danger)';
+            }
+          } catch(e) { statusEl.textContent = 'Błąd parsowania dla ' + file.name; }
+        } else {
+          statusEl.textContent = 'Błąd ' + xhr.status + ' dla ' + file.name;
+        }
+        uploadNext(idx + 1);
+      };
+      xhr.onerror = function() { statusEl.textContent = 'Błąd sieci dla ' + file.name; uploadNext(idx+1); };
+      xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload screenshot: '+filename, secret: prompt('Hasło:','') }));
+    };
+    reader.readAsDataURL(file);
+  }
+
+  uploadNext(0);
 }
 
 // ══════════ INIT ══════════
