@@ -2965,7 +2965,7 @@
 
   <!-- ═══════════ OVERLAY: szczegóły aplikacji ═══════════ -->
   <div class="overlay" id="appOverlay">
-    <div class="overlay-panel" id="overlayPanel">
+    <div class="overlay-panel" id="overlayPanel" tabindex="-1">
       <button class="overlay-close" id="overlayClose" aria-label="Zamknij">✕</button>
       <div class="overlay-header">
         <div class="ov-icon-wrap" id="ovIconWrap">
@@ -3228,11 +3228,14 @@
       function openOverlay() {
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';
+        // Focus panelu → natywne przewijanie strzałkami góra/dół (płynne, z autorepeat klawiszy)
+        panel.focus({preventScroll: true});
       }
 
       function closeOverlay() {
         overlay.classList.remove('open');
         document.body.style.overflow = '';
+        panel.blur();  // zwolnij focus → strzałki lewo/prawo wracają do nawigacji sekcji strony
 
         // Jeśli jesteśmy na URL-u artykułu lub projektu — wyczyść URL i przywróć meta
         var isArticleUrl = /\/artykul\//.test(window.location.pathname) || /\/en\/article\//.test(window.location.pathname);
@@ -3266,17 +3269,13 @@
         if (!panel.contains(e.target)) closeOverlay();
       });
 
-      // Klawiatura w overlayu: Escape = zamknij, strzałki góra/dół = przewijanie panelu
+      // Klawiatura w overlayu: Escape = zamknij, strzałki góra/dół = natywne przewijanie panelu (przeglądarka)
       document.addEventListener('keydown', function(e) {
         if (!overlay.classList.contains('open')) return;
         if (e.key === 'Escape') { closeOverlay(); return; }
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          panel.scrollBy({top: 120, behavior: 'smooth'});
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          panel.scrollBy({top: -120, behavior: 'smooth'});
-        }
+        // ArrowUp/ArrowDown — nic nie robimy, przeglądarka sama płynnie przewija
+        // panel, który ma focus (tabindex=-1 + panel.focus() w openOverlay).
+        // autorepeat działa natywnie = płynne, szybkie przewijanie przy trzymaniu klawisza.
       });
 
       // ── APP_DETAILS: dane aplikacji do overlayu ──
