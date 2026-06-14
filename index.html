@@ -4041,7 +4041,7 @@
         var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
         var bodyHtml = content[langKey] || content.bodyPl || '';
         var votesHtml = document.querySelector('.article-votes-overlay');
-        document.getElementById('ovBody').innerHTML = bodyHtml + (votesHtml ? votesHtml.outerHTML : buildVoteButtonsHtml(articleId));
+        document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + (votesHtml ? votesHtml.outerHTML : buildVoteButtonsHtml(articleId));
         // Aktualizuj tytuł w overlayu
         var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
         var title = content[titleKey] || content.titlePl || '';
@@ -4162,7 +4162,11 @@
             if (!bodyHtml) {
               bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
             }
-            document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
+            // Auto-wrap plain text in <p> tags if no HTML detected
+            if (bodyHtml.indexOf('<') === -1) {
+              bodyHtml = '<p>' + bodyHtml.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+            }
+            document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(articleId);
             document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
             document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
             document.getElementById('ovScreenshots').innerHTML = '';
@@ -4170,6 +4174,15 @@
             document.body.style.overflow = 'hidden';
           });
         });
+      }
+
+      // Helper: auto-wrap body text for overlay
+      function formatArticleBody(bodyHtml) {
+        if (!bodyHtml) return '';
+        if (bodyHtml.indexOf('<') === -1) {
+          return '<p>' + bodyHtml.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+        }
+        return bodyHtml;
       }
 
       // ═══ Load external content (JSON), fallback to hardcoded ═══
@@ -4348,7 +4361,7 @@
           if (!bodyHtml) {
             bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
           }
-          document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
+          document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(articleId);
           document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
           document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
@@ -4453,7 +4466,7 @@
         if (!bodyHtml) {
           bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
         }
-        document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(foundId);
+        document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(foundId);
         document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span style="color:var(--color-text)">' + date + '</span>Data publikacji</div>';
         document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
         document.getElementById('ovScreenshots').innerHTML = '';
@@ -4497,7 +4510,7 @@
           if (!bodyHtml) {
             bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
           }
-          document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
+          document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(articleId);
           document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
           document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
