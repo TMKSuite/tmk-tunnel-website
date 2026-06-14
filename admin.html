@@ -612,10 +612,13 @@ function saveAndPush(file, data, message, onSuccess) {
           showMsg('Błąd: ' + (resp.error || 'nieznany'), 'err');
         }
       } catch(e) { showMsg('Błąd parsowania odpowiedzi', 'err'); }
-    } else if (xhr.status === 401) {
-      showMsg('Nieprawidłowe hasło do publikacji.', 'err');
     } else {
-      showMsg('Błąd serwera: ' + xhr.status + '. Sprawdź czy Worker jest skonfigurowany.', 'err');
+      var errMsg = 'Błąd serwera: ' + xhr.status;
+      try {
+        var errResp = JSON.parse(xhr.responseText);
+        if (errResp.error) errMsg += ' — ' + errResp.error;
+      } catch(e) {}
+      showMsg(errMsg, 'err');
     }
   };
   xhr.onerror = function() {

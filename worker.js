@@ -80,6 +80,14 @@ export default {
     }
 
     try {
+      // ── Weryfikuj token GitHub ──
+      if (!token || token.length < 10) {
+        throw new Error('GITHUB_TOKEN is missing or too short. Check Worker environment variables.');
+      }
+      if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+        throw new Error('GITHUB_TOKEN does not look like a valid PAT (should start with ghp_ or github_pat_). Got: ' + token.substring(0, 4) + '...');
+      }
+
       // ── Pobierz aktualny SHA pliku (jeśli istnieje) ──
       let sha = null;
       const getUrl = `https://api.github.com/repos/${repo}/contents/${file}`;
@@ -94,9 +102,12 @@ export default {
       if (getResp.ok) {
         const getData = await getResp.json();
         sha = getData.sha;
+      } else if (getResp.status === 401 || getResp.status === 403) {
+        const err = await getResp.text();
+        throw new Error(`GitHub auth failed (${getResp.status}): token might be invalid or expired. ${err}`);
       } else if (getResp.status !== 404) {
         const err = await getResp.text();
-        throw new Error(`GitHub GET failed: ${getResp.status} ${err}`);
+        throw new Error(`GitHub GET ${file} failed: ${getResp.status} ${err.substring(0, 200)}`);
       }
 
       // ── Commit pliku ──
@@ -133,8 +144,16 @@ export default {
       });
 
       if (!putResp.ok) {
-        const err = await putResp.text();
-        throw new Error(`GitHub PUT failed: ${putResp.status} ${err}`);
+        const errText = await putResp.text();
+        let errMsg = `GitHub PUT failed (${putResp.status})`;
+        if (putResp.status === 401 || putResp.status === 403) {
+          errMsg += ': token might lack repo scope — check GITHUB_TOKEN permissions';
+        } else if (putResp.status === 422) {
+          errMsg += ': ' + errText.substring(0, 300);
+        } else {
+          errMsg += ': ' + errText.substring(0, 200);
+        }
+        throw new Error(errMsg);
       }
 
       const putData = await putResp.json();
