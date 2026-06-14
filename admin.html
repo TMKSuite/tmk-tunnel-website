@@ -200,6 +200,7 @@
   <div class="tabs">
     <button class="tab active" data-tab="articles" onclick="switchTab('articles')">Artykuły</button>
     <button class="tab" data-tab="news" onclick="switchTab('news')">Co nowego</button>
+    <button class="tab" data-tab="about" onclick="switchTab('about')">O mnie</button>
   </div>
 
   <!-- ARTICLES TAB -->
@@ -349,6 +350,115 @@
     </div>
   </div>
 
+  <!-- ABOUT TAB -->
+  <div id="tab-about" style="display:none">
+    <div style="margin-bottom:1rem;">
+      <span style="font-size:0.8rem;color:rgba(230,237,243,0.3)">Edycja sekcji "O MNIE" na stronie głównej. Zmiany publikowane są na GitHub → auto-deploy na Cloudflare (~30s).</span>
+    </div>
+
+    <div id="aboutMsgBox"></div>
+
+    <div class="form-group">
+      <label>Imię i nazwisko</label>
+      <input type="text" id="edAboutName" placeholder="Krystian">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Rola / tagline (PL)</label>
+        <input type="text" id="edAboutRolePl" placeholder="Architekt systemów • Budowniczy z AI">
+      </div>
+      <div class="form-group">
+        <label>Rola / tagline (EN)</label>
+        <input type="text" id="edAboutRoleEn" placeholder="AI-powered architecture • Built with AI">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Opis (PL) — pełny tekst HTML</label>
+      <textarea id="edAboutStoryPl" rows="18" placeholder="<p>Akapit pierwszy...</p>"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Opis (EN)</label>
+      <textarea id="edAboutStoryEn" rows="18" placeholder="<p>First paragraph...</p>"></textarea>
+    </div>
+
+    <details style="margin-bottom:1.5rem;font-size:0.85rem;color:rgba(230,237,243,0.4);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Ściąga formatowania</summary>
+      <div style="margin-top:0.6rem;line-height:1.8;">
+        <code style="color:var(--accent)">&lt;p&gt;...&lt;/p&gt;</code> — akapit z odstępem<br>
+        <code style="color:var(--accent)">&lt;br&gt;</code> — nowa linia bez odstępu<br>
+        Możesz też używać innych tagów HTML: <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;hr&gt;</code>
+      </div>
+    </details>
+
+    <div class="preview-toggle" style="margin-bottom:1rem;">
+      <label style="cursor:pointer;font-size:0.85rem;color:rgba(230,237,243,0.5)">
+        <input type="checkbox" id="aboutPreviewCb" onchange="toggleAboutPreview()"> Podgląd opisu
+      </label>
+    </div>
+    <div class="preview-box" id="aboutPreviewBox"></div>
+
+    <!-- Banner upload -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Banner — obrazek tła sekcji</summary>
+      <div style="margin-top:0.6rem">
+        <div class="form-group">
+          <label>Ścieżka do bannera (lub wgraj nowy)</label>
+          <input type="text" id="edAboutBanner" placeholder="/assets/images/banner4.png">
+        </div>
+        <div id="aboutBannerDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.2rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
+          Upuść obrazek tutaj lub kliknij, aby wybrać nowy banner<br>
+          <span style="font-size:0.75rem;">(PNG, JPG, WebP — max 2MB, zalecana szerokość ~1600px)</span>
+          <input type="file" id="aboutBannerFileInput" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleAboutBannerSelect(event)">
+        </div>
+        <div id="aboutBannerPreview" style="margin-top:0.5rem;display:none;">
+          <img id="aboutBannerPreviewImg" style="max-width:100%;max-height:150px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center;">
+            <span id="aboutBannerStatus" style="color:rgba(230,237,243,0.3);font-size:0.8rem;">Gotowy do uploadu</span>
+            <button class="btn btn-sm" onclick="uploadAboutBanner()">Wyślij na serwer</button>
+          </div>
+          <div id="aboutBannerUrlBox" style="margin-top:0.4rem;display:none;">
+            <input type="text" id="aboutBannerUrlInput" readonly style="width:100%;padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--accent);font-size:0.8rem;font-family:monospace;">
+            <button class="btn btn-sm" style="margin-top:0.3rem;" onclick="copyAboutBannerUrl()">Kopiuj URL i wstaw do pola</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Photo upload -->
+    <details style="margin-bottom:1.5rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Zdjęcie profilowe</summary>
+      <div style="margin-top:0.6rem">
+        <div class="form-group">
+          <label>Ścieżka do zdjęcia (lub wgraj nowe)</label>
+          <input type="text" id="edAboutPhoto" placeholder="/assets/images/face.png">
+        </div>
+        <div id="aboutPhotoDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.2rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
+          Upuść obrazek tutaj lub kliknij, aby wybrać nowe zdjęcie<br>
+          <span style="font-size:0.75rem;">(PNG, JPG, WebP — max 1MB, kwadratowe ~400×400px)</span>
+          <input type="file" id="aboutPhotoFileInput" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleAboutPhotoSelect(event)">
+        </div>
+        <div id="aboutPhotoPreview" style="margin-top:0.5rem;display:none;">
+          <img id="aboutPhotoPreviewImg" style="max-width:120px;max-height:120px;border-radius:50%;border:2px solid var(--accent);">
+          <div style="margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center;">
+            <span id="aboutPhotoStatus" style="color:rgba(230,237,243,0.3);font-size:0.8rem;">Gotowe do uploadu</span>
+            <button class="btn btn-sm" onclick="uploadAboutPhoto()">Wyślij na serwer</button>
+          </div>
+          <div id="aboutPhotoUrlBox" style="margin-top:0.4rem;display:none;">
+            <input type="text" id="aboutPhotoUrlInput" readonly style="width:100%;padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--accent);font-size:0.8rem;font-family:monospace;">
+            <button class="btn btn-sm" style="margin-top:0.3rem;" onclick="copyAboutPhotoUrl()">Kopiuj URL i wstaw do pola</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="form-actions" style="margin-bottom:3rem;">
+      <button class="btn" onclick="publishAbout()">Opublikuj</button>
+      <button class="btn" onclick="loadAbout()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Resetuj do zapisanej wersji</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -408,6 +518,8 @@ function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
   document.getElementById('tab-articles').style.display = tab === 'articles' ? 'block' : 'none';
   document.getElementById('tab-news').style.display = tab === 'news' ? 'block' : 'none';
+  document.getElementById('tab-about').style.display = tab === 'about' ? 'block' : 'none';
+  if (tab === 'about') loadAbout();
 }
 
 // ══════════ DATA ══════════
@@ -891,6 +1003,251 @@ function insertImgToBody(textareaId) {
   ta.value = text.substring(0, start) + '\n' + imgTag + '\n' + text.substring(end);
   ta.focus();
   showMsg('Obrazek wstawiony do ' + (lang === 'pl' ? 'PL' : 'EN') + ' (alt: ' + alt + ')', 'ok');
+}
+
+// ══════════ ABOUT (O MNIE) ══════════
+var aboutData = null;
+
+function loadAbout() {
+  fetchJSON('/data/about.json', function(data) {
+    aboutData = data || getDefaultAbout();
+    fillAboutForm(aboutData);
+  });
+}
+
+function getDefaultAbout() {
+  return {
+    name: '',
+    bannerImage: '/assets/images/banner4.png',
+    photoImage: '/assets/images/face.png',
+    rolePl: '',
+    roleEn: '',
+    storyPl: '',
+    storyEn: ''
+  };
+}
+
+function fillAboutForm(d) {
+  setVal('edAboutName', d.name || '');
+  setVal('edAboutBanner', d.bannerImage || '');
+  setVal('edAboutPhoto', d.photoImage || '');
+  setVal('edAboutRolePl', d.rolePl || '');
+  setVal('edAboutRoleEn', d.roleEn || '');
+  setVal('edAboutStoryPl', d.storyPl || '');
+  setVal('edAboutStoryEn', d.storyEn || '');
+}
+
+function publishAbout() {
+  var data = {
+    name: getVal('edAboutName'),
+    bannerImage: getVal('edAboutBanner'),
+    photoImage: getVal('edAboutPhoto'),
+    rolePl: getVal('edAboutRolePl'),
+    roleEn: getVal('edAboutRoleEn'),
+    storyPl: getVal('edAboutStoryPl'),
+    storyEn: getVal('edAboutStoryEn')
+  };
+
+  saveAndPush('data/about.json', data, 'Aktualizacja O MNIE', function() {
+    aboutData = data;
+    showAboutMsg('Opublikowano! Zmiany widoczne na stronie za ~30s.', 'ok');
+  });
+}
+
+function toggleAboutPreview() {
+  var cb = document.getElementById('aboutPreviewCb');
+  var box = document.getElementById('aboutPreviewBox');
+  if (cb.checked) {
+    var body = getVal('edAboutStoryPl') || getVal('edAboutStoryEn') || '<p>Brak treści</p>';
+    var name = getVal('edAboutName') || '(bez imienia)';
+    box.innerHTML = '<h2 style="font-family:Space Grotesk,sans-serif;color:var(--accent);margin-bottom:0.5rem">' + escHtml(name) + '</h2>'
+      + '<p style="color:rgba(230,237,243,0.4);margin-bottom:1rem;font-size:0.9rem;">' + escHtml(getVal('edAboutRolePl') || '') + '</p>'
+      + body;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+function showAboutMsg(msg, type) {
+  var box = document.getElementById('aboutMsgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+// ── Banner upload ──
+var pendingAboutBannerBase64 = null;
+var pendingAboutBannerExt = 'png';
+
+(function() {
+  var dz = document.getElementById('aboutBannerDropZone');
+  var fi = document.getElementById('aboutBannerFileInput');
+  if (!dz || !fi) return;
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.style.borderColor = 'var(--accent)'; });
+  dz.addEventListener('dragleave', function() { dz.style.borderColor = ''; });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); dz.style.borderColor = '';
+    if (e.dataTransfer.files.length) processAboutBannerFile(e.dataTransfer.files[0]);
+  });
+})();
+
+function handleAboutBannerSelect(e) {
+  if (e.target.files.length) processAboutBannerFile(e.target.files[0]);
+}
+
+function processAboutBannerFile(file) {
+  if (file.size > 2 * 1024 * 1024) { alert('Plik za duży — max 2MB'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','webp'].indexOf(ext) === -1) { alert('Niedozwolony format — tylko PNG, JPG, WebP'); return; }
+  pendingAboutBannerExt = ext === 'jpeg' ? 'jpg' : ext;
+  var reader = new FileReader();
+  reader.onload = function() {
+    pendingAboutBannerBase64 = reader.result.split(',')[1];
+    document.getElementById('aboutBannerPreviewImg').src = reader.result;
+    document.getElementById('aboutBannerPreview').style.display = 'block';
+    document.getElementById('aboutBannerStatus').textContent = file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+    document.getElementById('aboutBannerUrlBox').style.display = 'none';
+    document.getElementById('aboutBannerStatus').style.color = 'rgba(230,237,243,0.5)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadAboutBanner() {
+  if (!pendingAboutBannerBase64) return;
+  var filename = 'banner_' + Date.now() + '.' + pendingAboutBannerExt;
+  var path = 'assets/images/' + filename;
+  document.getElementById('aboutBannerStatus').textContent = 'Wysyłanie...';
+  document.getElementById('aboutBannerStatus').style.color = 'var(--accent)';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) {
+          var url = '/' + path;
+          document.getElementById('aboutBannerUrlInput').value = url;
+          document.getElementById('aboutBannerUrlBox').style.display = 'block';
+          document.getElementById('aboutBannerStatus').textContent = 'Wysłano! URL: ' + url;
+          document.getElementById('aboutBannerStatus').style.color = 'var(--success)';
+        } else {
+          document.getElementById('aboutBannerStatus').textContent = 'Błąd: ' + (resp.error || 'nieznany');
+          document.getElementById('aboutBannerStatus').style.color = 'var(--danger)';
+        }
+      } catch(e) {
+        document.getElementById('aboutBannerStatus').textContent = 'Błąd parsowania odpowiedzi';
+        document.getElementById('aboutBannerStatus').style.color = 'var(--danger)';
+      }
+    } else {
+      document.getElementById('aboutBannerStatus').textContent = 'Błąd ' + xhr.status;
+      document.getElementById('aboutBannerStatus').style.color = 'var(--danger)';
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('aboutBannerStatus').textContent = 'Błąd połączenia';
+    document.getElementById('aboutBannerStatus').style.color = 'var(--danger)';
+  };
+  xhr.send(JSON.stringify({
+    file: path, content: pendingAboutBannerBase64, contentBase64: true,
+    message: 'Upload about banner: ' + filename, secret: prompt('Hasło:', '')
+  }));
+}
+
+function copyAboutBannerUrl() {
+  var url = document.getElementById('aboutBannerUrlInput').value;
+  if (!url) return;
+  setVal('edAboutBanner', url);
+  showAboutMsg('URL bannera wstawiony do pola!', 'ok');
+}
+
+// ── Photo upload ──
+var pendingAboutPhotoBase64 = null;
+var pendingAboutPhotoExt = 'png';
+
+(function() {
+  var dz = document.getElementById('aboutPhotoDropZone');
+  var fi = document.getElementById('aboutPhotoFileInput');
+  if (!dz || !fi) return;
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.style.borderColor = 'var(--accent)'; });
+  dz.addEventListener('dragleave', function() { dz.style.borderColor = ''; });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); dz.style.borderColor = '';
+    if (e.dataTransfer.files.length) processAboutPhotoFile(e.dataTransfer.files[0]);
+  });
+})();
+
+function handleAboutPhotoSelect(e) {
+  if (e.target.files.length) processAboutPhotoFile(e.target.files[0]);
+}
+
+function processAboutPhotoFile(file) {
+  if (file.size > 1 * 1024 * 1024) { alert('Plik za duży — max 1MB'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','webp'].indexOf(ext) === -1) { alert('Niedozwolony format — tylko PNG, JPG, WebP'); return; }
+  pendingAboutPhotoExt = ext === 'jpeg' ? 'jpg' : ext;
+  var reader = new FileReader();
+  reader.onload = function() {
+    pendingAboutPhotoBase64 = reader.result.split(',')[1];
+    document.getElementById('aboutPhotoPreviewImg').src = reader.result;
+    document.getElementById('aboutPhotoPreview').style.display = 'block';
+    document.getElementById('aboutPhotoStatus').textContent = file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+    document.getElementById('aboutPhotoUrlBox').style.display = 'none';
+    document.getElementById('aboutPhotoStatus').style.color = 'rgba(230,237,243,0.5)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadAboutPhoto() {
+  if (!pendingAboutPhotoBase64) return;
+  var filename = 'photo_' + Date.now() + '.' + pendingAboutPhotoExt;
+  var path = 'assets/images/' + filename;
+  document.getElementById('aboutPhotoStatus').textContent = 'Wysyłanie...';
+  document.getElementById('aboutPhotoStatus').style.color = 'var(--accent)';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) {
+          var url = '/' + path;
+          document.getElementById('aboutPhotoUrlInput').value = url;
+          document.getElementById('aboutPhotoUrlBox').style.display = 'block';
+          document.getElementById('aboutPhotoStatus').textContent = 'Wysłano! URL: ' + url;
+          document.getElementById('aboutPhotoStatus').style.color = 'var(--success)';
+        } else {
+          document.getElementById('aboutPhotoStatus').textContent = 'Błąd: ' + (resp.error || 'nieznany');
+          document.getElementById('aboutPhotoStatus').style.color = 'var(--danger)';
+        }
+      } catch(e) {
+        document.getElementById('aboutPhotoStatus').textContent = 'Błąd parsowania odpowiedzi';
+        document.getElementById('aboutPhotoStatus').style.color = 'var(--danger)';
+      }
+    } else {
+      document.getElementById('aboutPhotoStatus').textContent = 'Błąd ' + xhr.status;
+      document.getElementById('aboutPhotoStatus').style.color = 'var(--danger)';
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('aboutPhotoStatus').textContent = 'Błąd połączenia';
+    document.getElementById('aboutPhotoStatus').style.color = 'var(--danger)';
+  };
+  xhr.send(JSON.stringify({
+    file: path, content: pendingAboutPhotoBase64, contentBase64: true,
+    message: 'Upload about photo: ' + filename, secret: prompt('Hasło:', '')
+  }));
+}
+
+function copyAboutPhotoUrl() {
+  var url = document.getElementById('aboutPhotoUrlInput').value;
+  if (!url) return;
+  setVal('edAboutPhoto', url);
+  showAboutMsg('URL zdjęcia wstawiony do pola!', 'ok');
 }
 
 // ══════════ INIT ══════════

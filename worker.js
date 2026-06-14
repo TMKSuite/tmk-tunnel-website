@@ -61,6 +61,7 @@ export default {
     const allowedPaths = [
       'data/articles.json',
       'data/news.json',
+      'data/about.json',
       'sitemap.xml'
     ];
     const isImageUpload = file.startsWith('assets/images/articles/');

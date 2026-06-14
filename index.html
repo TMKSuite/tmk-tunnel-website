@@ -4834,6 +4834,45 @@
       });
     });
 
+    // ── Load about.json → nadpisuje I18N + hardcodowane elementy O MNIE ──
+    (function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/data/about.json', true);
+      xhr.onload = function() {
+        if (xhr.status !== 200) return;
+        try {
+          var d = JSON.parse(xhr.responseText);
+          if (!d) return;
+
+          // Nadpisujemy I18N — switchLang automatycznie użyje tych wartości
+          if (d.rolePl) I18N.pl['about.role'] = d.rolePl;
+          if (d.roleEn) I18N.en['about.role'] = d.roleEn;
+          if (d.storyPl) I18N.pl['about.story'] = d.storyPl;
+          if (d.storyEn) I18N.en['about.story'] = d.storyEn;
+
+          // Aktualizujemy hardcodowane elementy HTML
+          if (d.name) {
+            var nameEl = document.querySelector('.about-name');
+            if (nameEl) nameEl.textContent = d.name;
+          }
+          if (d.bannerImage) {
+            var bannerImg = document.querySelector('.about-banner img');
+            if (bannerImg) bannerImg.src = d.bannerImage;
+          }
+          if (d.photoImage) {
+            var photoImg = document.querySelector('.about-photo');
+            if (photoImg) photoImg.src = d.photoImage;
+          }
+
+          // Re-aplikuj język — użyje nadpisanych wartości I18N
+          switchLang(currentLang);
+        } catch(e) {
+          // fallback — zostaje I18N z kodu
+        }
+      };
+      xhr.send();
+    })();
+
     // Init i18n after all IIFEs have run
     switchLang(currentLang);
 
