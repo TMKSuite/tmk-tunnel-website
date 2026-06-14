@@ -3551,62 +3551,53 @@
       window.APP_DETAILS = APP_DETAILS;
       window.renderAppOverlay = renderAppOverlay;
 
-      // Klik w kartę projektu
-      document.querySelectorAll('.project-card').forEach(function(card) {
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
+      // Klik w kartę projektu — delegacja (działa dla kart dynamicznych i hardcodowanych)
+      document.addEventListener('click', function(e) {
+        var card = e.target.closest('.project-card');
+        if (!card) return;
+        e.preventDefault();
 
-          window._currentArticleId = null;
-          var name = card.querySelector('.card-name').textContent;
-          window._currentProjectName = name;
-          var icon = card.querySelector('.card-icon img').getAttribute('src');
-          var badgeEls = card.querySelectorAll('.card-badge');
-          var badgeText = '';
-          var badgeClass = '';
-          if (badgeEls.length > 0) {
-            var texts = []; var classes = [];
-            badgeEls.forEach(function(b) { texts.push(b.textContent); classes.push(b.className.replace('card-badge ', '')); });
-            badgeText = texts.join(' · ');
-            badgeClass = classes[0]; // pierwszy badge określa styl
-          }
-          var details = APP_DETAILS[name];
+        window._currentArticleId = null;
+        var name = card.querySelector('.card-name').textContent;
+        window._currentProjectName = name;
+        var icon = card.querySelector('.card-icon img').getAttribute('src');
+        var badgeEls = card.querySelectorAll('.card-badge');
+        if (badgeEls.length > 0) {
+          var texts = []; var classes = [];
+          badgeEls.forEach(function(b) { texts.push(b.textContent); classes.push(b.className.replace('card-badge ', '')); });
+        }
+        var details = APP_DETAILS[name];
 
-          // URL z sluga
-          var slug = '';
-          var projectUrl = '/';
-          if (details) {
-            slug = (currentLang === 'en' && details.slugEn) ? details.slugEn : (details.slugPl || '');
-            if (slug) {
-              var prefix = currentLang === 'en' ? '/en/project/' : '/projekt/';
-              projectUrl = prefix + slug;
-            }
-          }
+        // URL z sluga — użyj data-slug-pl/data-slug-en jeśli są, inaczej z APP_DETAILS
+        var slugPl = card.getAttribute('data-slug-pl') || (details && details.slugPl) || '';
+        var slugEn = card.getAttribute('data-slug-en') || (details && details.slugEn) || '';
+        var slug = (currentLang === 'en' && slugEn) ? slugEn : (slugPl || '');
+        var prefix = currentLang === 'en' ? '/en/project/' : '/projekt/';
+        var projectUrl = slug ? prefix + slug : '/';
 
-          // pushState — zapamiętaj hash sekcji (raz, przy pierwszym kliknięciu)
-          if (!window._lastSectionHash) window._lastSectionHash = window.location.hash || '';
-          if (window.history.pushState && projectUrl !== '/') {
-            window.history.pushState({type: 'project', id: name, lang: currentLang}, '', projectUrl);
-          }
+        // pushState
+        if (!window._lastSectionHash) window._lastSectionHash = window.location.hash || '';
+        if (window.history.pushState && projectUrl !== '/') {
+          window.history.pushState({type: 'project', id: name, lang: currentLang}, '', projectUrl);
+        }
 
-          // Dynamiczny title + meta description
-          document.title = name + ' — TMK Suite';
-          var descEl = card.querySelector('.card-desc');
-          var metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc && descEl) metaDesc.setAttribute('content', descEl.textContent);
+        document.title = name + ' — TMK Suite';
+        var descEl = card.querySelector('.card-desc');
+        var metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc && descEl) metaDesc.setAttribute('content', descEl.textContent);
 
-          document.getElementById('ovIcon').src = icon;
-          document.getElementById('ovIcon').alt = name;
-          if (details && details.iconCircle) {
-            document.getElementById('ovIconWrap').classList.add('circle');
-          } else {
-            document.getElementById('ovIconWrap').classList.remove('circle');
-          }
-          document.getElementById('ovName').textContent = name;
-          // Generuj osobne badge dla każdej klasy z kafelka
-          var badgeHtml = '';
-          if (badgeEls && badgeEls.length > 0) {
-            badgeEls.forEach(function(b) {
-              var cls = b.className.replace('card-badge ', '');
+        document.getElementById('ovIcon').src = icon;
+        document.getElementById('ovIcon').alt = name;
+        if (details && details.iconCircle) {
+          document.getElementById('ovIconWrap').classList.add('circle');
+        } else {
+          document.getElementById('ovIconWrap').classList.remove('circle');
+        }
+        document.getElementById('ovName').textContent = name;
+        var badgeHtml = '';
+        if (badgeEls && badgeEls.length > 0) {
+          badgeEls.forEach(function(b) {
+            var cls = b.className.replace('card-badge ', '');
               var txt = b.textContent;
               badgeHtml += '<span class="oh-badge ' + cls + '">' + txt + '</span>';
             });
@@ -3621,8 +3612,7 @@
             document.getElementById('ovTags').innerHTML = '';
           }
 
-          openOverlay();
-        });
+        openOverlay();
       });
     })();
 
