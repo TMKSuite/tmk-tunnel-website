@@ -1,0 +1,54 @@
+{
+  "logoImage": "/assets/images/logo-hero.webp",
+  "logoWidth": 1600,
+  "logoHeight": 1519,
+  "appShowcase": [
+    {
+      "name": "TorekMarketKiller",
+      "iconImage": "/assets/images/icon-tmk.png",
+      "descPl": "Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie.",
+      "descEn": "Trading automation platform TradingView → MT5. Multi-terminal, local and remote."
+    },
+    {
+      "name": "PortfolioCommandCenter",
+      "iconImage": "/assets/images/icon-pc2.png",
+      "descPl": "Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.",
+      "descEn": "Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs."
+    },
+    {
+      "name": "CandleComparison",
+      "iconImage": "/assets/images/icon-comparator.png",
+      "descPl": "Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.",
+      "descEn": "Candle data comparison MT5 vs TradingView. Tick size, time shift, reports."
+    },
+    {
+      "name": "CandleDownloader",
+      "iconImage": "/assets/images/icon-downloader.png",
+      "descPl": "Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.",
+      "descEn": "Candle data download from TradingView via WebSocket. CSV ready for analysis."
+    }
+  ],
+  "stats": [
+    { "value": 4, "suffix": "", "labelPl": "Aplikacje", "labelEn": "Applications" },
+    { "value": 13, "suffix": "", "labelPl": "Miesięcy pracy", "labelEn": "Months of work" },
+    { "value": 45, "suffix": "K", "labelPl": "Linii kodu AI", "labelEn": "AI lines of code" }
+  ],
+  "socialLinks": [
+    { "icon": "github", "url": "https://github.com/TMKSuite", "title": "GitHub" },
+    { "icon": "linkedin", "url": "https://www.linkedin.com/in/krycha-tmk/", "title": "LinkedIn" },
+    { "icon": "youtube", "url": "https://www.youtube.com/@PozaWykresemzTMK", "title": "YouTube" }
+  ],
+  "techStack": [
+    { "icon": "/assets/icons/python.svg", "label": "Python" },
+    { "icon": "/assets/icons/fastapi.svg", "label": "FastAPI" },
+    { "icon": "/assets/icons/Metatrader5.svg", "label": "MT5" },
+    { "icon": "/assets/icons/claude.svg", "label": "Claude" },
+    { "icon": "/assets/icons/deepseek.svg", "label": "DeepSeek" },
+    { "icon": "/assets/icons/cloudflare.svg", "label": "Cloudflare" },
+    { "icon": "/assets/icons/tradingview.svg", "label": "TradingView" }
+  ],
+  "newsButtonPl": "CO NOWEGO",
+  "newsButtonEn": "WHAT'S NEW",
+  "footerDescPl": "Każda z nich zbudowana w 100% przy użyciu modeli językowych",
+  "footerDescEn": "Each built 100% using language models"
+}

@@ -206,8 +206,8 @@
 
   <!-- Tabs -->
   <div class="tabs">
-    <button class="tab active" data-tab="articles" onclick="switchTab('articles')">Artykuły</button>
-    <button class="tab" data-tab="news" onclick="switchTab('news')">Co nowego</button>
+    <button class="tab active" data-tab="home" onclick="switchTab('home')">Home</button>
+    <button class="tab" data-tab="articles" onclick="switchTab('articles')">Artykuły</button>
     <button class="tab" data-tab="about" onclick="switchTab('about')">O mnie</button>
     <button class="tab" data-tab="contact" onclick="switchTab('contact')">Kontakt</button>
     <button class="tab" data-tab="projects" onclick="switchTab('projects')">Projekty</button>
@@ -769,6 +769,99 @@
     </div>
   </div>
 
+  <!-- HOME TAB -->
+  <div id="tab-home" style="display:none">
+    <div style="margin-bottom:1rem;">
+      <span style="font-size:0.8rem;color:rgba(230,237,243,0.3)">Sekcja główna strony (hero). Logo, karuzela aplikacji, statystyki, social linki, tech stack i CO NOWEGO.</span>
+    </div>
+    <div id="homeMsgBox"></div>
+
+    <!-- Logo -->
+    <details open style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Logo hero</summary>
+      <div style="margin-top:0.6rem">
+        <div class="form-row">
+          <div class="form-group"><label>Ścieżka do logo</label><input type="text" id="edHomeLogo" oninput="updateHomeLogoPreview()" placeholder="/assets/images/logo-hero.webp"></div>
+          <div class="form-group"><label>Naturalna szerokość (px)</label><input type="number" id="edHomeLogoW" placeholder="1600"></div>
+        </div>
+        <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);text-align:center;">
+          <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:100%;max-width:600px;height:auto;margin:0 auto;" onerror="this.style.display='none';">
+          <div id="homeLogoPlaceholder" style="display:none;padding:3rem;color:rgba(230,237,243,0.2);">Brak podglądu</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- App Showcase -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Karuzela aplikacji (app showcase)</summary>
+      <div style="margin-top:0.6rem" id="homeAppShowcase"></div>
+      <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="addHomeApp()">+ Dodaj aplikację</button>
+    </details>
+
+    <!-- Statystyki -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Statystyki — 3 liczniki</summary>
+      <div style="margin-top:0.6rem" id="homeStats"></div>
+    </details>
+
+    <!-- Social linki -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Social linki</summary>
+      <div style="margin-top:0.6rem" id="homeSocial"></div>
+      <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="addHomeSocial()">+ Dodaj link</button>
+    </details>
+
+    <!-- Tech stack -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Tech stack</summary>
+      <div style="margin-top:0.6rem" id="homeTech"></div>
+      <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="addHomeTech()">+ Dodaj technologię</button>
+    </details>
+
+    <!-- CO NOWEGO -->
+    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Panel CO NOWEGO</summary>
+      <div style="margin-top:0.6rem">
+        <div class="form-row">
+          <div class="form-group"><label>Przycisk (PL)</label><input type="text" id="edHomeNewsBtnPl" placeholder="CO NOWEGO"></div>
+          <div class="form-group"><label>Przycisk (EN)</label><input type="text" id="edHomeNewsBtnEn" placeholder="WHAT'S NEW"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Stopka aplikacji (PL)</label><input type="text" id="edHomeFooterPl" placeholder="Każda z nich zbudowana..."></div>
+          <div class="form-group"><label>Stopka aplikacji (EN)</label><input type="text" id="edHomeFooterEn" placeholder="Each built 100%..."></div>
+        </div>
+        <div style="margin-top:0.8rem;font-size:0.8rem;color:rgba(230,237,243,0.3);">Newsy (2 sloty) — edytujesz tak jak wcześniej, dane z <code>data/news.json</code></div>
+        <div id="homeNewsList" style="margin-top:0.5rem;"></div>
+        <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="openNewsEditor()">+ Nowy wpis</button>
+        <div id="homeNewsEditorForm" style="display:none;margin-top:0.8rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
+          <h4 id="homeNewsEditorTitle" style="margin-bottom:0.8rem;">Nowy wpis</h4>
+          <input type="hidden" id="edHomeNewsIdx" value="-1">
+          <div class="form-row">
+            <div class="form-group"><label>Data</label><input type="text" id="edHomeNewsDate" placeholder="dd.mm"></div>
+            <div class="form-group"><label>Tekst (PL)</label><input type="text" id="edHomeNewsPl" placeholder="Nowy artykuł..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Tekst (EN)</label><input type="text" id="edHomeNewsEn" placeholder="New article..."></div>
+            <div class="form-group"><label>URL (PL)</label><input type="text" id="edHomeNewsUrlPl" placeholder="/artykul/..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>URL (EN)</label><input type="text" id="edHomeNewsUrlEn" placeholder="/en/article/..."></div>
+            <div></div>
+          </div>
+          <div class="form-actions" style="margin-top:0.5rem;">
+            <button class="btn btn-sm" onclick="publishHomeNews()">Zapisz wpis</button>
+            <button class="btn btn-sm" onclick="cancelHomeNewsEdit()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Anuluj</button>
+            <button class="btn btn-sm btn-danger" id="homeNewsDeleteBtn" style="display:none;margin-left:auto" onclick="deleteHomeNews()">Usuń</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="form-actions" style="margin-bottom:3rem;">
+      <button class="btn" onclick="publishHome()">Opublikuj wszystko</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -819,19 +912,21 @@ function doLogout() {
 function showPanel() {
   document.getElementById('loginGate').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
-  loadArticles();
+  loadHome();
   loadNews();
 }
 
 // ══════════ TABS ══════════
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
+  document.getElementById('tab-home').style.display = tab === 'home' ? 'block' : 'none';
   document.getElementById('tab-articles').style.display = tab === 'articles' ? 'block' : 'none';
-  document.getElementById('tab-news').style.display = tab === 'news' ? 'block' : 'none';
   document.getElementById('tab-about').style.display = tab === 'about' ? 'block' : 'none';
   document.getElementById('tab-contact').style.display = tab === 'contact' ? 'block' : 'none';
   document.getElementById('tab-projects').style.display = tab === 'projects' ? 'block' : 'none';
   document.getElementById('tab-ideas').style.display = tab === 'ideas' ? 'block' : 'none';
+  if (tab === 'home') loadHome();
+  if (tab === 'articles') loadArticles();
   if (tab === 'about') loadAbout();
   if (tab === 'contact') loadContact();
   if (tab === 'projects') loadProjects();
@@ -2037,6 +2132,220 @@ function publishIdeas() {
 
 function showIdeasMsg(msg, type) {
   var box = document.getElementById('ideasMsgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+// ══════════ HOME ══════════
+var homeData = null;
+
+function loadHome() {
+  // Load home.json + news.json
+  fetchJSON('/data/home.json', function(hd) {
+    homeData = hd || getDefaultHome();
+    fillHomeForm();
+  });
+  loadNews(); // wypełnia newsData globalnie
+  setTimeout(function(){ renderHomeNews(); }, 500);
+}
+
+function getDefaultHome() {
+  return { logoImage:'/assets/images/logo-hero.webp', logoWidth:1600, logoHeight:1519,
+    appShowcase:[], stats:[], socialLinks:[], techStack:[],
+    newsButtonPl:'CO NOWEGO', newsButtonEn:'WHAT\\'S NEW',
+    footerDescPl:'Każda z nich zbudowana w 100% przy użyciu modeli językowych',
+    footerDescEn:'Each built 100% using language models' };
+}
+
+function fillHomeForm() {
+  if (!homeData) return;
+  setVal('edHomeLogo', homeData.logoImage||'');
+  setVal('edHomeLogoW', homeData.logoWidth||1600);
+  setVal('edHomeNewsBtnPl', homeData.newsButtonPl||'');
+  setVal('edHomeNewsBtnEn', homeData.newsButtonEn||'');
+  setVal('edHomeFooterPl', homeData.footerDescPl||'');
+  setVal('edHomeFooterEn', homeData.footerDescEn||'');
+  updateHomeLogoPreview();
+  renderHomeAppShowcase();
+  renderHomeStats();
+  renderHomeSocial();
+  renderHomeTech();
+}
+
+function updateHomeLogoPreview() {
+  var url = getVal('edHomeLogo');
+  var img = document.getElementById('homeLogoPreviewImg');
+  var ph = document.getElementById('homeLogoPlaceholder');
+  if (url) { img.src = url; img.style.display = 'block'; ph.style.display = 'none'; }
+  else { img.style.display = 'none'; ph.style.display = 'block'; }
+}
+
+// ── App Showcase ──
+function renderHomeAppShowcase() {
+  var el = document.getElementById('homeAppShowcase');
+  var apps = homeData ? (homeData.appShowcase||[]) : [];
+  var html = '';
+  apps.forEach(function(a,i){
+    html += '<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;">'
+      + '<input value="' + escHtmlAttr(a.name||'') + '" onchange="homeData.appShowcase['+i+'].name=this.value" placeholder="Nazwa" style="width:140px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(a.iconImage||'') + '" onchange="homeData.appShowcase['+i+'].iconImage=this.value" placeholder="Ikona" style="width:200px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(a.descPl||'') + '" onchange="homeData.appShowcase['+i+'].descPl=this.value" placeholder="Opis PL" style="flex:1;min-width:200px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(a.descEn||'') + '" onchange="homeData.appShowcase['+i+'].descEn=this.value" placeholder="Opis EN" style="flex:1;min-width:200px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<button class="btn btn-sm btn-danger" onclick="homeData.appShowcase.splice('+i+',1);renderHomeAppShowcase()">✕</button>'
+      + '</div>';
+  });
+  el.innerHTML = html || '<div style="color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak aplikacji</div>';
+}
+
+function addHomeApp() {
+  if (!homeData) homeData = getDefaultHome();
+  if (!homeData.appShowcase) homeData.appShowcase = [];
+  homeData.appShowcase.push({ name:'', iconImage:'', descPl:'', descEn:'' });
+  renderHomeAppShowcase();
+}
+
+// ── Stats ──
+function renderHomeStats() {
+  var el = document.getElementById('homeStats');
+  var stats = homeData ? (homeData.stats||[]) : [];
+  var html = '';
+  stats.forEach(function(s,i){
+    html += '<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;">'
+      + '<input type="number" value="' + (s.value||0) + '" onchange="homeData.stats['+i+'].value=parseInt(this.value)||0" style="width:60px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;" title="Wartość">'
+      + '<input value="' + escHtmlAttr(s.suffix||'') + '" onchange="homeData.stats['+i+'].suffix=this.value" placeholder="Suffix (np. K)" style="width:60px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;" title="Suffix">'
+      + '<input value="' + escHtmlAttr(s.labelPl||'') + '" onchange="homeData.stats['+i+'].labelPl=this.value" placeholder="Label PL" style="width:150px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(s.labelEn||'') + '" onchange="homeData.stats['+i+'].labelEn=this.value" placeholder="Label EN" style="width:150px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<button class="btn btn-sm btn-danger" onclick="homeData.stats.splice('+i+',1);renderHomeStats()">✕</button>'
+      + '</div>';
+  });
+  el.innerHTML = html || '<div style="color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak statystyk</div>';
+}
+
+// ── Social ──
+function renderHomeSocial() {
+  var el = document.getElementById('homeSocial');
+  var links = homeData ? (homeData.socialLinks||[]) : [];
+  var html = '';
+  links.forEach(function(l,i){
+    html += '<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;">'
+      + '<select onchange="homeData.socialLinks['+i+'].icon=this.value" style="width:100px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem;border-radius:4px;font-size:0.8rem;color-scheme:dark;">'
+      + ['github','linkedin','youtube','facebook','instagram','discord','twitter','telegram','email','website'].map(function(ic){ return '<option value="'+ic+'"'+(l.icon===ic?' selected':'')+'>'+ic+'</option>'; }).join('')
+      + '</select>'
+      + '<input value="' + escHtmlAttr(l.url||'') + '" onchange="homeData.socialLinks['+i+'].url=this.value" placeholder="URL" style="flex:1;min-width:200px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(l.title||'') + '" onchange="homeData.socialLinks['+i+'].title=this.value" placeholder="Title" style="width:100px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<button class="btn btn-sm btn-danger" onclick="homeData.socialLinks.splice('+i+',1);renderHomeSocial()">✕</button>'
+      + '</div>';
+  });
+  el.innerHTML = html || '<div style="color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak linków</div>';
+}
+
+function addHomeSocial() {
+  if (!homeData) homeData = getDefaultHome();
+  if (!homeData.socialLinks) homeData.socialLinks = [];
+  homeData.socialLinks.push({ icon:'github', url:'', title:'' });
+  renderHomeSocial();
+}
+
+// ── Tech Stack ──
+function renderHomeTech() {
+  var el = document.getElementById('homeTech');
+  var tech = homeData ? (homeData.techStack||[]) : [];
+  var html = '';
+  tech.forEach(function(t,i){
+    html += '<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;">'
+      + '<input value="' + escHtmlAttr(t.icon||'') + '" onchange="homeData.techStack['+i+'].icon=this.value" placeholder="Ikona SVG/PNG" style="width:200px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(t.label||'') + '" onchange="homeData.techStack['+i+'].label=this.value" placeholder="Nazwa" style="width:150px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.5rem;border-radius:4px;font-size:0.8rem;">'
+      + '<button class="btn btn-sm btn-danger" onclick="homeData.techStack.splice('+i+',1);renderHomeTech()">✕</button>'
+      + '</div>';
+  });
+  el.innerHTML = html || '<div style="color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak technologii</div>';
+}
+
+function addHomeTech() {
+  if (!homeData) homeData = getDefaultHome();
+  if (!homeData.techStack) homeData.techStack = [];
+  homeData.techStack.push({ icon:'', label:'' });
+  renderHomeTech();
+}
+
+// ── Home News ──
+function renderHomeNews() {
+  var el = document.getElementById('homeNewsList');
+  if (!newsData || !newsData.length) {
+    el.innerHTML = '<div style="color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak wpisów</div>';
+    return;
+  }
+  var html = '';
+  newsData.forEach(function(n,i){
+    html += '<div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.3rem;font-size:0.8rem;">'
+      + '<span style="color:rgba(230,237,243,0.3);width:50px;">' + escHtml(n.date||'') + '</span>'
+      + '<span style="flex:1;">' + escHtml(n.pl||'') + '</span>'
+      + '<button class="btn btn-sm" onclick="editHomeNews('+i+')">Edytuj</button>'
+      + '<button class="btn btn-sm btn-danger" onclick="deleteHomeNews('+i+')">Usuń</button>'
+      + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function editHomeNews(idx) {
+  var n = newsData[idx];
+  document.getElementById('homeNewsEditorForm').style.display = 'block';
+  document.getElementById('homeNewsEditorTitle').textContent = 'Edycja wpisu';
+  document.getElementById('edHomeNewsIdx').value = idx;
+  document.getElementById('homeNewsDeleteBtn').style.display = 'inline-block';
+  setVal('edHomeNewsDate', n.date||'');
+  setVal('edHomeNewsPl', n.pl||'');
+  setVal('edHomeNewsEn', n.en||'');
+  setVal('edHomeNewsUrlPl', n.urlPl||'');
+  setVal('edHomeNewsUrlEn', n.urlEn||'');
+}
+
+function cancelHomeNewsEdit() {
+  document.getElementById('homeNewsEditorForm').style.display = 'none';
+  ['edHomeNewsDate','edHomeNewsPl','edHomeNewsEn','edHomeNewsUrlPl','edHomeNewsUrlEn','edHomeNewsIdx'].forEach(function(id){ setVal(id,''); });
+  document.getElementById('homeNewsDeleteBtn').style.display = 'none';
+}
+
+function publishHomeNews() {
+  var idx = parseInt(document.getElementById('edHomeNewsIdx').value);
+  var entry = { date: getVal('edHomeNewsDate'), pl: getVal('edHomeNewsPl'), en: getVal('edHomeNewsEn') };
+  var urlPl = getVal('edHomeNewsUrlPl'), urlEn = getVal('edHomeNewsUrlEn');
+  if (urlPl) entry.urlPl = urlPl;
+  if (urlEn) entry.urlEn = urlEn;
+  if (idx >= 0) { newsData[idx] = entry; } else { newsData.push(entry); }
+  saveAndPush('data/news.json', newsData, 'Aktualizacja CO NOWEGO', function() {
+    cancelHomeNewsEdit();
+    renderHomeNews();
+    showHomeMsg('News zapisany!', 'ok');
+  });
+}
+
+function deleteHomeNews(idx) {
+  if (!confirm('Usunąć wpis?')) return;
+  newsData.splice(idx, 1);
+  saveAndPush('data/news.json', newsData, 'Usuń wpis CO NOWEGO', function() {
+    cancelHomeNewsEdit();
+    renderHomeNews();
+  });
+}
+
+// ── Publish all ──
+function publishHome() {
+  if (!homeData) return;
+  homeData.logoImage = getVal('edHomeLogo');
+  homeData.logoWidth = parseInt(getVal('edHomeLogoW')) || 1600;
+  homeData.newsButtonPl = getVal('edHomeNewsBtnPl');
+  homeData.newsButtonEn = getVal('edHomeNewsBtnEn');
+  homeData.footerDescPl = getVal('edHomeFooterPl');
+  homeData.footerDescEn = getVal('edHomeFooterEn');
+  saveAndPush('data/home.json', homeData, 'Aktualizacja HOME', function() {
+    showHomeMsg('Opublikowano! Zmiany na stronie za ~30s.', 'ok');
+  });
+}
+
+function showHomeMsg(msg, type) {
+  var box = document.getElementById('homeMsgBox');
   box.className = 'msg msg-' + type;
   box.textContent = msg;
   setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);

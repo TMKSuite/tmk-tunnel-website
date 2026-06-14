@@ -65,6 +65,7 @@ export default {
       'data/contact.json',
       'data/projects.json',
       'data/ideas.json',
+      'data/home.json',
       'sitemap.xml'
     ];
     const isImageUpload = file.startsWith('assets/images/articles/');
