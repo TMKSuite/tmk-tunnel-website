@@ -3927,6 +3927,18 @@
         item.addEventListener('mouseleave', function() {
           startTimer();
         });
+        // Kliknięcie — otwórz overlay projektu
+        item.addEventListener('click', function() {
+          var name = item.dataset.name;
+          var card = document.querySelector('.project-card .card-name');
+          var allCards = document.querySelectorAll('.project-card');
+          var targetCard = null;
+          allCards.forEach(function(c) {
+            var cn = c.querySelector('.card-name');
+            if (cn && cn.textContent === name) targetCard = c;
+          });
+          if (targetCard) targetCard.click();
+        });
       });
 
       // Expose for lang switch
