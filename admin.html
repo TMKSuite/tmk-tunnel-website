@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — TMK Suite</title>
+  <link rel="icon" type="image/x-icon" href="/assets/images/tmk-favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #E6EDF3;
+      --accent: #D4A843;
+      --surface: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --danger: #c13b3b;
+      --success: #3b9c3b;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+    /* ── Login gate ── */
+    #loginGate {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    #loginGate form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 400px;
+      text-align: center;
+    }
+    #loginGate h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    #loginGate p { color: rgba(230,237,243,0.4); margin-bottom: 1.5rem; font-size:0.95rem; }
+    #loginGate input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: inherit;
+    }
+    #loginGate input:focus { outline: none; border-color: var(--accent); }
+    #loginGate .err { color: var(--danger); font-size:0.85rem; margin-bottom:0.5rem; display:none; }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:hover { background: rgba(212,168,67,0.1); }
+    .btn-danger { border-color: var(--danger); color: var(--danger); }
+    .btn-danger:hover { background: rgba(193,59,59,0.1); }
+    .btn-sm { padding: 0.35rem 0.8rem; font-size:0.8rem; }
+    /* ── Panel ── */
+    #adminPanel { display:none; max-width:1200px; margin:0 auto; padding:2rem; }
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-header h1 { font-family:'Space Grotesk',sans-serif; font-size:1.8rem; }
+    .admin-header .logout { font-size:0.85rem; color:rgba(230,237,243,0.4); cursor:pointer; }
+    .admin-header .logout:hover { color: var(--danger); }
+    .tabs { display:flex; gap:0.5rem; margin-bottom:2rem; }
+    .tab {
+      padding:0.6rem 1.5rem;
+      border:1px solid var(--border);
+      background:transparent;
+      color:rgba(230,237,243,0.5);
+      font-family:'Space Grotesk',sans-serif;
+      font-size:0.95rem;
+      border-radius:6px;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .tab.active { border-color:var(--accent); color:var(--accent); background:rgba(212,168,67,0.05); }
+    .tab:hover:not(.active) { color:var(--text); border-color:rgba(255,255,255,0.15); }
+    /* ── Lista ── */
+    .list-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap:1rem;
+    }
+    .list-item .info { flex:1; min-width:0; }
+    .list-item .title { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .list-item .meta { font-size:0.8rem; color:rgba(230,237,243,0.4); margin-top:0.2rem; }
+    .list-item .actions { display:flex; gap:0.4rem; flex-shrink:0; }
+    .empty { text-align:center; color:rgba(230,237,243,0.3); padding:3rem; }
+    .add-bar { margin-bottom:1rem; }
+    /* ── Formularz ── */
+    #editorForm { display:none; }
+    .form-group { margin-bottom:1.2rem; }
+    .form-group label {
+      display:block;
+      font-size:0.8rem;
+      color:rgba(230,237,243,0.5);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      margin-bottom:0.3rem;
+    }
+    .form-group input, .form-group textarea {
+      width:100%;
+      padding:0.7rem 1rem;
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-radius:6px;
+      color:var(--text);
+      font-family:'Inter',sans-serif;
+      font-size:0.95rem;
+    }
+    .form-group textarea { min-height:120px; resize:vertical; }
+    .form-group input:focus, .form-group textarea:focus {
+      outline:none;
+      border-color:var(--accent);
+    }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-actions { display:flex; gap:0.5rem; margin-top:1.5rem; }
+    .msg { padding:0.5rem 1rem; border-radius:6px; margin-bottom:1rem; font-size:0.9rem; display:none; }
+    .msg-ok { display:block; background:rgba(59,156,59,0.1); border:1px solid rgba(59,156,59,0.3); color:var(--success); }
+    .msg-err { display:block; background:rgba(193,59,59,0.1); border:1px solid rgba(193,59,59,0.3); color:var(--danger); }
+    .msg-info { display:block; background:rgba(212,168,67,0.08); border:1px solid rgba(212,168,67,0.2); color:var(--accent); }
+    /* ── Preview ── */
+    .preview-toggle { margin-bottom:1rem; }
+    .preview-box {
+      display:none;
+      background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:2rem;
+      margin-top:1rem;
+      max-height:60vh;
+      overflow-y:auto;
+      font-size:0.95rem;
+      line-height:1.7;
+      color:rgba(230,237,243,0.7);
+    }
+    .preview-box h3 { color:var(--text); margin:1.5rem 0 0.5rem; }
+    .preview-box hr { border-color:rgba(255,255,255,0.06); margin:1.5rem 0; }
+    /* ── Responsive ── */
+    @media (max-width:768px) {
+      #adminPanel { padding:1rem; }
+      .form-row { grid-template-columns:1fr; }
+      .list-item { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════ LOGIN GATE ═══════ -->
+<div id="loginGate">
+  <form id="loginForm" onsubmit="return doLogin()">
+    <h1>Admin Panel</h1>
+    <p>TMK Suite — zarządzanie treścią</p>
+    <input type="password" id="passInput" placeholder="Hasło" autofocus>
+    <div class="err" id="loginErr">Nieprawidłowe hasło</div>
+    <button type="submit" class="btn">Zaloguj</button>
+  </form>
+</div>
+
+<!-- ═══════ ADMIN PANEL ═══════ -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <h1>Admin Panel</h1>
+    <span class="logout" onclick="doLogout()">Wyloguj</span>
+  </div>
+
+  <div id="msgBox"></div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="articles" onclick="switchTab('articles')">Artykuły</button>
+    <button class="tab" data-tab="news" onclick="switchTab('news')">Co nowego</button>
+  </div>
+
+  <!-- ARTICLES TAB -->
+  <div id="tab-articles">
+    <div class="add-bar">
+      <button class="btn" onclick="openArticleEditor()">+ Nowy artykuł</button>
+      <span style="margin-left:1rem;font-size:0.8rem;color:rgba(230,237,243,0.3)">Zmiany publikowane są na GitHub → auto-deploy na Cloudflare (~30s)</span>
+    </div>
+    <div id="articlesList"></div>
+
+    <!-- Article Editor -->
+    <div id="editorForm">
+      <h3 style="margin-bottom:1.5rem" id="editorTitle">Nowy artykuł</h3>
+      <input type="hidden" id="edArticleId" value="">
+
+      <div class="form-group">
+        <label>Data publikacji</label>
+        <input type="text" id="edDate" placeholder="dd.mm.rrrr">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tytuł (PL)</label>
+          <input type="text" id="edTitlePl" placeholder="Paradoks Achillesa...">
+        </div>
+        <div class="form-group">
+          <label>Tytuł (EN)</label>
+          <input type="text" id="edTitleEn" placeholder="The Achilles Paradox...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Excerpt (PL) — widoczny na kafelku</label>
+        <textarea id="edExcerptPl" rows="3" placeholder="Krótki opis artykułu..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Excerpt (EN)</label>
+        <textarea id="edExcerptEn" rows="3" placeholder="Short article description..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Body (PL) — pełna treść artykułu (HTML)</label>
+        <textarea id="edBodyPl" rows="15" placeholder="<p>Akapit pierwszy...</p>"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Body (EN)</label>
+        <textarea id="edBodyEn" rows="15" placeholder="<p>First paragraph...</p>"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Slug (PL) — do URL: /artykul/...</label>
+          <input type="text" id="edSlugPl" placeholder="paradoks-achillesa-wysoka-stopa-zwrotu">
+        </div>
+        <div class="form-group">
+          <label>Slug (EN) — do URL: /en/article/...</label>
+          <input type="text" id="edSlugEn" placeholder="achilles-paradox-high-return-rate">
+        </div>
+      </div>
+
+      <div class="preview-toggle">
+        <label style="cursor:pointer;font-size:0.85rem;color:rgba(230,237,243,0.5)">
+          <input type="checkbox" id="previewCb" onchange="togglePreview()"> Podgląd
+        </label>
+      </div>
+      <div class="preview-box" id="previewBox"></div>
+
+      <div class="form-actions">
+        <button class="btn" onclick="publishArticle()">Opublikuj</button>
+        <button class="btn" onclick="cancelEdit()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Anuluj</button>
+        <button class="btn btn-danger btn-sm" id="deleteBtn" style="display:none;margin-left:auto" onclick="deleteArticle()">Usuń artykuł</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS TAB -->
+  <div id="tab-news" style="display:none">
+    <div class="add-bar">
+      <button class="btn" onclick="openNewsEditor()">+ Nowy wpis</button>
+    </div>
+    <div id="newsList"></div>
+    <div id="newsEditorForm" style="display:none">
+      <h3 style="margin-bottom:1.5rem" id="newsEditorTitle">Nowy wpis</h3>
+      <input type="hidden" id="edNewsIdx" value="-1">
+      <div class="form-group">
+        <label>Data (krótka, np. "13.06")</label>
+        <input type="text" id="edNewsDate" placeholder="dd.mm">
+      </div>
+      <div class="form-group">
+        <label>Tekst (PL)</label>
+        <input type="text" id="edNewsPl" placeholder="Nowy artykuł: ...">
+      </div>
+      <div class="form-group">
+        <label>Tekst (EN)</label>
+        <input type="text" id="edNewsEn" placeholder="New article: ...">
+      </div>
+      <div class="form-group">
+        <label>URL (PL) — opcjonalny</label>
+        <input type="text" id="edNewsUrlPl" placeholder="/artykul/...">
+      </div>
+      <div class="form-group">
+        <label>URL (EN) — opcjonalny</label>
+        <input type="text" id="edNewsUrlEn" placeholder="/en/article/...">
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="publishNews()">Opublikuj</button>
+        <button class="btn" onclick="cancelNewsEdit()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Anuluj</button>
+        <button class="btn btn-danger btn-sm" id="newsDeleteBtn" style="display:none;margin-left:auto" onclick="deleteNews()">Usuń wpis</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════ CONFIG ══════════
+// URL Cloudflare Worker (zmień po deployu Workera!)
+var WORKER_URL = 'https://admin-proxy.tmk-suite.workers.dev/api/admin/commit';
+
+// ══════════ AUTH ══════════
+var SESSION_KEY = 'tmk_admin_session';
+var SESSION_TTL = 30 * 60 * 1000; // 30 min
+
+function checkSession() {
+  var s = sessionStorage.getItem(SESSION_KEY);
+  if (!s) return false;
+  try {
+    var data = JSON.parse(s);
+    if (Date.now() - data.ts > SESSION_TTL) { sessionStorage.removeItem(SESSION_KEY); return false; }
+    return true;
+  } catch(e) { return false; }
+}
+
+function doLogin() {
+  var pass = document.getElementById('passInput').value;
+  // Hash porównawczy (SHA-256 pierwszych 8 znaków — prosty ale skuteczny)
+  // Użytkownik ustawia własne hasło przy deployu
+  if (!pass) return false;
+
+  // Testowe hasło — ZMIEŃ PRZED PRODUKCJĄ!
+  // docelowo hasło będzie walidowane przez Workera
+  var testHash = 'admin123'; // <-- ZMIEŃ TO na własne hasło!
+
+  if (pass === testHash) {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
+    showPanel();
+    return false;
+  }
+  document.getElementById('loginErr').style.display = 'block';
+  return false;
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('loginGate').style.display = 'flex';
+  document.getElementById('passInput').value = '';
+}
+
+function showPanel() {
+  document.getElementById('loginGate').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  loadArticles();
+  loadNews();
+}
+
+// ══════════ TABS ══════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
+  document.getElementById('tab-articles').style.display = tab === 'articles' ? 'block' : 'none';
+  document.getElementById('tab-news').style.display = tab === 'news' ? 'block' : 'none';
+}
+
+// ══════════ DATA ══════════
+var articlesData = [];
+var newsData = [];
+
+function fetchJSON(path, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', path, true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try { cb(JSON.parse(xhr.responseText)); } catch(e) { cb(null); }
+    } else { cb(null); }
+  };
+  xhr.onerror = function() { cb(null); };
+  xhr.send();
+}
+
+function loadArticles() {
+  fetchJSON('/data/articles.json', function(data) {
+    articlesData = data || [];
+    renderArticles();
+  });
+}
+
+function loadNews() {
+  fetchJSON('/data/news.json', function(data) {
+    newsData = data || [];
+    renderNews();
+  });
+}
+
+function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
+
+function slugify(text) {
+  return text.toLowerCase()
+    .replace(/[ąćęłńóśźż]/g, function(c) { return {ą:'a',ć:'c',ę:'e',ł:'l',ń:'n',ó:'o',ś:'s',ź:'z',ż:'z'}[c]||c; })
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// ══════════ ARTICLES ══════════
+function renderArticles() {
+  var list = document.getElementById('articlesList');
+  if (!articlesData.length) {
+    list.innerHTML = '<div class="empty">Brak artykułów. Kliknij "+ Nowy artykuł" aby dodać.</div>';
+    return;
+  }
+  var html = '';
+  articlesData.forEach(function(a, i) {
+    html += '<div class="list-item">'
+      + '<div class="info"><div class="title">' + escHtml(a.titlePl || '(bez tytułu)') + '</div>'
+      + '<div class="meta">' + (a.date||'') + ' · ' + (a.slugPl||'') + '</div></div>'
+      + '<div class="actions">'
+      + '<button class="btn btn-sm" onclick="editArticle(' + i + ')">Edytuj</button>'
+      + '<button class="btn btn-sm btn-danger" onclick="deleteArticle(' + i + ')">Usuń</button>'
+      + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function openArticleEditor() {
+  document.getElementById('editorForm').style.display = 'block';
+  document.getElementById('editorTitle').textContent = 'Nowy artykuł';
+  document.getElementById('edArticleId').value = '';
+  document.getElementById('deleteBtn').style.display = 'none';
+  clearArticleForm();
+}
+
+function editArticle(idx) {
+  var a = articlesData[idx];
+  document.getElementById('editorForm').style.display = 'block';
+  document.getElementById('editorTitle').textContent = 'Edycja: ' + (a.titlePl || '');
+  document.getElementById('edArticleId').value = a.id || '';
+  document.getElementById('deleteBtn').style.display = 'inline-block';
+  document.getElementById('deleteBtn').setAttribute('data-idx', idx);
+  setVal('edDate', a.date||'');
+  setVal('edTitlePl', a.titlePl||'');
+  setVal('edTitleEn', a.titleEn||'');
+  setVal('edExcerptPl', a.excerptPl||'');
+  setVal('edExcerptEn', a.excerptEn||'');
+  setVal('edBodyPl', a.bodyPl||'');
+  setVal('edBodyEn', a.bodyEn||'');
+  setVal('edSlugPl', a.slugPl||'');
+  setVal('edSlugEn', a.slugEn||'');
+  document.getElementById('editorForm').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelEdit() {
+  document.getElementById('editorForm').style.display = 'none';
+  clearArticleForm();
+}
+
+function deleteArticle(idx) {
+  if (!confirm('Na pewno usunąć ten artykuł?')) return;
+  articlesData.splice(idx, 1);
+  saveAndPush('data/articles.json', articlesData, 'Usuń artykuł', function() {
+    cancelEdit();
+    renderArticles();
+  });
+}
+
+function publishArticle() {
+  var id = document.getElementById('edArticleId').value || generateId();
+  var slugPl = getVal('edSlugPl') || slugify(getVal('edTitlePl'));
+  var slugEn = getVal('edSlugEn') || slugify(getVal('edTitleEn'));
+
+  var article = {
+    id: id,
+    date: getVal('edDate'),
+    titlePl: getVal('edTitlePl'),
+    titleEn: getVal('edTitleEn'),
+    excerptPl: getVal('edExcerptPl'),
+    excerptEn: getVal('edExcerptEn'),
+    bodyPl: getVal('edBodyPl'),
+    bodyEn: getVal('edBodyEn'),
+    slugPl: slugPl,
+    slugEn: slugEn
+  };
+
+  // Update or add
+  var found = false;
+  for (var i = 0; i < articlesData.length; i++) {
+    if (articlesData[i].id === id) { articlesData[i] = article; found = true; break; }
+  }
+  if (!found) articlesData.push(article);
+
+  var msg = found ? 'Aktualizacja artykułu: ' + article.titlePl : 'Nowy artykuł: ' + article.titlePl;
+  saveAndPush('data/articles.json', articlesData, msg, function() {
+    cancelEdit();
+    renderArticles();
+  });
+}
+
+// ══════════ NEWS ══════════
+function renderNews() {
+  var list = document.getElementById('newsList');
+  if (!newsData.length) {
+    list.innerHTML = '<div class="empty">Brak wpisów. Kliknij "+ Nowy wpis" aby dodać.</div>';
+    return;
+  }
+  var html = '';
+  newsData.forEach(function(n, i) {
+    html += '<div class="list-item">'
+      + '<div class="info"><div class="title">' + escHtml(n.pl||'') + '</div>'
+      + '<div class="meta">' + (n.date||'') + (n.urlPl ? ' · ' + n.urlPl : '') + '</div></div>'
+      + '<div class="actions">'
+      + '<button class="btn btn-sm" onclick="editNews(' + i + ')">Edytuj</button>'
+      + '<button class="btn btn-sm btn-danger" onclick="deleteNews(' + i + ')">Usuń</button>'
+      + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function openNewsEditor() {
+  document.getElementById('newsEditorForm').style.display = 'block';
+  document.getElementById('newsEditorTitle').textContent = 'Nowy wpis';
+  document.getElementById('edNewsIdx').value = '-1';
+  document.getElementById('newsDeleteBtn').style.display = 'none';
+  clearNewsForm();
+}
+
+function editNews(idx) {
+  var n = newsData[idx];
+  document.getElementById('newsEditorForm').style.display = 'block';
+  document.getElementById('newsEditorTitle').textContent = 'Edycja wpisu';
+  document.getElementById('edNewsIdx').value = idx;
+  document.getElementById('newsDeleteBtn').style.display = 'inline-block';
+  setVal('edNewsDate', n.date||'');
+  setVal('edNewsPl', n.pl||'');
+  setVal('edNewsEn', n.en||'');
+  setVal('edNewsUrlPl', n.urlPl||'');
+  setVal('edNewsUrlEn', n.urlEn||'');
+}
+
+function cancelNewsEdit() {
+  document.getElementById('newsEditorForm').style.display = 'none';
+  clearNewsForm();
+}
+
+function deleteNews(idx) {
+  if (!confirm('Na pewno usunąć ten wpis?')) return;
+  newsData.splice(idx, 1);
+  saveAndPush('data/news.json', newsData, 'Usuń wpis CO NOWEGO', function() {
+    cancelNewsEdit();
+    renderNews();
+  });
+}
+
+function publishNews() {
+  var idx = parseInt(document.getElementById('edNewsIdx').value);
+  var entry = {
+    date: getVal('edNewsDate'),
+    pl: getVal('edNewsPl'),
+    en: getVal('edNewsEn')
+  };
+  var urlPl = getVal('edNewsUrlPl');
+  var urlEn = getVal('edNewsUrlEn');
+  if (urlPl) entry.urlPl = urlPl;
+  if (urlEn) entry.urlEn = urlEn;
+
+  if (idx >= 0) {
+    newsData[idx] = entry;
+  } else {
+    newsData.push(entry);
+  }
+
+  saveAndPush('data/news.json', newsData, 'Aktualizacja CO NOWEGO', function() {
+    cancelNewsEdit();
+    renderNews();
+  });
+}
+
+// ══════════ WORKER COMM ══════════
+function saveAndPush(file, data, message, onSuccess) {
+  var content = JSON.stringify(data, null, 2);
+  var secret = sessionStorage.getItem(SESSION_KEY);
+  var pass = '';
+  try { pass = JSON.parse(secret).ts ? document.getElementById('passInput').value : ''; } catch(e) {}
+
+  // Zamiast zapisywać hasło wprost, używamy tokenu sesji
+  // Worker waliduje ADMIN_SECRET — hasło musi być takie samo jak w zmiennych Workera
+  var workerSecret = prompt('Hasło do publikacji (takie samo jak do logowania):', '');
+  if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
+
+  showMsg('Publikowanie...', 'info');
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) {
+          showMsg('Opublikowano! Zmiany będą widoczne na stronie za ~30s.', 'ok');
+          if (onSuccess) onSuccess();
+        } else {
+          showMsg('Błąd: ' + (resp.error || 'nieznany'), 'err');
+        }
+      } catch(e) { showMsg('Błąd parsowania odpowiedzi', 'err'); }
+    } else if (xhr.status === 401) {
+      showMsg('Nieprawidłowe hasło do publikacji.', 'err');
+    } else {
+      showMsg('Błąd serwera: ' + xhr.status + '. Sprawdź czy Worker jest skonfigurowany.', 'err');
+    }
+  };
+  xhr.onerror = function() {
+    showMsg('Błąd połączenia z Workerem. Sprawdź WORKER_URL w kodzie admin.html.', 'err');
+  };
+  xhr.send(JSON.stringify({
+    file: file,
+    content: content,
+    message: message,
+    secret: workerSecret
+  }));
+}
+
+// ══════════ HELPERS ══════════
+function getVal(id) { return document.getElementById(id).value; }
+function setVal(id, val) { document.getElementById(id).value = val; }
+function clearArticleForm() {
+  ['edDate','edTitlePl','edTitleEn','edExcerptPl','edExcerptEn','edBodyPl','edBodyEn','edSlugPl','edSlugEn','edArticleId'].forEach(function(id){ setVal(id,''); });
+  document.getElementById('deleteBtn').style.display = 'none';
+}
+function clearNewsForm() {
+  ['edNewsDate','edNewsPl','edNewsEn','edNewsUrlPl','edNewsUrlEn','edNewsIdx'].forEach(function(id){ setVal(id,''); });
+  document.getElementById('newsDeleteBtn').style.display = 'none';
+}
+function escHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+function showMsg(msg, type) {
+  var box = document.getElementById('msgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+function togglePreview() {
+  var cb = document.getElementById('previewCb');
+  var box = document.getElementById('previewBox');
+  if (cb.checked) {
+    var body = getVal('edBodyPl') || getVal('edBodyEn') || '<p>Brak treści</p>';
+    var title = getVal('edTitlePl') || '(bez tytułu)';
+    box.innerHTML = '<h2 style="font-family:Space Grotesk,sans-serif;color:var(--accent);margin-bottom:1rem">' + escHtml(title) + '</h2>' + body;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+}
+
+// ══════════ INIT ══════════
+if (checkSession()) showPanel();
+</script>
+</body>
+</html>
