@@ -315,11 +315,20 @@
       <div class="form-row">
         <div class="form-group">
           <label>Slug (PL) — do URL: /artykul/...</label>
-          <input type="text" id="edSlugPl" placeholder="paradoks-achillesa-wysoka-stopa-zwrotu">
+          <input type="text" id="edSlugPl" placeholder="paradoks-achillesa-wysoka-stopa-zwrotu" oninput="updateArticleUrls()">
         </div>
         <div class="form-group">
           <label>Slug (EN) — do URL: /en/article/...</label>
-          <input type="text" id="edSlugEn" placeholder="achilles-paradox-high-return-rate">
+          <input type="text" id="edSlugEn" placeholder="achilles-paradox-high-return-rate" oninput="updateArticleUrls()">
+        </div>
+      </div>
+      <div id="articleUrlsBox" style="margin-bottom:1rem;display:none;">
+        <div style="font-size:0.75rem;color:rgba(230,237,243,0.3);margin-bottom:0.2rem;">Linki do artykułu:</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <code id="articleUrlPl" style="font-size:0.75rem;color:var(--accent);background:rgba(255,255,255,0.03);padding:0.3rem 0.5rem;border-radius:4px;flex:1;"></code>
+          <button class="btn btn-sm" onclick="copyArticleUrl('Pl')" style="font-size:0.7rem;">📋 Kopiuj PL</button>
+          <code id="articleUrlEn" style="font-size:0.75rem;color:var(--accent);background:rgba(255,255,255,0.03);padding:0.3rem 0.5rem;border-radius:4px;flex:1;"></code>
+          <button class="btn btn-sm" onclick="copyArticleUrl('En')" style="font-size:0.7rem;">📋 Kopiuj EN</button>
         </div>
       </div>
 
@@ -906,10 +915,10 @@
           </div>
           <div class="form-row">
             <div class="form-group"><label>Tekst (EN)</label><input type="text" id="edHomeNewsEn" placeholder="New article..."></div>
-            <div class="form-group"><label>URL (PL)</label><input type="text" id="edHomeNewsUrlPl" placeholder="/artykul/..."></div>
+            <div class="form-group"><label>URL (PL)</label><input type="text" id="edHomeNewsUrlPl" placeholder="/artykul/..." oninput="autoFillNewsUrlEn()"></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>URL (EN)</label><input type="text" id="edHomeNewsUrlEn" placeholder="/en/article/..."></div>
+            <div class="form-group"><label>URL (EN)</label><input type="text" id="edHomeNewsUrlEn" placeholder="/en/article/... (auto z PL)"></div>
             <div></div>
           </div>
           <div class="form-actions" style="margin-top:0.5rem;">
@@ -1132,6 +1141,24 @@ function editArticle(idx) {
   setVal('edSlugPl', a.slugPl||'');
   setVal('edSlugEn', a.slugEn||'');
   document.getElementById('editorForm').scrollIntoView({behavior:'smooth'});
+}
+
+function updateArticleUrls() {
+  var pl = getVal('edSlugPl');
+  var en = getVal('edSlugEn');
+  var box = document.getElementById('articleUrlsBox');
+  if (pl || en) {
+    box.style.display = 'block';
+    document.getElementById('articleUrlPl').textContent = 'https://tmk-tunnel.pl/artykul/' + (pl || '...');
+    document.getElementById('articleUrlEn').textContent = 'https://tmk-tunnel.pl/en/article/' + (en || '...');
+  } else {
+    box.style.display = 'none';
+  }
+}
+function copyArticleUrl(lang) {
+  var el = document.getElementById('articleUrl' + lang);
+  if (!el || !el.textContent || el.textContent === 'https://tmk-tunnel.pl/artykul/...') return;
+  navigator.clipboard.writeText(el.textContent).then(function(){ showMsg('URL skopiowany!', 'ok'); });
 }
 
 function cancelEdit() {
@@ -2541,6 +2568,13 @@ function openHomeNewsEditor() {
   document.getElementById('edHomeNewsIdx').value = '-1';
   document.getElementById('homeNewsDeleteBtn').style.display = 'none';
   ['edHomeNewsDate','edHomeNewsPl','edHomeNewsEn','edHomeNewsUrlPl','edHomeNewsUrlEn'].forEach(function(id){ setVal(id,''); });
+}
+
+function autoFillNewsUrlEn() {
+  var plUrl = getVal('edHomeNewsUrlPl');
+  if (!plUrl) return;
+  var enUrl = plUrl.replace(/^\/artykul\//, '/en/article/');
+  setVal('edHomeNewsUrlEn', enUrl);
 }
 
 function editHomeNews(idx) {
