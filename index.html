@@ -2838,15 +2838,7 @@
         <input type="text" class="article-search" id="articleSearch" data-i18n-placeholder="articles.search_placeholder" placeholder="Szukaj po tytule lub dacie...">
       </div>
       <div class="articles-list" id="articlesList">
-        <a href="/artykul/paradoks-achillesa-wysoka-stopa-zwrotu" class="article-card" data-article="1" data-slug-pl="paradoks-achillesa-wysoka-stopa-zwrotu" data-slug-en="achilles-paradox-high-return-rate">
-          <time class="article-date">13.06.2026</time>
-          <h3 class="article-title">Paradoks Achillesa - czyli wysoka „stopa" zwrotu z przypadku</h3>
-          <p class="article-excerpt">Z pewnością każdy z Was, a na pewno większość, słyszało historię o Achillesie — największym wojowniku wojny trojańskiej. Nie będę zagłębiał się w szczegóły tej historii, więc jeżeli ktoś jeszcze o niej nie słyszał, to gorąco zachęcam do nadrobienia zaległości w wolnej chwili.</p>
-          <div class="article-votes" data-article="1">
-            <button class="vote-btn vote-like" data-vote="like" aria-label="Lubię to">👍</button>
-            <button class="vote-btn vote-dislike" data-vote="dislike" aria-label="Nie lubię">👎</button>
-          </div>
-        </a>
+        <!-- Kafelki renderowane dynamicznie przez renderArticleCards() -->
       </div>
     </details>
   </section>
@@ -4066,25 +4058,119 @@
         }
       };
 
-      // Aktualizuj tekst na kafelku artykułu przy zmianie języka
-      window._refreshArticleCardText = function() {
-        var card = document.querySelector('.article-card[data-article="1"]');
-        if (!card) return;
-        var content = ARTICLE_CONTENT['1'];
-        if (!content) return;
-        var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
-        var excerptKey = currentLang === 'en' ? 'excerptEn' : 'excerptPl';
-        var title = content[titleKey] || content.titlePl || '';
-        var excerpt = content[excerptKey] || content.excerptPl || '';
-        if (title) {
-          var titleEl = card.querySelector('.article-title');
-          if (titleEl) titleEl.textContent = title;
+      // Dynamiczne renderowanie kafelków artykułów z ARTICLE_CONTENT
+      window._renderArticleCards = function() {
+        var list = document.getElementById('articlesList');
+        var summary = document.getElementById('articlesSummary');
+        if (!list) return;
+
+        var ids = Object.keys(ARTICLE_CONTENT).sort(function(a, b) {
+          // Sortuj wg daty malejąco (zakładając format dd.mm.rrrr)
+          var da = ARTICLE_CONTENT[a].date || '';
+          var db = ARTICLE_CONTENT[b].date || '';
+          return db.localeCompare(da);
+        });
+
+        var html = '';
+        ids.forEach(function(id) {
+          var a = ARTICLE_CONTENT[id];
+          var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
+          var excerptKey = currentLang === 'en' ? 'excerptEn' : 'excerptPl';
+          var slugPl = a.slugPl || '';
+          var slugEn = a.slugEn || '';
+          var url = currentLang === 'en' && slugEn ? '/en/article/' + slugEn : (slugPl ? '/artykul/' + slugPl : '#');
+          var title = a[titleKey] || a.titlePl || '(bez tytułu)';
+          var excerpt = a[excerptKey] || a.excerptPl || '';
+          var date = a.date || '';
+
+          html += '<a href="' + url + '" class="article-card" data-article="' + id + '" data-slug-pl="' + (slugPl||'') + '" data-slug-en="' + (slugEn||'') + '">'
+            + '<time class="article-date">' + date + '</time>'
+            + '<h3 class="article-title">' + title + '</h3>'
+            + '<p class="article-excerpt">' + excerpt + '</p>'
+            + '<div class="article-votes" data-article="' + id + '">'
+            + '<button class="vote-btn vote-like" data-vote="like" aria-label="Lubię to">👍</button>'
+            + '<button class="vote-btn vote-dislike" data-vote="dislike" aria-label="Nie lubię">👎</button>'
+            + '</div></a>';
+        });
+
+        list.innerHTML = html;
+
+        // Aktualizuj licznik
+        if (summary) {
+          var labelPl = 'Lista artykułów (' + ids.length + ')';
+          var labelEn = 'Article list (' + ids.length + ')';
+          summary.textContent = currentLang === 'en' ? labelEn : labelPl;
         }
-        if (excerpt) {
-          var excerptEl = card.querySelector('.article-excerpt');
-          if (excerptEl) excerptEl.textContent = excerpt;
-        }
+
+        // Przypnij eventy do nowych kart
+        bindArticleCardEvents();
+        refreshAllVoteButtons();
+
+        // Filtruj jeśli jest tekst w wyszukiwarce
+        var searchInput = document.getElementById('articleSearch');
+        if (searchInput && searchInput.value) filterArticleCards(searchInput.value);
       };
+
+      // Aktualizuj przy zmianie języka
+      window._refreshArticleCardText = function() {
+        window._renderArticleCards();
+      };
+
+      function bindArticleCardEvents() {
+        document.querySelectorAll('.article-card').forEach(function(card) {
+          // Usuń stare listenery przez klonowanie
+          var clone = card.cloneNode(true);
+          card.parentNode.replaceChild(clone, card);
+
+          clone.addEventListener('click', function(e) {
+            if (e.target.closest('.vote-btn')) return;
+            e.preventDefault();
+            var title = clone.querySelector('.article-title').textContent;
+            var date = clone.querySelector('.article-date').textContent;
+            var excerpt = clone.querySelector('.article-excerpt').textContent;
+            var articleId = clone.dataset.article;
+            window._currentArticleId = articleId;
+            window._currentProjectName = null;
+
+            var content = ARTICLE_CONTENT[articleId];
+            var articleUrl = '/';
+            if (content) {
+              if (currentLang === 'en' && content.slugEn) articleUrl = '/en/article/' + content.slugEn;
+              else if (content.slugPl) articleUrl = '/artykul/' + content.slugPl;
+            }
+
+            if (!window._lastSectionHash) window._lastSectionHash = window.location.hash || '';
+            if (window.history.pushState && articleUrl !== '/') {
+              window.history.pushState({type: 'article', id: articleId, lang: currentLang}, '', articleUrl);
+            }
+
+            document.title = title + ' — TMK Suite';
+            var metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute('content', excerpt);
+
+            document.getElementById('ovIcon').src = '/assets/images/face.png';
+            document.getElementById('ovIcon').alt = 'Artykuł';
+            document.getElementById('ovIconWrap').classList.add('circle');
+            document.getElementById('ovName').textContent = title;
+            document.getElementById('ovBadge').textContent = date;
+            document.getElementById('ovBadge').className = 'oh-badge badge-article-date';
+            var bodyHtml = '';
+            if (content) {
+              var langKey = currentLang === 'en' ? 'bodyEn' : 'bodyPl';
+              bodyHtml = content[langKey] || content.bodyPl || '';
+            }
+            if (!bodyHtml) {
+              bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
+            }
+            document.getElementById('ovBody').innerHTML = bodyHtml + buildVoteButtonsHtml(articleId);
+            document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
+            document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
+            document.getElementById('ovScreenshots').innerHTML = '';
+            document.getElementById('appOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+      }
 
       // ═══ Load external content (JSON), fallback to hardcoded ═══
       (function() {
@@ -4104,6 +4190,8 @@
               for (var k in obj) { ARTICLE_CONTENT[k] = obj[k]; }
               window.ARTICLE_CONTENT = ARTICLE_CONTENT;
               loadedArticles = true;
+              // Odśwież kafelki
+              if (window._renderArticleCards) window._renderArticleCards();
             } catch(e) { console.warn('Articles JSON parse error, using hardcoded'); }
           }
         };
@@ -4206,6 +4294,10 @@
       };
       window.ARTICLE_CONTENT = ARTICLE_CONTENT;
 
+      // Renderuj kafelki artykułów (dynamicznie z ARTICLE_CONTENT)
+      window._renderArticleCards();
+
+      // Stary handler — zachowany dla kompatybilności, karty już są renderowane dynamicznie
       document.querySelectorAll('.article-card').forEach(function(card) {
         card.addEventListener('click', function(e) {
           // Nie otwieraj overlayu gdy kliknięto przycisk łapki
