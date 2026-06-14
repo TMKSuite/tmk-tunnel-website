@@ -68,7 +68,7 @@ export default {
       'data/home.json',
       'sitemap.xml'
     ];
-    const isImageUpload = file.startsWith('assets/images/articles/');
+    const isImageUpload = file.startsWith('assets/images/articles/') || file.startsWith('assets/images/');
     if (!allowedPaths.includes(file) && !isImageUpload) {
       return new Response(JSON.stringify({ error: 'File not allowed: ' + file }), {
         status: 403,
