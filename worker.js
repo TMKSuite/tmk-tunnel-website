@@ -100,9 +100,20 @@ export default {
       }
 
       // ── Commit pliku ──
+      // Base64 z obsługą UTF-8 (polskie znaki itp.)
+      function toBase64(str) {
+        const encoder = new TextEncoder();
+        const bytes = encoder.encode(str);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+      }
+
       const putBody = {
         message: message,
-        content: btoa(unescape(encodeURIComponent(content))), // base64 (UTF-8 safe)
+        content: toBase64(content),
         branch: 'master'
       };
       if (sha) {
