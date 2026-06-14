@@ -3261,6 +3261,7 @@
 
       // Expose for popstate / external use
       window._closeOverlay = closeOverlay;
+      window._openOverlay = openOverlay;
 
       closeBtn.addEventListener('click', closeOverlay);
 
@@ -3726,8 +3727,7 @@
           document.getElementById('ovTags').innerHTML = '';
         }
 
-        document.getElementById('appOverlay').classList.add('open');
-        document.body.style.overflow = 'hidden';
+        window._openOverlay();
 
         return true;
       };
@@ -4238,8 +4238,7 @@
             document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
             document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
             document.getElementById('ovScreenshots').innerHTML = '';
-            document.getElementById('appOverlay').classList.add('open');
-            document.body.style.overflow = 'hidden';
+            window._openOverlay();
           });
         });
       }
@@ -4474,8 +4473,7 @@
           document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
 
-          document.getElementById('appOverlay').classList.add('open');
-          document.body.style.overflow = 'hidden';
+          window._openOverlay();
         });
       });
 
@@ -4580,8 +4578,7 @@
         document.getElementById('ovTags').innerHTML = '';
         document.getElementById('ovScreenshots').innerHTML = '';
 
-        document.getElementById('appOverlay').classList.add('open');
-        document.body.style.overflow = 'hidden';
+        window._openOverlay();
 
         return true;
       };
@@ -4622,8 +4619,7 @@
           document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
           document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
           document.getElementById('ovScreenshots').innerHTML = '';
-          document.getElementById('appOverlay').classList.add('open');
-          document.body.style.overflow = 'hidden';
+          window._openOverlay();
         }
       } else if (e.state && e.state.type === 'project') {
         // Back/forward do projektu — otwórz overlay
@@ -4673,8 +4669,7 @@
             document.getElementById('ovMeta').innerHTML = '';
             document.getElementById('ovTags').innerHTML = '';
           }
-          document.getElementById('appOverlay').classList.add('open');
-          document.body.style.overflow = 'hidden';
+          window._openOverlay();
         }
       } else {
         // Back/forward z artykułu/projektu — zamknij overlay
