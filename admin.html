@@ -776,6 +776,27 @@
     </div>
     <div id="homeMsgBox"></div>
 
+    <!-- Podgląd na żywo -->
+    <details open style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Podgląd na żywo całej sekcji HOME <button class="btn btn-sm" onclick="renderHomePreview()" style="margin-left:1rem;font-size:0.7rem;">⟳ Odśwież podgląd</button></summary>
+      <div id="homeLivePreview" style="margin-top:0.6rem;background:#000;border-radius:8px;padding:1.5rem 1rem;text-align:center;min-height:200px;border:1px solid rgba(255,255,255,0.05);">
+        <!-- Logo -->
+        <div id="homePreviewLogo" style="margin-bottom:1rem;">
+          <img id="homePreviewLogoImg" src="/assets/images/logo-hero.webp" style="max-width:300px;width:100%;height:auto;opacity:0.9;" onerror="this.style.display='none'">
+        </div>
+        <!-- App Showcase -->
+        <div id="homePreviewApps" style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
+        <!-- Stats -->
+        <div id="homePreviewStats" style="display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;font-family:'Space Grotesk',sans-serif;"></div>
+        <!-- Social -->
+        <div id="homePreviewSocial" style="display:flex;justify-content:center;gap:0.8rem;margin-bottom:0.8rem;"></div>
+        <!-- Tech Stack -->
+        <div id="homePreviewTech" style="display:flex;justify-content:center;gap:0.6rem;flex-wrap:wrap;"></div>
+        <!-- Footer -->
+        <div id="homePreviewFooter" style="margin-top:0.8rem;color:rgba(230,237,243,0.3);font-size:0.7rem;font-style:italic;"></div>
+      </div>
+    </details>
+
     <!-- Logo -->
     <details open style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
       <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Logo hero</summary>
@@ -2170,6 +2191,7 @@ function fillHomeForm() {
   renderHomeStats();
   renderHomeSocial();
   renderHomeTech();
+  renderHomePreview();
 }
 
 function updateHomeLogoPreview() {
@@ -2379,6 +2401,68 @@ function publishHome() {
   saveAndPush('data/home.json', homeData, 'Aktualizacja HOME', function() {
     showHomeMsg('Opublikowano! Zmiany na stronie za ~30s.', 'ok');
   });
+}
+
+function renderHomePreview() {
+  var h = homeData || getDefaultHome();
+  // Logo
+  var logoImg = document.getElementById('homePreviewLogoImg');
+  if (logoImg) logoImg.src = h.logoImage || '';
+
+  // App Showcase
+  var appsEl = document.getElementById('homePreviewApps');
+  if (appsEl) {
+    var appsHtml = '';
+    (h.appShowcase||[]).forEach(function(a){
+      appsHtml += '<div style="text-align:center;width:70px;">'
+        + '<img src="' + escHtmlAttr(a.iconImage||'') + '" style="width:32px;height:32px;border-radius:6px;object-fit:contain;" onerror="this.style.display=\'none\'">'
+        + '<div style="font-size:0.6rem;color:rgba(230,237,243,0.5);margin-top:0.1rem;line-height:1.1;">' + escHtml(a.name||'') + '</div>'
+        + '</div>';
+    });
+    appsEl.innerHTML = appsHtml;
+  }
+
+  // Stats
+  var statsEl = document.getElementById('homePreviewStats');
+  if (statsEl) {
+    var statsHtml = '';
+    (h.stats||[]).forEach(function(s){
+      var suffix = s.suffix || '';
+      statsHtml += '<div style="text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:var(--accent);">' + s.value + suffix + '</div><div style="font-size:0.6rem;color:rgba(230,237,243,0.35);">' + escHtml(s.labelPl||'') + '</div></div>';
+    });
+    statsEl.innerHTML = statsHtml;
+  }
+
+  // Social links
+  var socialEl = document.getElementById('homePreviewSocial');
+  if (socialEl) {
+    var socColors = {github:'#8b949e',linkedin:'#0a66c2',youtube:'#ff0000',facebook:'#1877f2',instagram:'#e4405f',discord:'#5865f2',twitter:'#1da1f2',telegram:'#26a5e4',email:'#ea4335',website:'#58a6ff'};
+    var socHtml = '';
+    (h.socialLinks||[]).forEach(function(l){
+      var bg = socColors[l.icon] || '#555';
+      socHtml += '<div style="width:20px;height:20px;border-radius:50%;background:' + bg + ';display:flex;align-items:center;justify-content:center;" title="' + escHtmlAttr(l.title||l.icon) + '">'
+        + '<span style="font-size:0.55rem;color:#fff;font-weight:700;">' + escHtml((l.icon||'?')[0].toUpperCase()) + '</span>'
+        + '</div>';
+    });
+    socialEl.innerHTML = socHtml;
+  }
+
+  // Tech stack
+  var techEl = document.getElementById('homePreviewTech');
+  if (techEl) {
+    var techHtml = '';
+    (h.techStack||[]).forEach(function(t){
+      techHtml += '<div style="display:flex;align-items:center;gap:0.2rem;font-size:0.6rem;color:rgba(230,237,243,0.4);background:rgba(255,255,255,0.03);padding:0.2rem 0.4rem;border-radius:4px;">'
+        + '<img src="' + escHtmlAttr(t.icon||'') + '" style="width:12px;height:12px;" onerror="this.style.display=\'none\'">'
+        + escHtml(t.label||'')
+        + '</div>';
+    });
+    techEl.innerHTML = techHtml;
+  }
+
+  // Footer
+  var footerEl = document.getElementById('homePreviewFooter');
+  if (footerEl) footerEl.textContent = h.footerDescPl || '';
 }
 
 function showHomeMsg(msg, type) {
