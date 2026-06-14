@@ -60,7 +60,8 @@ export default {
     // Tylko dozwolone ścieżki
     const allowedPaths = [
       'data/articles.json',
-      'data/news.json'
+      'data/news.json',
+      'sitemap.xml'
     ];
     if (!allowedPaths.includes(file)) {
       return new Response(JSON.stringify({ error: 'File not allowed: ' + file }), {

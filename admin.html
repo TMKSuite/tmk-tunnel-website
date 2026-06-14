@@ -483,38 +483,6 @@ function deleteArticle(idx) {
   });
 }
 
-function publishArticle() {
-  var id = document.getElementById('edArticleId').value || generateId();
-  var slugPl = getVal('edSlugPl') || slugify(getVal('edTitlePl'));
-  var slugEn = getVal('edSlugEn') || slugify(getVal('edTitleEn'));
-
-  var article = {
-    id: id,
-    date: getVal('edDate'),
-    titlePl: getVal('edTitlePl'),
-    titleEn: getVal('edTitleEn'),
-    excerptPl: getVal('edExcerptPl'),
-    excerptEn: getVal('edExcerptEn'),
-    bodyPl: getVal('edBodyPl'),
-    bodyEn: getVal('edBodyEn'),
-    slugPl: slugPl,
-    slugEn: slugEn
-  };
-
-  // Update or add
-  var found = false;
-  for (var i = 0; i < articlesData.length; i++) {
-    if (articlesData[i].id === id) { articlesData[i] = article; found = true; break; }
-  }
-  if (!found) articlesData.push(article);
-
-  var msg = found ? 'Aktualizacja artykułu: ' + article.titlePl : 'Nowy artykuł: ' + article.titlePl;
-  saveAndPush('data/articles.json', articlesData, msg, function() {
-    cancelEdit();
-    renderArticles();
-  });
-}
-
 // ══════════ NEWS ══════════
 function renderNews() {
   var list = document.getElementById('newsList');
@@ -595,14 +563,8 @@ function publishNews() {
 }
 
 // ══════════ WORKER COMM ══════════
-function saveAndPush(file, data, message, onSuccess) {
+function saveAndPush(file, data, message, onSuccess, extraCallback) {
   var content = JSON.stringify(data, null, 2);
-  var secret = sessionStorage.getItem(SESSION_KEY);
-  var pass = '';
-  try { pass = JSON.parse(secret).ts ? document.getElementById('passInput').value : ''; } catch(e) {}
-
-  // Zamiast zapisywać hasło wprost, używamy tokenu sesji
-  // Worker waliduje ADMIN_SECRET — hasło musi być takie samo jak w zmiennych Workera
   var workerSecret = prompt('Hasło do publikacji (takie samo jak do logowania):', '');
   if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
 
@@ -618,6 +580,7 @@ function saveAndPush(file, data, message, onSuccess) {
         if (resp.success) {
           showMsg('Opublikowano! Zmiany będą widoczne na stronie za ~30s.', 'ok');
           if (onSuccess) onSuccess();
+          if (extraCallback) extraCallback();
         } else {
           showMsg('Błąd: ' + (resp.error || 'nieznany'), 'err');
         }
@@ -640,6 +603,78 @@ function saveAndPush(file, data, message, onSuccess) {
     message: message,
     secret: workerSecret
   }));
+}
+
+function generateSitemapXml(articles) {
+  var now = new Date().toISOString().split('T')[0];
+  var urls = [
+    '  <url><loc>https://tmk-tunnel.pl/</loc><lastmod>' + now + '</lastmod><priority>1.0</priority></url>',
+    '  <url><loc>https://tmk-tunnel.pl/en/</loc><lastmod>' + now + '</lastmod><priority>0.9</priority></url>'
+  ];
+  articles.forEach(function(a) {
+    if (a.slugPl) urls.push('  <url><loc>https://tmk-tunnel.pl/artykul/' + a.slugPl + '</loc><lastmod>' + now + '</lastmod><priority>0.8</priority></url>');
+    if (a.slugEn) urls.push('  <url><loc>https://tmk-tunnel.pl/en/article/' + a.slugEn + '</loc><lastmod>' + now + '</lastmod><priority>0.8</priority></url>');
+  });
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.join('\n') + '\n</urlset>\n';
+}
+
+function pushSitemap(workerSecret) {
+  var sitemapXml = generateSitemapXml(articlesData);
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) console.log('Sitemap updated');
+        else console.warn('Sitemap error:', resp.error);
+      } catch(e) {}
+    }
+  };
+  xhr.send(JSON.stringify({
+    file: 'sitemap.xml',
+    content: sitemapXml,
+    message: 'Update sitemap.xml',
+    secret: workerSecret
+  }));
+}
+
+function publishArticle() {
+  var id = document.getElementById('edArticleId').value || generateId();
+  var slugPl = getVal('edSlugPl') || slugify(getVal('edTitlePl'));
+  var slugEn = getVal('edSlugEn') || slugify(getVal('edTitleEn'));
+
+  var article = {
+    id: id,
+    date: getVal('edDate'),
+    titlePl: getVal('edTitlePl'),
+    titleEn: getVal('edTitleEn'),
+    excerptPl: getVal('edExcerptPl'),
+    excerptEn: getVal('edExcerptEn'),
+    bodyPl: getVal('edBodyPl'),
+    bodyEn: getVal('edBodyEn'),
+    slugPl: slugPl,
+    slugEn: slugEn
+  };
+
+  var found = false;
+  for (var i = 0; i < articlesData.length; i++) {
+    if (articlesData[i].id === id) { articlesData[i] = article; found = true; break; }
+  }
+  if (!found) articlesData.push(article);
+
+  var msg = found ? 'Aktualizacja artykułu: ' + article.titlePl : 'Nowy artykuł: ' + article.titlePl;
+  var workerSecret = prompt('Hasło do publikacji (takie samo jak do logowania):', '');
+  if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
+  showMsg('Publikowanie artykułu + sitemap...', 'info');
+
+  saveAndPush('data/articles.json', articlesData, msg, function() {
+    cancelEdit();
+    renderArticles();
+  }, function() {
+    pushSitemap(workerSecret);
+  });
 }
 
 // ══════════ HELPERS ══════════
