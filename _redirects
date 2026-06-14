@@ -1,5 +1,5 @@
-https://tmk-tunnel.pl/ https://www.tmk-tunnel.pl/ 301!
-https://tmk-tunnel.pl/* https://www.tmk-tunnel.pl/:splat 301!
+https://www.tmk-tunnel.pl/ https://tmk-tunnel.pl/ 301!
+https://www.tmk-tunnel.pl/* https://tmk-tunnel.pl/:splat 301!
 
 # SPA routing for article pages
 /artykul/* /index.html 200
