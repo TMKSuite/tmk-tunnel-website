@@ -210,6 +210,7 @@
     <button class="tab" data-tab="news" onclick="switchTab('news')">Co nowego</button>
     <button class="tab" data-tab="about" onclick="switchTab('about')">O mnie</button>
     <button class="tab" data-tab="contact" onclick="switchTab('contact')">Kontakt</button>
+    <button class="tab" data-tab="projects" onclick="switchTab('projects')">Projekty</button>
   </div>
 
   <!-- ARTICLES TAB -->
@@ -616,6 +617,138 @@
     </div>
   </div>
 
+  <!-- PROJECTS TAB -->
+  <div id="tab-projects" style="display:none">
+    <!-- Edycja nagłówka -->
+    <details style="margin-bottom:1rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Nagłówek, podtytuł i etykiety grup</summary>
+      <div style="margin-top:0.6rem" class="form-row">
+        <div class="form-group"><label>Nagłówek (PL)</label><input type="text" id="edProjHeadingPl" placeholder="Projekty"></div>
+        <div class="form-group"><label>Nagłówek (EN)</label><input type="text" id="edProjHeadingEn" placeholder="Projects"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Podtytuł (PL)</label><input type="text" id="edProjSubheadingPl"></div>
+        <div class="form-group"><label>Podtytuł (EN)</label><input type="text" id="edProjSubheadingEn"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Grupa "Gotowe" (PL)</label><input type="text" id="edProjDonePl" placeholder="Gotowe"></div>
+        <div class="form-group"><label>Grupa "Gotowe" (EN)</label><input type="text" id="edProjDoneEn" placeholder="Done"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Grupa "W toku" (PL)</label><input type="text" id="edProjWipPl" placeholder="W toku"></div>
+        <div class="form-group"><label>Grupa "W toku" (EN)</label><input type="text" id="edProjWipEn" placeholder="In progress"></div>
+      </div>
+      <div style="margin-top:0.5rem;"><button class="btn btn-sm" onclick="publishProjectsMeta()">Zapisz nagłówek</button></div>
+    </details>
+
+    <div id="projectsMsgBox"></div>
+    <div class="add-bar">
+      <button class="btn" onclick="openProjectEditor()">+ Nowy kafelek</button>
+    </div>
+    <div id="projectsList"></div>
+
+    <!-- Project Editor -->
+    <div id="projectEditorForm" style="display:none">
+      <h3 style="margin-bottom:1.5rem" id="projectEditorTitle">Nowy kafelek</h3>
+      <input type="hidden" id="edProjectIdx" value="-1">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nazwa projektu</label>
+          <input type="text" id="edProjectName" placeholder="TorekMarketKiller">
+        </div>
+        <div class="form-group">
+          <label>ID / klucz (unikalny)</label>
+          <input type="text" id="edProjectId" placeholder="torek-market-killer">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Grupa</label>
+          <select id="edProjectGroup"><option value="done">Gotowe</option><option value="wip">W toku</option></select>
+        </div>
+        <div class="form-group">
+          <label>Etykiety (oddzielone przecinkiem: live,stable,wip)</label>
+          <input type="text" id="edProjectBadges" placeholder="live,stable">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ścieżka do ikony</label>
+          <input type="text" id="edProjectIcon" placeholder="/assets/images/icon-tmk.png">
+        </div>
+        <div class="form-group">
+          <label>LOC (np. ~36 700)</label>
+          <input type="text" id="edProjectLoc" placeholder="~1 000">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Środowisko (np. Python 3.12)</label>
+          <input type="text" id="edProjectEnv" placeholder="Python 3.12">
+        </div>
+        <div class="form-group">
+          <label>Ikona w kółku?</label>
+          <select id="edProjectIconCircle"><option value="0">Nie</option><option value="1">Tak</option></select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Slug (PL)</label>
+          <input type="text" id="edProjectSlugPl" placeholder="torek-market-killer">
+        </div>
+        <div class="form-group">
+          <label>Slug (EN)</label>
+          <input type="text" id="edProjectSlugEn" placeholder="torek-market-killer">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Krótki opis na kafelku (PL)</label>
+        <input type="text" id="edProjectDescPl" placeholder="Platforma do automatyzacji...">
+      </div>
+      <div class="form-group">
+        <label>Krótki opis na kafelku (EN)</label>
+        <input type="text" id="edProjectDescEn" placeholder="Trading automation platform...">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tagi (PL) — oddzielone przecinkiem</label>
+          <input type="text" id="edProjectTagsPl" placeholder="Python, MT5, FastAPI">
+        </div>
+        <div class="form-group">
+          <label>Tagi (EN) — oddzielone przecinkiem</label>
+          <input type="text" id="edProjectTagsEn" placeholder="Python, MT5, FastAPI">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Screenshoty — ścieżki oddzielone przecinkiem</label>
+        <input type="text" id="edProjectScreenshots" placeholder="/assets/screenshots/tmk/01.png, /assets/screenshots/tmk/02.png">
+      </div>
+
+      <div class="form-group">
+        <label>Pełny opis (PL) — HTML</label>
+        <textarea id="edProjectBodyPl" rows="10" placeholder="<h3>Opis</h3><p>...</p>"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Pełny opis (EN) — HTML</label>
+        <textarea id="edProjectBodyEn" rows="10" placeholder="<h3>Description</h3><p>...</p>"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn" onclick="publishProject()">Zapisz kafelek</button>
+        <button class="btn" onclick="cancelProjectEdit()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Anuluj</button>
+        <button class="btn btn-danger btn-sm" id="projectDeleteBtn" style="display:none;margin-left:auto" onclick="deleteProject()">Usuń kafelek</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -677,8 +810,10 @@ function switchTab(tab) {
   document.getElementById('tab-news').style.display = tab === 'news' ? 'block' : 'none';
   document.getElementById('tab-about').style.display = tab === 'about' ? 'block' : 'none';
   document.getElementById('tab-contact').style.display = tab === 'contact' ? 'block' : 'none';
+  document.getElementById('tab-projects').style.display = tab === 'projects' ? 'block' : 'none';
   if (tab === 'about') loadAbout();
   if (tab === 'contact') loadContact();
+  if (tab === 'projects') loadProjects();
 }
 
 // ══════════ DATA ══════════
@@ -1674,6 +1809,163 @@ function clearContactForm() {
 
 function showContactMsg(msg, type) {
   var box = document.getElementById('contactMsgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
+}
+
+// ══════════ PROJECTS (PROJEKTY) ══════════
+var projectsData = null;
+
+function loadProjects() {
+  fetchJSON('/data/projects.json', function(data) {
+    projectsData = data || getDefaultProjects();
+    fillProjectsMeta();
+    renderProjects();
+  });
+}
+
+function getDefaultProjects() {
+  return { headingPl:'Projekty', headingEn:'Projects', subheadingPl:'', subheadingEn:'',
+    groupDonePl:'Gotowe', groupDoneEn:'Done', groupWipPl:'W toku', groupWipEn:'In progress',
+    badgeLivePl:'Live', badgeLiveEn:'Live', badgeStablePl:'Stabilny', badgeStableEn:'Stable',
+    badgeWipPl:'W toku', badgeWipEn:'WIP', projects:[] };
+}
+
+function fillProjectsMeta() {
+  if (!projectsData) return;
+  setVal('edProjHeadingPl', projectsData.headingPl||'');
+  setVal('edProjHeadingEn', projectsData.headingEn||'');
+  setVal('edProjSubheadingPl', projectsData.subheadingPl||'');
+  setVal('edProjSubheadingEn', projectsData.subheadingEn||'');
+  setVal('edProjDonePl', projectsData.groupDonePl||'Gotowe');
+  setVal('edProjDoneEn', projectsData.groupDoneEn||'Done');
+  setVal('edProjWipPl', projectsData.groupWipPl||'W toku');
+  setVal('edProjWipEn', projectsData.groupWipEn||'In progress');
+}
+
+function publishProjectsMeta() {
+  projectsData.headingPl = getVal('edProjHeadingPl');
+  projectsData.headingEn = getVal('edProjHeadingEn');
+  projectsData.subheadingPl = getVal('edProjSubheadingPl');
+  projectsData.subheadingEn = getVal('edProjSubheadingEn');
+  projectsData.groupDonePl = getVal('edProjDonePl');
+  projectsData.groupDoneEn = getVal('edProjDoneEn');
+  projectsData.groupWipPl = getVal('edProjWipPl');
+  projectsData.groupWipEn = getVal('edProjWipEn');
+  saveAndPush('data/projects.json', projectsData, 'Aktualizacja nagłówka PROJEKTY', function() {
+    showProjMsg('Nagłówek zapisany!', 'ok');
+  });
+}
+
+function renderProjects() {
+  var list = document.getElementById('projectsList');
+  var projects = projectsData ? (projectsData.projects || []) : [];
+  if (!projects.length) {
+    list.innerHTML = '<div class="empty">Brak kafelków. Kliknij "+ Nowy kafelek" aby dodać.</div>';
+    return;
+  }
+  var html = '';
+  projects.forEach(function(p, i) {
+    html += '<div class="list-item">'
+      + '<div class="info"><div class="title">' + escHtml(p.name||'(bez nazwy)') + '</div>'
+      + '<div class="meta">' + (p.group||'') + ' · ' + (p.badges||[]).join(',') + ' · ' + (p.loc||'') + ' · ' + escHtml(p.slugPl||'') + '</div></div>'
+      + '<div class="actions">'
+      + '<button class="btn btn-sm" onclick="editProject(' + i + ')">Edytuj</button>'
+      + '<button class="btn btn-sm btn-danger" onclick="deleteProject(' + i + ')">Usuń</button>'
+      + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function openProjectEditor() {
+  document.getElementById('projectEditorForm').style.display = 'block';
+  document.getElementById('projectEditorTitle').textContent = 'Nowy kafelek';
+  document.getElementById('edProjectIdx').value = '-1';
+  document.getElementById('projectDeleteBtn').style.display = 'none';
+  clearProjectForm();
+}
+
+function editProject(idx) {
+  var p = projectsData.projects[idx];
+  document.getElementById('projectEditorForm').style.display = 'block';
+  document.getElementById('projectEditorTitle').textContent = 'Edycja: ' + (p.name||'');
+  document.getElementById('edProjectIdx').value = idx;
+  document.getElementById('projectDeleteBtn').style.display = 'inline-block';
+  setVal('edProjectName', p.name||'');
+  setVal('edProjectId', p.id||'');
+  setVal('edProjectGroup', p.group||'done');
+  setVal('edProjectBadges', (p.badges||[]).join(','));
+  setVal('edProjectIcon', p.iconImage||'');
+  setVal('edProjectLoc', p.loc||'');
+  setVal('edProjectEnv', p.env||'');
+  setVal('edProjectIconCircle', p.iconCircle ? '1' : '0');
+  setVal('edProjectSlugPl', p.slugPl||'');
+  setVal('edProjectSlugEn', p.slugEn||'');
+  setVal('edProjectDescPl', p.descPl||'');
+  setVal('edProjectDescEn', p.descEn||'');
+  setVal('edProjectTagsPl', (p.tagsPl||[]).join(', '));
+  setVal('edProjectTagsEn', (p.tagsEn||[]).join(', '));
+  setVal('edProjectScreenshots', (p.screenshots||[]).join(', '));
+  setVal('edProjectBodyPl', p.bodyPl||'');
+  setVal('edProjectBodyEn', p.bodyEn||'');
+  document.getElementById('projectEditorForm').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelProjectEdit() {
+  document.getElementById('projectEditorForm').style.display = 'none';
+  clearProjectForm();
+}
+
+function deleteProject(idx) {
+  if (!confirm('Na pewno usunąć ten kafelek?')) return;
+  projectsData.projects.splice(idx, 1);
+  saveAndPush('data/projects.json', projectsData, 'Usuń kafelek PROJEKTY', function() {
+    cancelProjectEdit();
+    renderProjects();
+  });
+}
+
+function publishProject() {
+  var idx = parseInt(document.getElementById('edProjectIdx').value);
+  var project = {
+    id: getVal('edProjectId') || ('proj_' + Date.now().toString(36)),
+    name: getVal('edProjectName'),
+    group: getVal('edProjectGroup'),
+    badges: getVal('edProjectBadges').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    iconImage: getVal('edProjectIcon'),
+    iconCircle: getVal('edProjectIconCircle') === '1',
+    loc: getVal('edProjectLoc'),
+    env: getVal('edProjectEnv'),
+    slugPl: getVal('edProjectSlugPl'),
+    slugEn: getVal('edProjectSlugEn'),
+    descPl: getVal('edProjectDescPl'),
+    descEn: getVal('edProjectDescEn'),
+    tagsPl: getVal('edProjectTagsPl').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    tagsEn: getVal('edProjectTagsEn').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    screenshots: getVal('edProjectScreenshots').split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+    bodyPl: getVal('edProjectBodyPl'),
+    bodyEn: getVal('edProjectBodyEn')
+  };
+  if (idx >= 0) {
+    projectsData.projects[idx] = project;
+  } else {
+    projectsData.projects.push(project);
+  }
+  saveAndPush('data/projects.json', projectsData, 'Zapisano kafelek: ' + project.name, function() {
+    cancelProjectEdit();
+    renderProjects();
+  });
+}
+
+function clearProjectForm() {
+  ['edProjectIdx','edProjectName','edProjectId','edProjectGroup','edProjectBadges','edProjectIcon','edProjectLoc','edProjectEnv','edProjectIconCircle','edProjectSlugPl','edProjectSlugEn','edProjectDescPl','edProjectDescEn','edProjectTagsPl','edProjectTagsEn','edProjectScreenshots','edProjectBodyPl','edProjectBodyEn'].forEach(function(id){ setVal(id,''); });
+  document.getElementById('edProjectGroup').value = 'done';
+  document.getElementById('edProjectIconCircle').value = '0';
+}
+
+function showProjMsg(msg, type) {
+  var box = document.getElementById('projectsMsgBox');
   box.className = 'msg msg-' + type;
   box.textContent = msg;
   setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);

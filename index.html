@@ -4908,6 +4908,134 @@
       xhr.send();
     })();
 
+    // ── Load projects.json → nadpisuje I18N + dynamicznie renderuje kafelki ──
+    var projectsGridData = null;
+    var projectsMetaData = null;
+
+    function renderProjectsSection(lang) {
+      var section = document.getElementById('projects');
+      if (!section || !projectsGridData) return;
+      var proj = projectsGridData;
+      var doneGroup = proj.filter(function(p){ return p.group === 'done'; });
+      var wipGroup = proj.filter(function(p){ return p.group === 'wip'; });
+
+      var badgeLabels = {};
+      if (projectsMetaData) {
+        badgeLabels.live = lang === 'en' ? (projectsMetaData.badgeLiveEn || 'Live') : (projectsMetaData.badgeLivePl || 'Live');
+        badgeLabels.stable = lang === 'en' ? (projectsMetaData.badgeStableEn || 'Stable') : (projectsMetaData.badgeStablePl || 'Stabilny');
+        badgeLabels.wip = lang === 'en' ? (projectsMetaData.badgeWipEn || 'WIP') : (projectsMetaData.badgeWipPl || 'W toku');
+      }
+
+      function renderGroup(group, label) {
+        var html = '<h3 class="group-heading">' + escHtml(label) + '</h3>';
+        html += '<div class="projects-grid' + (group.length === 1 ? ' projects-grid--centered' : '') + '">';
+        group.forEach(function(p) {
+          var badgeHtml = '';
+          (p.badges||[]).forEach(function(b) {
+            var cls = 'badge-' + b;
+            badgeHtml += '<span class="card-badge ' + cls + '">' + escHtml(badgeLabels[b] || b) + '</span>';
+          });
+          var slug = lang === 'en' ? p.slugEn : p.slugPl;
+          html += '<a href="/projekt/' + slug + '" class="project-card" data-slug-pl="' + escHtmlAttr(p.slugPl||'') + '" data-slug-en="' + escHtmlAttr(p.slugEn||'') + '">'
+            + '<div class="card-icon"><img src="' + escHtmlAttr(p.iconImage||'') + '" alt="' + escHtmlAttr(p.name||'') + '" width="48" height="48"></div>'
+            + '<div class="card-name">' + escHtml(p.name||'') + '</div>'
+            + '<div class="card-desc">' + escHtml(lang === 'en' ? (p.descEn||p.descPl||'') : (p.descPl||p.descEn||'')) + '</div>'
+            + '<div class="card-meta">'
+            + '<span class="card-stat"><span class="val">' + escHtml(p.loc||'') + '</span> LOC</span>'
+            + badgeHtml
+            + '</div></a>';
+        });
+        html += '</div>';
+        return html;
+      }
+
+      var doneLabel = lang === 'en' ? (projectsMetaData ? projectsMetaData.groupDoneEn : 'Done') || 'Done' : (projectsMetaData ? projectsMetaData.groupDonePl : 'Gotowe') || 'Gotowe';
+      var wipLabel = lang === 'en' ? (projectsMetaData ? projectsMetaData.groupWipEn : 'In progress') || 'In progress' : (projectsMetaData ? projectsMetaData.groupWipPl : 'W toku') || 'W toku';
+
+      // Build new HTML: heading + subheading + group headings + grids
+      var heading = (projectsMetaData && (lang === 'en' ? projectsMetaData.headingEn : projectsMetaData.headingPl)) || (lang === 'en' ? 'Projects' : 'Projekty');
+      var subheading = (projectsMetaData && (lang === 'en' ? projectsMetaData.subheadingEn : projectsMetaData.subheadingPl)) || '';
+
+      var newHtml = '<h2 class="section-heading">' + escHtml(heading) + '</h2>';
+      if (subheading) newHtml += '<p class="section-subheading">' + subheading + '</p>';
+      if (doneGroup.length) newHtml += renderGroup(doneGroup, doneLabel);
+      if (wipGroup.length) newHtml += renderGroup(wipGroup, wipLabel);
+
+      // Replace section content but keep the section element itself
+      // Clear all children after subheading (or after heading if no subheading)
+      var gridEls = section.querySelectorAll('.projects-grid, .group-heading');
+      gridEls.forEach(function(el){ el.remove(); });
+      // Append new group content
+      var afterHeading = section.querySelector('.section-subheading') || section.querySelector('.section-heading');
+      if (afterHeading) {
+        var container = document.createElement('div');
+        container.innerHTML = newHtml;
+        // Remove heading/subheading from newHtml (they're already in the DOM)
+        var newHeading = container.querySelector('.section-heading');
+        var newSub = container.querySelector('.section-subheading');
+        if (newHeading) newHeading.remove();
+        if (newSub) newSub.remove();
+        // Append remaining (groups + grids)
+        while (container.firstChild) {
+          afterHeading.parentNode.insertBefore(container.firstChild, afterHeading.nextSibling);
+        }
+      }
+    }
+
+    (function() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/data/projects.json', true);
+      xhr.onload = function() {
+        if (xhr.status !== 200) return;
+        try {
+          var d = JSON.parse(xhr.responseText);
+          if (!d || !d.projects) return;
+
+          projectsMetaData = d;
+          projectsGridData = d.projects;
+
+          // Override I18N
+          if (d.headingPl) I18N.pl['projects.heading'] = d.headingPl;
+          if (d.headingEn) I18N.en['projects.heading'] = d.headingEn;
+          if (d.subheadingPl) I18N.pl['projects.subheading'] = d.subheadingPl;
+          if (d.subheadingEn) I18N.en['projects.subheading'] = d.subheadingEn;
+          if (d.groupDonePl) I18N.pl['projects.group_done'] = d.groupDonePl;
+          if (d.groupDoneEn) I18N.en['projects.group_done'] = d.groupDoneEn;
+          if (d.groupWipPl) I18N.pl['projects.group_wip'] = d.groupWipPl;
+          if (d.groupWipEn) I18N.en['projects.group_wip'] = d.groupWipEn;
+
+          // Update heading/subheading elements immediately
+          var hEl = document.querySelector('#projects .section-heading');
+          var sEl = document.querySelector('#projects .section-subheading');
+          if (hEl && I18N[currentLang] && I18N[currentLang]['projects.heading']) hEl.innerHTML = I18N[currentLang]['projects.heading'];
+          if (sEl && I18N[currentLang] && I18N[currentLang]['projects.subheading']) sEl.innerHTML = I18N[currentLang]['projects.subheading'];
+
+          // Merge into APP_DETAILS for overlay
+          d.projects.forEach(function(p) {
+            APP_DETAILS[p.name] = APP_DETAILS[p.name] || {}; // keep existing if already defined
+            if (!APP_DETAILS[p.name].bodyPl) {
+              APP_DETAILS[p.name] = {
+                slugPl: p.slugPl,
+                slugEn: p.slugEn,
+                iconCircle: p.iconCircle || false,
+                loc: p.loc,
+                env: p.env,
+                screenshots: p.screenshots || [],
+                bodyPl: p.bodyPl || '',
+                bodyEn: p.bodyEn || '',
+                tagsPl: (p.tagsPl||[]).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join(''),
+                tagsEn: (p.tagsEn||[]).map(function(t){ return '<span class="tag">' + t + '</span>'; }).join('')
+              };
+            }
+          });
+          window.APP_DETAILS = APP_DETAILS;
+
+          renderProjectsSection(currentLang);
+        } catch(e) {}
+      };
+      xhr.send();
+    })();
+
     // ── Load contact.json → nadpisuje I18N + dynamicznie renderuje kafelki ──
     var CONTACT_ICONS = {
       email: '<svg viewBox="0 0 24 24"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>',
@@ -4968,11 +5096,12 @@
       xhr.send();
     })();
 
-    // Hook: re-render contact cards on language switch
+    // Hook: re-render contact cards + projects on language switch
     var _origSwitchLangContact = switchLang;
     switchLang = function(lang) {
       _origSwitchLangContact(lang);
       if (contactCardsData) renderContactGrid(lang);
+      if (projectsGridData) renderProjectsSection(lang);
     };
 
     // Init i18n after all IIFEs have run
