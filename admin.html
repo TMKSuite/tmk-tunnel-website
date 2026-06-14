@@ -784,16 +784,18 @@
         <div id="homePreviewLogo" style="margin-bottom:1rem;">
           <img id="homePreviewLogoImg" src="/assets/images/logo-hero.webp" style="max-width:300px;width:100%;height:auto;opacity:0.9;" onerror="this.style.display='none'">
         </div>
-        <!-- App Showcase -->
-        <div id="homePreviewApps" style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
-        <!-- Stats -->
-        <div id="homePreviewStats" style="display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;font-family:'Space Grotesk',sans-serif;"></div>
-        <!-- Social -->
+        <!-- App Showcase — karuzela, ikony obok siebie -->
+        <div id="homePreviewApps" style="display:flex;justify-content:center;align-items:flex-start;gap:1.2rem;margin-bottom:1.2rem;flex-wrap:nowrap;overflow-x:auto;"></div>
+        <!-- Stats — obok siebie -->
+        <div id="homePreviewStats" style="display:flex;justify-content:center;gap:2.5rem;margin-bottom:1rem;font-family:'Space Grotesk',sans-serif;"></div>
+        <!-- Social — kółka obok siebie -->
         <div id="homePreviewSocial" style="display:flex;justify-content:center;gap:0.8rem;margin-bottom:0.8rem;"></div>
-        <!-- Tech Stack -->
-        <div id="homePreviewTech" style="display:flex;justify-content:center;gap:0.6rem;flex-wrap:wrap;"></div>
+        <!-- Tech Stack — obok siebie w rzędzie -->
+        <div id="homePreviewTech" style="display:flex;justify-content:center;align-items:center;gap:0.8rem;flex-wrap:wrap;margin-bottom:0.6rem;"></div>
+        <!-- News button -->
+        <div id="homePreviewNewsBtn" style="margin-bottom:0.6rem;"></div>
         <!-- Footer -->
-        <div id="homePreviewFooter" style="margin-top:0.8rem;color:rgba(230,237,243,0.3);font-size:0.7rem;font-style:italic;"></div>
+        <div id="homePreviewFooter" style="color:rgba(230,237,243,0.3);font-size:0.7rem;font-style:italic;"></div>
       </div>
     </details>
 
@@ -2414,12 +2416,18 @@ function renderHomePreview() {
   if (appsEl) {
     var appsHtml = '';
     (h.appShowcase||[]).forEach(function(a){
-      appsHtml += '<div style="text-align:center;width:70px;">'
-        + '<img src="' + escHtmlAttr(a.iconImage||'') + '" style="width:32px;height:32px;border-radius:6px;object-fit:contain;" onerror="this.style.display=\'none\'">'
-        + '<div style="font-size:0.6rem;color:rgba(230,237,243,0.5);margin-top:0.1rem;line-height:1.1;">' + escHtml(a.name||'') + '</div>'
+      appsHtml += '<div style="text-align:center;min-width:60px;">'
+        + '<img src="' + escHtmlAttr(a.iconImage||'') + '" style="width:36px;height:36px;border-radius:8px;object-fit:contain;" onerror="this.style.display=\'none\'">'
+        + '<div style="font-size:0.6rem;color:rgba(230,237,243,0.5);margin-top:0.2rem;line-height:1.2;word-break:break-all;">' + escHtml((a.name||'').replace(/([A-Z])/g,'<br>$1').replace(/^<br>/,'')) + '</div>'
         + '</div>';
     });
     appsEl.innerHTML = appsHtml;
+  }
+
+  // News button
+  var newsBtnEl = document.getElementById('homePreviewNewsBtn');
+  if (newsBtnEl) {
+    newsBtnEl.innerHTML = '<div style="display:inline-block;padding:0.3rem 1rem;border:1px solid rgba(212,168,67,0.4);border-radius:20px;color:var(--accent);font-size:0.7rem;font-family:\'Space Grotesk\',sans-serif;letter-spacing:0.05em;">● ' + escHtml(h.newsButtonPl||'CO NOWEGO') + ' ▾</div>';
   }
 
   // Stats
