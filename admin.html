@@ -879,14 +879,18 @@ function copyImgUrl() {
 function insertImgToBody(textareaId) {
   var url = document.getElementById('imgUrlInput').value;
   if (!url) return;
+  var lang = textareaId === 'edBodyPl' ? 'pl' : 'en';
+  var titleKey = lang === 'en' ? 'titleEn' : 'titlePl';
+  var title = getVal('ed' + (lang === 'en' ? 'TitleEn' : 'TitlePl')) || 'Artykuł TMK Suite';
+  var alt = title + ' — ilustracja';
+  var imgTag = '<img src="' + url + '" alt="' + alt + '" style="max-width:100%;border-radius:4px;">';
   var ta = document.getElementById(textareaId);
-  var imgTag = '<img src="' + url + '" alt="" style="max-width:100%;border-radius:4px;">';
   var start = ta.selectionStart;
   var end = ta.selectionEnd;
   var text = ta.value;
   ta.value = text.substring(0, start) + '\n' + imgTag + '\n' + text.substring(end);
   ta.focus();
-  showMsg('Obrazek wstawiony do ' + (textareaId === 'edBodyPl' ? 'PL' : 'EN'), 'ok');
+  showMsg('Obrazek wstawiony do ' + (lang === 'pl' ? 'PL' : 'EN') + ' (alt: ' + alt + ')', 'ok');
 }
 
 // ══════════ INIT ══════════
