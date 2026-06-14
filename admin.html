@@ -847,10 +847,19 @@ function fetchJSON(path, cb) {
   xhr.open('GET', path, true);
   xhr.onload = function() {
     if (xhr.status === 200) {
-      try { cb(JSON.parse(xhr.responseText)); } catch(e) { cb(null); }
-    } else { cb(null); }
+      try { cb(JSON.parse(xhr.responseText)); } catch(e) {
+        if (window.console) console.error('[fetchJSON] parse error for', path, e.message);
+        cb(null);
+      }
+    } else {
+      if (window.console) console.warn('[fetchJSON] status', xhr.status, 'for', path);
+      cb(null);
+    }
   };
-  xhr.onerror = function() { cb(null); };
+  xhr.onerror = function() {
+    if (window.console) console.error('[fetchJSON] network error for', path);
+    cb(null);
+  };
   xhr.send();
 }
 
@@ -858,18 +867,25 @@ var articlesMeta = null; // { headingPl, headingEn, subheadingPl, subheadingEn }
 
 function loadArticles() {
   fetchJSON('/data/articles.json', function(data) {
+    // Debug — pokaż co przyszło z serwera
+    if (window.console) console.log('[loadArticles] raw data type:', typeof data, Array.isArray(data) ? '(array)' : (data && typeof data === 'object' ? '(object) keys:' + Object.keys(data).join(',') : '(other)'));
+
     if (Array.isArray(data)) {
       // Stary format — sama tablica
       articlesData = data;
       articlesMeta = null;
-    } else if (data && data.articles) {
-      // Nowy format — obiekt z meta
+      if (window.console) console.log('[loadArticles] old format, articles:', articlesData.length);
+    } else if (data && typeof data === 'object' && data.articles !== undefined) {
+      // Nowy format — obiekt z meta (articles może być pustą tablicą, to OK)
       articlesMeta = { headingPl: data.headingPl, headingEn: data.headingEn, subheadingPl: data.subheadingPl, subheadingEn: data.subheadingEn };
-      articlesData = data.articles;
+      articlesData = data.articles || [];
       fillArticlesMeta();
+      if (window.console) console.log('[loadArticles] new format, articles:', articlesData.length);
     } else {
+      // Nieznany format lub null — fallback do pustej tablicy
       articlesData = [];
       articlesMeta = null;
+      if (window.console) console.warn('[loadArticles] unknown/null data, falling back to empty');
     }
     renderArticles();
   });
@@ -1841,7 +1857,8 @@ var projectsData = null;
 
 function loadProjects() {
   fetchJSON('/data/projects.json', function(data) {
-    projectsData = data || getDefaultProjects();
+    if (window.console) console.log('[loadProjects] raw data type:', typeof data, data && data.projects ? '(object, projects:' + data.projects.length + ')' : '(other)');
+    projectsData = (data && data.projects) ? data : getDefaultProjects();
     fillProjectsMeta();
     renderProjects();
   });
