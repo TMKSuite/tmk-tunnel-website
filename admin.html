@@ -1335,6 +1335,7 @@ function escHtml(s) {
   d.textContent = s;
   return d.innerHTML;
 }
+function escHtmlAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function showMsg(msg, type) {
   var box = document.getElementById('msgBox');
   box.className = 'msg msg-' + type;
@@ -2140,12 +2141,8 @@ function showIdeasMsg(msg, type) {
 var homeData = null;
 
 function loadHome() {
-  // Load home.json + news.json
   fetchJSON('/data/home.json', function(hd) {
-    if (window.console) console.log('[loadHome] hd:', hd ? 'got data' : 'null', hd ? 'keys:'+Object.keys(hd).join(',') : '');
-    if (hd && window.console) console.log('[loadHome] appShowcase:', hd.appShowcase ? hd.appShowcase.length : 'MISSING');
     homeData = hd || getDefaultHome();
-    if (window.console) console.log('[loadHome] homeData.appShowcase:', homeData.appShowcase ? homeData.appShowcase.length : 'MISSING');
     fillHomeForm();
   });
   loadNews(); // wypełnia newsData globalnie
