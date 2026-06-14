@@ -815,11 +815,24 @@
           </div>
           <div id="homeLogoUploadStatus" style="margin-top:0.3rem;font-size:0.75rem;color:rgba(230,237,243,0.3);"></div>
         </div>
-        <div style="margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center;">
-          <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Zoom:</span>
-          <code id="homeLogoScaleLabel" style="font-size:0.75rem;color:var(--accent);">1.00</code><span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">×</span>
-          <input type="range" id="edHomeLogoScale" min="0.5" max="2.5" step="0.05" value="1" oninput="updateHomeLogoScale()" style="flex:1;max-width:250px;accent-color:var(--accent);">
-          <input type="hidden" id="edHomeLogoScaleHidden" value="1">
+        <div style="margin-top:0.4rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+          <div style="display:flex;gap:0.3rem;align-items:center;">
+            <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Zoom:</span>
+            <code id="homeLogoScaleLabel" style="font-size:0.75rem;color:var(--accent);">1.00</code><span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">×</span>
+            <input type="range" id="edHomeLogoScale" min="0.5" max="2.5" step="0.05" value="1" oninput="updateHomeLogoScale()" style="width:120px;accent-color:var(--accent);">
+            <input type="hidden" id="edHomeLogoScaleHidden" value="1">
+          </div>
+          <div style="display:flex;gap:0.3rem;align-items:center;">
+            <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Przesuń:</span>
+            <button class="btn btn-sm" onclick="shiftHomeLogo(0,-2)" title="W górę" style="padding:0.1rem 0.4rem;line-height:1;">▲</button>
+            <button class="btn btn-sm" onclick="shiftHomeLogo(0,2)" title="W dół" style="padding:0.1rem 0.4rem;line-height:1;">▼</button>
+            <button class="btn btn-sm" onclick="shiftHomeLogo(-2,0)" title="W lewo" style="padding:0.1rem 0.4rem;line-height:1;">◀</button>
+            <button class="btn btn-sm" onclick="shiftHomeLogo(2,0)" title="W prawo" style="padding:0.1rem 0.4rem;line-height:1;">▶</button>
+            <button class="btn btn-sm" onclick="resetHomeLogoPos()" title="Wyśrodkuj" style="padding:0.1rem 0.4rem;line-height:1;border-color:rgba(255,255,255,0.2);">⊙</button>
+            <code id="homeLogoPosLabel" style="font-size:0.7rem;color:var(--accent);">50% 50%</code>
+            <input type="hidden" id="edHomeLogoPosX" value="50">
+            <input type="hidden" id="edHomeLogoPosY" value="50">
+          </div>
         </div>
         <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);text-align:center;">
           <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:100%;max-width:500px;height:auto;margin:0 auto;" onerror="this.style.display='none';">
@@ -2210,7 +2223,8 @@ function fillHomeForm() {
   var ls = homeData.logoScale || 1;
   setVal('edHomeLogoScale', ls);
   setVal('edHomeLogoScaleHidden', ls);
-  document.getElementById('homeLogoScaleLabel').textContent = ls.toFixed(2);
+  setVal('edHomeLogoPosX', homeData.logoPositionX || 50);
+  setVal('edHomeLogoPosY', homeData.logoPositionY || 50);
   setVal('edHomeNewsBtnPl', homeData.newsButtonPl||'');
   setVal('edHomeNewsBtnEn', homeData.newsButtonEn||'');
   setVal('edHomeFooterPl', homeData.footerDescPl||'');
@@ -2279,14 +2293,41 @@ function updateHomeLogoPreview() {
   var img = document.getElementById('homeLogoPreviewImg');
   var ph = document.getElementById('homeLogoPlaceholder');
   var scale = parseFloat(getVal('edHomeLogoScaleHidden')) || 1;
-  if (url) { img.src = url; img.style.transform = 'scale(' + scale + ')'; img.style.display = 'block'; ph.style.display = 'none'; }
-  else { img.style.display = 'none'; ph.style.display = 'block'; }
+  var px = getVal('edHomeLogoPosX') || '50';
+  var py = getVal('edHomeLogoPosY') || '50';
+  if (url) {
+    img.src = url;
+    img.style.transform = 'scale(' + scale + ')';
+    img.style.objectPosition = px + '% ' + py + '%';
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    ph.style.display = 'block';
+  }
+  document.getElementById('homeLogoScaleLabel').textContent = scale.toFixed(2);
+  document.getElementById('homeLogoPosLabel').textContent = px + '% ' + py + '%';
 }
 
 function updateHomeLogoScale() {
   var scale = parseFloat(document.getElementById('edHomeLogoScale').value);
   document.getElementById('edHomeLogoScaleHidden').value = scale;
-  document.getElementById('homeLogoScaleLabel').textContent = scale.toFixed(2);
+  updateHomeLogoPreview();
+}
+
+function shiftHomeLogo(dx, dy) {
+  var px = parseInt(getVal('edHomeLogoPosX')) || 50;
+  var py = parseInt(getVal('edHomeLogoPosY')) || 50;
+  px = Math.max(0, Math.min(100, px + dx));
+  py = Math.max(0, Math.min(100, py + dy));
+  setVal('edHomeLogoPosX', px);
+  setVal('edHomeLogoPosY', py);
+  updateHomeLogoPreview();
+}
+
+function resetHomeLogoPos() {
+  setVal('edHomeLogoPosX', 50);
+  setVal('edHomeLogoPosY', 50);
   updateHomeLogoPreview();
 }
 
@@ -2485,6 +2526,8 @@ function publishHome() {
   homeData.logoImage = getVal('edHomeLogo');
   homeData.logoWidth = parseInt(getVal('edHomeLogoW')) || 1600;
   homeData.logoScale = parseFloat(getVal('edHomeLogoScaleHidden')) || 1;
+  homeData.logoPositionX = parseInt(getVal('edHomeLogoPosX')) || 50;
+  homeData.logoPositionY = parseInt(getVal('edHomeLogoPosY')) || 50;
   homeData.newsButtonPl = getVal('edHomeNewsBtnPl');
   homeData.newsButtonEn = getVal('edHomeNewsBtnEn');
   homeData.footerDescPl = getVal('edHomeFooterPl');

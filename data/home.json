@@ -3,6 +3,8 @@
   "logoWidth": 1600,
   "logoHeight": 1519,
   "logoScale": 1,
+  "logoPositionX": 50,
+  "logoPositionY": 50,
   "appShowcase": [
     {
       "name": "TorekMarketKiller",

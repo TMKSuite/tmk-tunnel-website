@@ -5050,7 +5050,11 @@
           if (d.logoImage) {
             var logoImg = document.querySelector('.logo-container img');
             var logoContainer = document.querySelector('.logo-container');
-            if (logoImg) { logoImg.src = d.logoImage; if (d.logoWidth) logoImg.width = d.logoWidth; }
+            if (logoImg) {
+              logoImg.src = d.logoImage;
+              if (d.logoWidth) logoImg.width = d.logoWidth;
+              if (d.logoPositionX !== undefined) logoImg.style.objectPosition = (d.logoPositionX||50) + '% ' + (d.logoPositionY||50) + '%';
+            }
             if (logoContainer && d.logoScale) logoContainer.style.setProperty('--logo-scale', d.logoScale);
           }
 
