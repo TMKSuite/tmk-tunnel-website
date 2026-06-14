@@ -808,6 +808,13 @@
           <div class="form-group"><label>Ścieżka do logo</label><input type="text" id="edHomeLogo" oninput="updateHomeLogoPreview()" placeholder="/assets/images/logo-hero.webp"></div>
           <div class="form-group"><label>Naturalna szerokość (px)</label><input type="number" id="edHomeLogoW" placeholder="1600"></div>
         </div>
+        <div style="margin-bottom:0.5rem;">
+          <div id="homeLogoDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:6px;padding:0.6rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;font-size:0.75rem;">
+            Upuść logo tutaj lub kliknij, aby wgrać nowe<br>
+            <input type="file" id="homeLogoFile" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleHomeLogoUpload(event)">
+          </div>
+          <div id="homeLogoUploadStatus" style="margin-top:0.3rem;font-size:0.75rem;color:rgba(230,237,243,0.3);"></div>
+        </div>
         <div style="margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center;">
           <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Zoom:</span>
           <code id="homeLogoScaleLabel" style="font-size:0.75rem;color:var(--accent);">1.00</code><span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">×</span>
@@ -2213,6 +2220,58 @@ function fillHomeForm() {
   renderHomeStats();
   renderHomeSocial();
   renderHomeTech();
+}
+
+// ── Home Logo Upload ──
+(function() {
+  var dz = document.getElementById('homeLogoDropZone');
+  var fi = document.getElementById('homeLogoFile');
+  if (!dz || !fi) return;
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.style.borderColor = 'var(--accent)'; });
+  dz.addEventListener('dragleave', function() { dz.style.borderColor = ''; });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); dz.style.borderColor = '';
+    if (e.dataTransfer.files.length) uploadHomeLogoFile(e.dataTransfer.files[0]);
+  });
+})();
+
+function handleHomeLogoUpload(e) { if (e.target.files.length) uploadHomeLogoFile(e.target.files[0]); }
+
+function uploadHomeLogoFile(file) {
+  if (file.size > 3 * 1024 * 1024) { alert('Plik za duży — max 3MB'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','webp'].indexOf(ext) === -1) { alert('Tylko PNG, JPG, WebP'); return; }
+  var statusEl = document.getElementById('homeLogoUploadStatus');
+  statusEl.textContent = 'Wysyłanie...';
+  statusEl.style.color = 'var(--accent)';
+  var reader = new FileReader();
+  reader.onload = function() {
+    var b64 = reader.result.split(',')[1];
+    var filename = 'logo_' + Date.now() + '.' + (ext==='jpeg'?'jpg':ext);
+    var path = 'assets/images/' + filename;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', WORKER_URL, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          if (resp.success) {
+            var url = '/' + path;
+            setVal('edHomeLogo', url);
+            if (homeData) homeData.logoImage = url;
+            updateHomeLogoPreview();
+            statusEl.textContent = 'Wysłano! URL: ' + url;
+            statusEl.style.color = 'var(--success)';
+          } else { statusEl.textContent = 'Błąd: ' + (resp.error||''); statusEl.style.color = 'var(--danger)'; }
+        } catch(e) { statusEl.textContent = 'Błąd parsowania'; statusEl.style.color = 'var(--danger)'; }
+      } else { statusEl.textContent = 'Błąd ' + xhr.status; statusEl.style.color = 'var(--danger)'; }
+    };
+    xhr.onerror = function() { statusEl.textContent = 'Błąd sieci'; statusEl.style.color = 'var(--danger)'; };
+    xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload logo: '+filename, secret: prompt('Hasło:','') }));
+  };
+  reader.readAsDataURL(file);
 }
 
 function updateHomeLogoPreview() {
