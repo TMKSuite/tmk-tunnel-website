@@ -39,15 +39,6 @@
       "descEn": "Algorithmic trading, data anomalies, trading strategies",
       "icon": "youtube",
       "targetBlank": true
-    },
-    {
-      "id": "c_mqe85gki",
-      "label": "Instagram",
-      "icon": "instagram",
-      "url": "https://instagram.com",
-      "descPl": "d",
-      "descEn": "f",
-      "targetBlank": true
     }
   ]
 }
