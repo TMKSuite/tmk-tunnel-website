@@ -4861,7 +4861,10 @@
           }
           if (d.photoImage) {
             var photoImg = document.querySelector('.about-photo');
-            if (photoImg) photoImg.src = d.photoImage;
+            if (photoImg) {
+              photoImg.src = d.photoImage;
+              if (d.photoPosition) photoImg.style.objectPosition = d.photoPosition;
+            }
           }
 
           // Re-aplikuj język — użyje nadpisanych wartości I18N
