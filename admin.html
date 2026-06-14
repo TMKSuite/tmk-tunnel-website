@@ -634,15 +634,54 @@ function saveAndPush(file, data, message, onSuccess, extraCallback) {
 
 function generateSitemapXml(articles) {
   var now = new Date().toISOString().split('T')[0];
-  var urls = [
-    '  <url><loc>https://tmk-tunnel.pl/</loc><lastmod>' + now + '</lastmod><priority>1.0</priority></url>',
-    '  <url><loc>https://tmk-tunnel.pl/en/</loc><lastmod>' + now + '</lastmod><priority>0.9</priority></url>'
-  ];
+  var lines = [];
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+  lines.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"');
+  lines.push('        xmlns:xhtml="http://www.w3.org/1999/xhtml">');
+
+  // Strona główna
+  lines.push('  <url><loc>https://tmk-tunnel.pl/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>');
+  lines.push('  <url><loc>https://tmk-tunnel.pl/en/</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>');
+
+  // Artykuły — dynamicznie
   articles.forEach(function(a) {
-    if (a.slugPl) urls.push('  <url><loc>https://tmk-tunnel.pl/artykul/' + a.slugPl + '</loc><lastmod>' + now + '</lastmod><priority>0.8</priority></url>');
-    if (a.slugEn) urls.push('  <url><loc>https://tmk-tunnel.pl/en/article/' + a.slugEn + '</loc><lastmod>' + now + '</lastmod><priority>0.8</priority></url>');
+    var plUrl = 'https://tmk-tunnel.pl/artykul/' + a.slugPl;
+    var enUrl = 'https://tmk-tunnel.pl/en/article/' + a.slugEn;
+    lines.push('  <url>');
+    lines.push('    <loc>' + plUrl + '</loc>');
+    lines.push('    <lastmod>' + now + '</lastmod>');
+    lines.push('    <changefreq>monthly</changefreq>');
+    lines.push('    <priority>0.8</priority>');
+    if (a.slugEn) {
+      lines.push('    <xhtml:link rel="alternate" hreflang="pl" href="' + plUrl + '"/>');
+      lines.push('    <xhtml:link rel="alternate" hreflang="en" href="' + enUrl + '"/>');
+    }
+    lines.push('  </url>');
+    lines.push('  <url>');
+    lines.push('    <loc>' + enUrl + '</loc>');
+    lines.push('    <lastmod>' + now + '</lastmod>');
+    lines.push('    <changefreq>monthly</changefreq>');
+    lines.push('    <priority>0.8</priority>');
+    lines.push('    <xhtml:link rel="alternate" hreflang="en" href="' + enUrl + '"/>');
+    lines.push('    <xhtml:link rel="alternate" hreflang="pl" href="' + plUrl + '"/>');
+    lines.push('  </url>');
   });
-  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.join('\n') + '\n</urlset>\n';
+
+  // Projekty — statyczne
+  var projects = [
+    {pl:'torek-market-killer', en:'torek-market-killer'},
+    {pl:'portfolio-command-center', en:'portfolio-command-center'},
+    {pl:'candle-comparison', en:'candle-comparison'},
+    {pl:'candles-downloader', en:'candles-downloader'},
+    {pl:'client-creator', en:'client-creator'}
+  ];
+  projects.forEach(function(p) {
+    lines.push('  <url><loc>https://tmk-tunnel.pl/projekt/' + p.pl + '</loc><lastmod>' + now + '</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>');
+    lines.push('  <url><loc>https://tmk-tunnel.pl/en/project/' + p.en + '</loc><lastmod>' + now + '</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>');
+  });
+
+  lines.push('</urlset>');
+  return lines.join('\n') + '\n';
 }
 
 function pushSitemap(workerSecret) {
