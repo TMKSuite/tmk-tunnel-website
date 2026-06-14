@@ -1,5 +1,10 @@
 /*
   X-Frame-Options: DENY
+  Content-Type: text/html; charset=utf-8
+
+/data/*
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=0
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
