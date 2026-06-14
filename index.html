@@ -4662,8 +4662,11 @@
     });
 
     // Przy starcie sprawdź URL — jeśli /artykul/... lub /projekt/... to otwórz od razu
-    if (window._openArticleFromUrl) window._openArticleFromUrl();
-    if (window._openProjectFromUrl) window._openProjectFromUrl();
+    // setTimeout daje czas na pełne załadowanie DOM + JSON (dla artykułów)
+    setTimeout(function() {
+      if (window._openArticleFromUrl) window._openArticleFromUrl();
+      if (window._openProjectFromUrl) window._openProjectFromUrl();
+    }, 200);
 
     // ── Tech stack: cykliczne podświetlanie ──
     (function() {
