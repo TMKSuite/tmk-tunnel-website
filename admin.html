@@ -904,6 +904,12 @@
           <div class="form-group"><label>Stopka aplikacji (EN)</label><input type="text" id="edHomeFooterEn" placeholder="Each built 100%..."></div>
         </div>
         <div style="margin-top:0.8rem;font-size:0.8rem;color:rgba(230,237,243,0.3);">Newsy (2 sloty) — edytujesz tak jak wcześniej, dane z <code>data/news.json</code></div>
+        <div style="margin-top:0.5rem;font-size:0.8rem;">
+          <label style="color:rgba(230,237,243,0.4);">Szybkie dodawanie z artykułu:</label>
+          <select id="homeNewsArticleSelect" onchange="fillNewsFromArticle()" style="width:100%;margin-top:0.2rem;padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.8rem;color-scheme:dark;">
+            <option value="">— wybierz artykuł —</option>
+          </select>
+        </div>
         <div id="homeNewsList" style="margin-top:0.5rem;"></div>
         <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="openHomeNewsEditor()">+ Nowy wpis</button>
         <div id="homeNewsEditorForm" style="display:none;margin-top:0.8rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
@@ -2246,7 +2252,36 @@ function loadHome() {
     fillHomeForm();
   });
   loadNews(); // wypełnia newsData globalnie
+  loadArticlesForHomeNews();
   setTimeout(function(){ renderHomeNews(); }, 500);
+}
+
+function loadArticlesForHomeNews() {
+  fetchJSON('/data/articles.json', function(data) {
+    var articles = Array.isArray(data) ? data : (data && data.articles) || [];
+    var sel = document.getElementById('homeNewsArticleSelect');
+    if (!sel) return;
+    while (sel.options.length > 1) sel.remove(1);
+    articles.forEach(function(a) {
+      var opt = document.createElement('option');
+      opt.value = JSON.stringify({ titlePl: a.titlePl||'', titleEn: a.titleEn||'', slugPl: a.slugPl||'', slugEn: a.slugEn||'', date: a.date||'' });
+      opt.textContent = (a.titlePl || a.id || '') + ' [' + (a.date||'') + ']';
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function fillNewsFromArticle() {
+  var sel = document.getElementById('homeNewsArticleSelect');
+  if (!sel || !sel.value) return;
+  try {
+    var a = JSON.parse(sel.value);
+    setVal('edHomeNewsDate', a.date || '');
+    setVal('edHomeNewsPl', 'Nowy artykuł: ' + (a.titlePl || ''));
+    setVal('edHomeNewsEn', 'New article: ' + (a.titleEn || ''));
+    setVal('edHomeNewsUrlPl', '/artykul/' + (a.slugPl || ''));
+    setVal('edHomeNewsUrlEn', '/en/article/' + (a.slugEn || ''));
+  } catch(e) {}
 }
 
 function getDefaultHome() {
