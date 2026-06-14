@@ -834,9 +834,9 @@
             <input type="hidden" id="edHomeLogoPosY" value="50">
           </div>
         </div>
-        <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);text-align:center;">
-          <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:100%;max-width:500px;height:auto;margin:0 auto;" onerror="this.style.display='none';">
-          <div id="homeLogoPlaceholder" style="display:none;padding:3rem;color:rgba(230,237,243,0.2);">Brak podglądu</div>
+        <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:auto;border:1px solid rgba(255,255,255,0.06);background:#000;display:flex;align-items:center;justify-content:center;min-height:300px;max-height:60vh;">
+          <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:auto;max-width:90%;max-height:55vh;height:auto;object-fit:contain;object-position:50% 50%;" onerror="this.style.display='none';">
+          <div id="homeLogoPlaceholder" style="display:none;padding:4rem;color:rgba(230,237,243,0.15);font-size:0.9rem;">Brak podglądu — wpisz URL lub wgraj logo</div>
         </div>
       </div>
     </details>
