@@ -4177,21 +4177,24 @@
       }
 
       // Helper: auto-format article body — plain text → HTML paragraphs
+      // Obsługuje prosty Markdown: ## nagłówek, Enter=nowa linia, 2xEnter=nowy akapit
       function formatArticleBody(bodyHtml) {
         if (!bodyHtml) return '';
-        // Jeśli już zawiera tagi HTML — zwróć jak jest
         if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(bodyHtml)) {
           return bodyHtml;
         }
-        // Plain text: zamień znaki nowej linii na akapity
-        var text = bodyHtml.replace(/\n{3,}/g, '\n\n');  // 3+ enterów → 2
-        var paragraphs = text.split('\n\n');
+        var text = bodyHtml.replace(/\n{3,}/g, '\n\n');
+        var blocks = text.split('\n\n');
         var html = '';
-        for (var i = 0; i < paragraphs.length; i++) {
-          var p = paragraphs[i].trim();
-          if (!p) continue;
-          p = p.replace(/\n/g, '<br>');  // pojedynczy enter → <br>
-          html += '<p>' + p + '</p>';
+        for (var i = 0; i < blocks.length; i++) {
+          var block = blocks[i].trim();
+          if (!block) continue;
+          // ## na początku → złoty nagłówek <h3>
+          if (/^##\s/.test(block)) {
+            html += '<h3>' + block.replace(/^##\s+/, '').replace(/\n/g, '<br>') + '</h3>';
+          } else {
+            html += '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+          }
         }
         return html || '<p>' + bodyHtml.replace(/\n/g, '<br>') + '</p>';
       }
