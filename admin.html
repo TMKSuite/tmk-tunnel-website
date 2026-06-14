@@ -856,8 +856,14 @@
     <!-- App Showcase -->
     <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
       <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Karuzela aplikacji (app showcase)</summary>
+      <div style="margin-top:0.6rem">
+        <label style="font-size:0.75rem;color:rgba(230,237,243,0.4);">Dodaj z istniejącego projektu:</label>
+        <select id="homeAppProjectSelect" onchange="addHomeAppFromProject()" style="width:100%;margin-top:0.2rem;padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.8rem;color-scheme:dark;">
+          <option value="">— wybierz projekt, żeby dodać do karuzeli —</option>
+        </select>
+      </div>
       <div style="margin-top:0.6rem" id="homeAppShowcase"></div>
-      <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="addHomeApp()">+ Dodaj aplikację</button>
+      <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="addHomeApp()">+ Dodaj ręcznie</button>
     </details>
 
     <!-- Statystyki -->
@@ -2240,7 +2246,43 @@ function loadHome() {
   });
   loadNews(); // wypełnia newsData globalnie
   loadArticlesForHomeNews();
+  loadProjectsForHomeShowcase();
   setTimeout(function(){ renderHomeNews(); }, 500);
+}
+
+function loadProjectsForHomeShowcase() {
+  fetchJSON('/data/projects.json', function(data) {
+    var projects = data && data.projects ? data.projects : [];
+    var sel = document.getElementById('homeAppProjectSelect');
+    if (!sel) return;
+    while (sel.options.length > 1) sel.remove(1);
+    projects.forEach(function(p) {
+      var opt = document.createElement('option');
+      opt.value = JSON.stringify({
+        name: p.name||'', iconImage: p.iconImage||'', projectSlugPl: p.slugPl||'', projectSlugEn: p.slugEn||'',
+        descPl: p.descPl||'', descEn: p.descEn||''
+      });
+      opt.textContent = (p.name||'') + ' [' + (p.group||'') + ']';
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function addHomeAppFromProject() {
+  var sel = document.getElementById('homeAppProjectSelect');
+  if (!sel || !sel.value) return;
+  try {
+    var p = JSON.parse(sel.value);
+    if (!homeData) homeData = getDefaultHome();
+    if (!homeData.appShowcase) homeData.appShowcase = [];
+    homeData.appShowcase.push({
+      name: p.name, iconImage: p.iconImage,
+      projectSlugPl: p.projectSlugPl, projectSlugEn: p.projectSlugEn,
+      descPl: p.descPl, descEn: p.descEn
+    });
+    renderHomeAppShowcase();
+    sel.value = ''; // reset
+  } catch(e) {}
 }
 
 function loadArticlesForHomeNews() {
