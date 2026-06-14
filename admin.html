@@ -400,12 +400,16 @@
     <div class="preview-box" id="aboutPreviewBox"></div>
 
     <!-- Banner upload -->
-    <details style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+    <details open style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
       <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Banner — obrazek tła sekcji</summary>
       <div style="margin-top:0.6rem">
         <div class="form-group">
           <label>Ścieżka do bannera (lub wgraj nowy)</label>
-          <input type="text" id="edAboutBanner" placeholder="/assets/images/banner4.png">
+          <input type="text" id="edAboutBanner" placeholder="/assets/images/banner4.png" oninput="updateAboutImagePreviews()">
+        </div>
+        <div id="aboutBannerLivePreview" style="margin-bottom:0.6rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);">
+          <img id="aboutBannerLiveImg" src="" alt="Podgląd bannera" style="display:block;width:100%;height:auto;min-height:40px;" onerror="this.style.display='none';">
+          <div id="aboutBannerLivePlaceholder" style="display:none;padding:2rem;text-align:center;color:rgba(230,237,243,0.2);font-size:0.8rem;">Brak podglądu — wpisz URL lub wgraj obrazek</div>
         </div>
         <div id="aboutBannerDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.2rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
           Upuść obrazek tutaj lub kliknij, aby wybrać nowy banner<br>
@@ -427,12 +431,16 @@
     </details>
 
     <!-- Photo upload -->
-    <details style="margin-bottom:1.5rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+    <details open style="margin-bottom:1.5rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
       <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Zdjęcie profilowe</summary>
       <div style="margin-top:0.6rem">
         <div class="form-group">
           <label>Ścieżka do zdjęcia (lub wgraj nowe)</label>
-          <input type="text" id="edAboutPhoto" placeholder="/assets/images/face.png">
+          <input type="text" id="edAboutPhoto" placeholder="/assets/images/face.png" oninput="updateAboutImagePreviews()">
+        </div>
+        <div id="aboutPhotoLivePreview" style="margin-bottom:0.6rem;display:flex;justify-content:center;">
+          <img id="aboutPhotoLiveImg" src="" alt="Podgląd zdjęcia" style="display:block;width:100px;height:100px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,168,67,0.4);" onerror="this.style.display='none';">
+          <div id="aboutPhotoLivePlaceholder" style="display:none;width:100px;height:100px;border-radius:50%;border:2px dashed rgba(255,255,255,0.12);align-items:center;justify-content:center;color:rgba(230,237,243,0.2);font-size:0.7rem;text-align:center;">Brak zdjęcia</div>
         </div>
         <div id="aboutPhotoDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.2rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
           Upuść obrazek tutaj lub kliknij, aby wybrać nowe zdjęcie<br>
@@ -1035,6 +1043,36 @@ function fillAboutForm(d) {
   setVal('edAboutRoleEn', d.roleEn || '');
   setVal('edAboutStoryPl', d.storyPl || '');
   setVal('edAboutStoryEn', d.storyEn || '');
+  updateAboutImagePreviews();
+}
+
+function updateAboutImagePreviews() {
+  var bannerUrl = getVal('edAboutBanner');
+  var photoUrl = getVal('edAboutPhoto');
+
+  // Banner preview
+  var bannerImg = document.getElementById('aboutBannerLiveImg');
+  var bannerPlaceholder = document.getElementById('aboutBannerLivePlaceholder');
+  if (bannerUrl) {
+    bannerImg.src = bannerUrl;
+    bannerImg.style.display = 'block';
+    bannerPlaceholder.style.display = 'none';
+  } else {
+    bannerImg.style.display = 'none';
+    bannerPlaceholder.style.display = 'block';
+  }
+
+  // Photo preview
+  var photoImg = document.getElementById('aboutPhotoLiveImg');
+  var photoPlaceholder = document.getElementById('aboutPhotoLivePlaceholder');
+  if (photoUrl) {
+    photoImg.src = photoUrl;
+    photoImg.style.display = 'block';
+    photoPlaceholder.style.display = 'none';
+  } else {
+    photoImg.style.display = 'none';
+    photoPlaceholder.style.display = 'flex';
+  }
 }
 
 function publishAbout() {
@@ -1160,6 +1198,7 @@ function copyAboutBannerUrl() {
   var url = document.getElementById('aboutBannerUrlInput').value;
   if (!url) return;
   setVal('edAboutBanner', url);
+  updateAboutImagePreviews();
   showAboutMsg('URL bannera wstawiony do pola!', 'ok');
 }
 
@@ -1247,6 +1286,7 @@ function copyAboutPhotoUrl() {
   var url = document.getElementById('aboutPhotoUrlInput').value;
   if (!url) return;
   setVal('edAboutPhoto', url);
+  updateAboutImagePreviews();
   showAboutMsg('URL zdjęcia wstawiony do pola!', 'ok');
 }
 
