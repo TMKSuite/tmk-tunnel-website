@@ -4845,10 +4845,28 @@
           if (!d) return;
 
           // Nadpisujemy I18N — switchLang automatycznie użyje tych wartości
+          // Smart format: jeśli story to plain text → konwertuj na HTML (Enter=br, 2×Enter=p, ##=h3)
+          function fmtAboutStory(text) {
+            if (!text) return '';
+            if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(text)) return text; // już HTML
+            var clean = text.replace(/\n{3,}/g, '\n\n');
+            var blocks = clean.split('\n\n');
+            var html = '';
+            for (var i = 0; i < blocks.length; i++) {
+              var block = blocks[i].trim();
+              if (!block) continue;
+              if (/^##\s/.test(block)) {
+                html += '<h3>' + block.replace(/^##\s+/, '').replace(/\n/g, '<br>') + '</h3>';
+              } else {
+                html += '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+              }
+            }
+            return html || '<p>' + clean.replace(/\n/g, '<br>') + '</p>';
+          }
           if (d.rolePl) I18N.pl['about.role'] = d.rolePl;
           if (d.roleEn) I18N.en['about.role'] = d.roleEn;
-          if (d.storyPl) I18N.pl['about.story'] = d.storyPl;
-          if (d.storyEn) I18N.en['about.story'] = d.storyEn;
+          if (d.storyPl) I18N.pl['about.story'] = fmtAboutStory(d.storyPl);
+          if (d.storyEn) I18N.en['about.story'] = fmtAboutStory(d.storyEn);
 
           // Aktualizujemy hardcodowane elementy HTML
           if (d.name) {

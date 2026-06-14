@@ -386,9 +386,10 @@
     <details style="margin-bottom:1.5rem;font-size:0.85rem;color:rgba(230,237,243,0.4);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
       <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Ściąga formatowania</summary>
       <div style="margin-top:0.6rem;line-height:1.8;">
-        <code style="color:var(--accent)">&lt;p&gt;...&lt;/p&gt;</code> — akapit z odstępem<br>
-        <code style="color:var(--accent)">&lt;br&gt;</code> — nowa linia bez odstępu<br>
-        Możesz też używać innych tagów HTML: <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;hr&gt;</code>
+        <code style="color:var(--accent)">## Tytuł sekcji</code> → złoty nagłówek<br>
+        <code style="color:var(--accent)">Enter</code> raz → nowa linia w tym samym akapicie<br>
+        <code style="color:var(--accent)">Enter Enter</code> (pusta linia) → nowy akapit z odstępem<br>
+        Możesz też używać tagów HTML: <code>&lt;p&gt;</code>, <code>&lt;h3&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;br&gt;</code>
       </div>
     </details>
 
@@ -1167,7 +1168,24 @@ function toggleAboutPreview() {
   var cb = document.getElementById('aboutPreviewCb');
   var box = document.getElementById('aboutPreviewBox');
   if (cb.checked) {
-    var body = getVal('edAboutStoryPl') || getVal('edAboutStoryEn') || '<p>Brak treści</p>';
+    var raw = getVal('edAboutStoryPl') || getVal('edAboutStoryEn') || 'Brak treści';
+    // Ten sam smart format co na stronie: jeśli nie ma tagów HTML → auto-konwersja
+    var body = raw;
+    if (!/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(raw)) {
+      var clean = raw.replace(/\n{3,}/g, '\n\n');
+      var blocks = clean.split('\n\n');
+      body = '';
+      for (var i = 0; i < blocks.length; i++) {
+        var block = blocks[i].trim();
+        if (!block) continue;
+        if (/^##\s/.test(block)) {
+          body += '<h3>' + escHtml(block.replace(/^##\s+/, '')).replace(/\n/g, '<br>') + '</h3>';
+        } else {
+          body += '<p>' + escHtml(block).replace(/\n/g, '<br>') + '</p>';
+        }
+      }
+      if (!body) body = '<p>' + escHtml(clean).replace(/\n/g, '<br>') + '</p>';
+    }
     var name = getVal('edAboutName') || '(bez imienia)';
     box.innerHTML = '<h2 style="font-family:Space Grotesk,sans-serif;color:var(--accent);margin-bottom:0.5rem">' + escHtml(name) + '</h2>'
       + '<p style="color:rgba(230,237,243,0.4);margin-bottom:1rem;font-size:0.9rem;">' + escHtml(getVal('edAboutRolePl') || '') + '</p>'
