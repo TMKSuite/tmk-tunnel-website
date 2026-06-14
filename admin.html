@@ -896,7 +896,7 @@
         </div>
         <div style="margin-top:0.8rem;font-size:0.8rem;color:rgba(230,237,243,0.3);">Newsy (2 sloty) — edytujesz tak jak wcześniej, dane z <code>data/news.json</code></div>
         <div id="homeNewsList" style="margin-top:0.5rem;"></div>
-        <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="openNewsEditor()">+ Nowy wpis</button>
+        <button class="btn btn-sm" style="margin-top:0.5rem;" onclick="openHomeNewsEditor()">+ Nowy wpis</button>
         <div id="homeNewsEditorForm" style="display:none;margin-top:0.8rem;padding:1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
           <h4 id="homeNewsEditorTitle" style="margin-bottom:0.8rem;">Nowy wpis</h4>
           <input type="hidden" id="edHomeNewsIdx" value="-1">
@@ -2533,6 +2533,14 @@ function renderHomeNews() {
       + '</div>';
   });
   el.innerHTML = html;
+}
+
+function openHomeNewsEditor() {
+  document.getElementById('homeNewsEditorForm').style.display = 'block';
+  document.getElementById('homeNewsEditorTitle').textContent = 'Nowy wpis';
+  document.getElementById('edHomeNewsIdx').value = '-1';
+  document.getElementById('homeNewsDeleteBtn').style.display = 'none';
+  ['edHomeNewsDate','edHomeNewsPl','edHomeNewsEn','edHomeNewsUrlPl','edHomeNewsUrlEn'].forEach(function(id){ setVal(id,''); });
 }
 
 function editHomeNews(idx) {
