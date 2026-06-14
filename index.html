@@ -5064,18 +5064,23 @@
             if (logoContainer && d.logoScale) logoContainer.style.setProperty('--logo-scale', d.logoScale);
           }
 
-          // App showcase
+          // App showcase — ikony jako linki do projektów
           if (d.appShowcase && d.appShowcase.length) {
             var showcase = document.getElementById('appShowcase');
             if (showcase) {
               var dots = document.getElementById('appDots');
               var html = '', dotsHtml = '';
               d.appShowcase.forEach(function(a,i){
-                html += '<div class="app-item'+(i===0?' active':'')+'" data-name="'+escHtmlAttr(a.name)+'" data-desc-pl="'+escHtmlAttr(a.descPl||'')+'" data-desc-en="'+escHtmlAttr(a.descEn||'')+'"><img src="'+escHtmlAttr(a.iconImage||'')+'" alt="'+escHtmlAttr(a.name)+'" width="36" height="36"></div>';
+                var slug = a.projectSlug || '';
+                var tag = slug ? 'a href="/projekt/'+escHtmlAttr(slug)+'"' : 'div';
+                var endTag = slug ? 'a' : 'div';
+                html += '<'+tag+' class="app-item'+(i===0?' active':'')+'" data-name="'+escHtmlAttr(a.name)+'" data-desc-pl="'+escHtmlAttr(a.descPl||'')+'" data-desc-en="'+escHtmlAttr(a.descEn||'')+'"><img src="'+escHtmlAttr(a.iconImage||'')+'" alt="'+escHtmlAttr(a.name)+'" width="36" height="36"></'+endTag+'>';
                 dotsHtml += '<span class="dot'+(i===0?' active':'')+'"></span>';
               });
               showcase.innerHTML = html;
               if (dots) dots.innerHTML = dotsHtml;
+              // Re-initialize carousel if needed
+              if (window._initAppShowcase) window._initAppShowcase();
             }
           }
 

@@ -2222,11 +2222,12 @@ function renderHomeAppShowcase() {
   apps.forEach(function(a,i){
     html += '<div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;">'
       + '<input value="' + escHtmlAttr(a.name||'') + '" onchange="homeData.appShowcase['+i+'].name=this.value" placeholder="Nazwa" style="width:130px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
-      + '<input value="' + escHtmlAttr(a.iconImage||'') + '" id="homeAppIconInput'+i+'" onchange="homeData.appShowcase['+i+'].iconImage=this.value" placeholder="Ikona" style="width:170px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
-      + '<button class="btn btn-sm" onclick="uploadHomeAppIconFor('+i+')" title="Wgraj ikonę dla tej aplikacji" style="padding:0.2rem 0.5rem;font-size:0.7rem;">📁</button>'
+      + '<input value="' + escHtmlAttr(a.iconImage||'') + '" id="homeAppIconInput'+i+'" onchange="homeData.appShowcase['+i+'].iconImage=this.value" placeholder="Ikona" style="width:140px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
+      + '<button class="btn btn-sm" onclick="uploadHomeAppIconFor('+i+')" title="Wgraj ikonę" style="padding:0.2rem 0.5rem;font-size:0.7rem;">📁</button>'
       + '<input type="file" id="homeAppIconFileFor'+i+'" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleHomeAppIconFor(event,'+i+')">'
-      + '<input value="' + escHtmlAttr(a.descPl||'') + '" onchange="homeData.appShowcase['+i+'].descPl=this.value" placeholder="Opis PL" style="flex:1;min-width:180px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
-      + '<input value="' + escHtmlAttr(a.descEn||'') + '" onchange="homeData.appShowcase['+i+'].descEn=this.value" placeholder="Opis EN" style="flex:1;min-width:180px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(a.projectSlug||'') + '" onchange="homeData.appShowcase['+i+'].projectSlug=this.value" placeholder="Slug projektu (link)" style="width:150px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--accent);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.75rem;font-family:monospace;">'
+      + '<input value="' + escHtmlAttr(a.descPl||'') + '" onchange="homeData.appShowcase['+i+'].descPl=this.value" placeholder="Opis PL" style="flex:1;min-width:140px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
+      + '<input value="' + escHtmlAttr(a.descEn||'') + '" onchange="homeData.appShowcase['+i+'].descEn=this.value" placeholder="Opis EN" style="flex:1;min-width:140px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text);padding:0.3rem 0.4rem;border-radius:4px;font-size:0.8rem;">'
       + '<button class="btn btn-sm btn-danger" onclick="homeData.appShowcase.splice('+i+',1);renderHomeAppShowcase()">✕</button>'
       + '</div>';
   });
@@ -2272,7 +2273,7 @@ function handleHomeAppIconFor(e, idx) {
 function addHomeApp() {
   if (!homeData) homeData = getDefaultHome();
   if (!homeData.appShowcase) homeData.appShowcase = [];
-  homeData.appShowcase.push({ name:'', iconImage:'', descPl:'', descEn:'' });
+  homeData.appShowcase.push({ name:'', iconImage:'', projectSlug:'', descPl:'', descEn:'' });
   renderHomeAppShowcase();
 }
 
