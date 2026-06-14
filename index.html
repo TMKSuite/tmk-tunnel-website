@@ -4961,24 +4961,23 @@
       if (doneGroup.length) newHtml += renderGroup(doneGroup, doneLabel);
       if (wipGroup.length) newHtml += renderGroup(wipGroup, wipLabel);
 
-      // Replace section content but keep the section element itself
-      // Clear all children after subheading (or after heading if no subheading)
-      var gridEls = section.querySelectorAll('.projects-grid, .group-heading');
-      gridEls.forEach(function(el){ el.remove(); });
-      // Append new group content
+      // Wyczyść WSZYSTKO poza heading i subheading (usuwa też hardcodowane kafelki)
       var afterHeading = section.querySelector('.section-subheading') || section.querySelector('.section-heading');
-      if (afterHeading) {
-        var container = document.createElement('div');
-        container.innerHTML = newHtml;
-        // Remove heading/subheading from newHtml (they're already in the DOM)
-        var newHeading = container.querySelector('.section-heading');
-        var newSub = container.querySelector('.section-subheading');
-        if (newHeading) newHeading.remove();
-        if (newSub) newSub.remove();
-        // Append remaining (groups + grids)
-        while (container.firstChild) {
-          afterHeading.parentNode.insertBefore(container.firstChild, afterHeading.nextSibling);
-        }
+      var el = afterHeading ? afterHeading.nextSibling : section.firstChild;
+      while (el) {
+        var next = el.nextSibling;
+        el.remove();
+        el = next;
+      }
+      // Dodaj nową treść (grupy + gridy)
+      var container = document.createElement('div');
+      container.innerHTML = newHtml;
+      var newHeading = container.querySelector('.section-heading');
+      var newSub = container.querySelector('.section-subheading');
+      if (newHeading) newHeading.remove();
+      if (newSub) newSub.remove();
+      while (container.firstChild) {
+        section.appendChild(container.firstChild);
       }
     }
 
