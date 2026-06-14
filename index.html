@@ -1536,6 +1536,11 @@
       margin-top: 1.5rem;
     }
 
+    .overlay-tags:empty {
+      display: none;
+      margin-top: 0;
+    }
+
     .overlay-tags .tag {
       font-family: 'Inter', sans-serif;
       font-size: 1.17rem;
@@ -3490,7 +3495,7 @@
         document.getElementById('ovMeta').innerHTML =
           '<div class="overlay-meta-item"><span>' + details.loc + '</span>' + (lang === 'en' ? 'Lines of code' : 'Linii kodu') + '</div>' +
           '<div class="overlay-meta-item"><span>' + details.env + '</span>' + (lang === 'en' ? 'Environment' : 'Środowisko') + '</div>';
-        document.getElementById('ovTags').innerHTML = details['tags' + (lang === 'en' ? 'En' : 'Pl')] || details.tagsPl || '';
+        document.getElementById('ovTags').innerHTML = '';
 
         // Screenshoty
         var shots = details.screenshots || [];
@@ -3991,8 +3996,7 @@
       return '<div class="overlay-meta-item"><span style="color:var(--color-text)">' + date + '</span>' + label + '</div>';
     }
     function getArticleTagsHtml() {
-      var articleLabel = currentLang === 'en' ? 'Article' : 'Artykuł';
-      return '<span class="tag">' + articleLabel + '</span><span class="tag">AI</span><span class="tag">Trading</span>';
+      return '';
     }
     function buildVoteButtonsHtml(articleId) {
       var current = getArticleVote(articleId);
@@ -4482,7 +4486,7 @@
         }
         document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(foundId);
         document.getElementById('ovMeta').innerHTML = '<div class="overlay-meta-item"><span style="color:var(--color-text)">' + date + '</span>Data publikacji</div>';
-        document.getElementById('ovTags').innerHTML = '<span class="tag">Artykuł</span><span class="tag">AI</span><span class="tag">Trading</span>';
+        document.getElementById('ovTags').innerHTML = '';
         document.getElementById('ovScreenshots').innerHTML = '';
 
         document.getElementById('appOverlay').classList.add('open');
