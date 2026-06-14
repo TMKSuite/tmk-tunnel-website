@@ -3544,9 +3544,15 @@
           var name = card.querySelector('.card-name').textContent;
           window._currentProjectName = name;
           var icon = card.querySelector('.card-icon img').getAttribute('src');
-          var badgeEl = card.querySelector('.card-badge');
-          var badgeText = badgeEl ? badgeEl.textContent : '';
-          var badgeClass = badgeEl ? badgeEl.className.replace('card-badge ', '') : '';
+          var badgeEls = card.querySelectorAll('.card-badge');
+          var badgeText = '';
+          var badgeClass = '';
+          if (badgeEls.length > 0) {
+            var texts = []; var classes = [];
+            badgeEls.forEach(function(b) { texts.push(b.textContent); classes.push(b.className.replace('card-badge ', '')); });
+            badgeText = texts.join(' · ');
+            badgeClass = classes[0]; // pierwszy badge określa styl
+          }
           var details = APP_DETAILS[name];
 
           // URL z sluga
