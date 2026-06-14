@@ -4649,23 +4649,62 @@
         });
       }
 
-      // Startuj gdy widoczne (Intersection Observer)
+      // Startuj animację gdy statystyki są widoczne
+      var statsAnimatedDesktop = false;
+      var statsAnimatedMobile = false;
+
+      function tryAnimateMobile() {
+        var sm = document.querySelector('.stats-mobile');
+        if (!sm || statsAnimatedMobile) return;
+        if (window.getComputedStyle(sm).display !== 'none') {
+          statsAnimatedMobile = true;
+          var mobileCounters = sm.querySelectorAll('.stats-mobile-value[data-count]');
+          mobileCounters.forEach(function(el, i) {
+            setTimeout(function() { animateCounter(el); }, i * 600 + 300);
+          });
+        }
+      }
+
+      function tryAnimateDesktop() {
+        var sb = document.querySelector('.stats-block');
+        if (!sb || statsAnimatedDesktop) return;
+        if (window.getComputedStyle(sb).display !== 'none') {
+          statsAnimatedDesktop = true;
+          var counters = sb.querySelectorAll('.stat-value[data-count]');
+          counters.forEach(function(el, i) {
+            setTimeout(function() { animateCounter(el); }, i * 600 + 1100);
+          });
+        }
+      }
+
+      // Obserwuj oba — desktop i mobile
       var observer = new IntersectionObserver(function(entries) {
         if (entries[0].isIntersecting) {
-          startAnimation();
+          tryAnimateDesktop();
+          tryAnimateMobile();
           observer.disconnect();
         }
-      }, { threshold: 0.5 });
+      }, { threshold: 0.3 });
 
       var statsBlock = document.querySelector('.stats-block');
       var statsMobile = document.querySelector('.stats-mobile');
+
+      // Obserwuj ten który jest widoczny na starcie
       if (statsBlock && window.getComputedStyle(statsBlock).display !== 'none') {
         observer.observe(statsBlock);
-      } else if (statsMobile) {
+      } else if (statsMobile && window.getComputedStyle(statsMobile).display !== 'none') {
         observer.observe(statsMobile);
       } else {
-        startAnimation(); // fallback
+        // Żaden nie widoczny — obserwuj oba
+        if (statsBlock) observer.observe(statsBlock);
+        if (statsMobile) observer.observe(statsMobile);
       }
+
+      // Reakcja na resize — gdy mobile stats się pojawią, odpal animację
+      var mobileMql = window.matchMedia('(max-width: 999px)');
+      mobileMql.addEventListener('change', function(e) {
+        if (e.matches) tryAnimateMobile();
+      });
     })();
 
     // Logo w navbarze — scroll na górę + usuń podświetlenie zakładek
