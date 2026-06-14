@@ -14,6 +14,22 @@
   <title>TMK Suite — AI-powered architecture</title>
   <link rel="icon" type="image/x-icon" href="/assets/images/tmk-favicon.ico">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  <link rel="canonical" href="https://tmk-tunnel.pl/" id="canonicalLink">
+  <script type="application/ld+json" id="siteJsonLd">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "TMK Suite",
+    "url": "https://tmk-tunnel.pl",
+    "description": "AI-powered architecture for algorithmic trading — platforma, symulator, komparator i downloader danych.",
+    "author": {
+      "@type": "Person",
+      "name": "Krystian",
+      "url": "https://tmk-tunnel.pl/#about"
+    }
+  }
+  </script>
+  <script type="application/ld+json" id="articleJsonLd"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -3225,8 +3241,9 @@
           if (window.history.replaceState) {
             window.history.replaceState(null, '', basePath + restoreHash);
           }
-          // Przywróć domyślny title i description
+          // Przywróć domyślny title, description, canonical i JSON-LD
           document.title = defaultTitle;
+          clearArticleSeo();
           var metaDesc = document.querySelector('meta[name="description"]');
           if (metaDesc) metaDesc.setAttribute('content', defaultDesc);
         }
@@ -4152,9 +4169,8 @@
               window.history.pushState({type: 'article', id: articleId, lang: currentLang}, '', articleUrl);
             }
 
-            document.title = title + ' — TMK Suite';
-            var metaDesc = document.querySelector('meta[name="description"]');
-            if (metaDesc) metaDesc.setAttribute('content', excerpt);
+            var articleUrlFull = window.location.origin + articleUrl;
+            setArticleSeo(title, excerpt, articleUrlFull, date);
 
             document.getElementById('ovIcon').src = '/assets/images/face.png';
             document.getElementById('ovIcon').alt = 'Artykuł';
@@ -4186,6 +4202,40 @@
 
       // Helper: auto-format article body — plain text → HTML paragraphs
       // Obsługuje prosty Markdown: ## nagłówek, Enter=nowa linia, 2xEnter=nowy akapit
+      // Ustaw meta SEO dla artykułu: canonical, JSON-LD, title, description
+      function setArticleSeo(title, excerpt, url, date) {
+        document.title = title + ' — TMK Suite';
+        // Canonical
+        var canonical = document.getElementById('canonicalLink');
+        if (canonical) canonical.href = url;
+        // Meta description
+        var metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc && excerpt) metaDesc.setAttribute('content', excerpt);
+        // JSON-LD Article
+        var jsonLd = document.getElementById('articleJsonLd');
+        if (jsonLd && date) {
+          jsonLd.textContent = JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            'headline': title,
+            'description': excerpt,
+            'datePublished': date.split('.').reverse().join('-'),
+            'author': { '@type': 'Person', 'name': 'Krystian' },
+            'publisher': { '@type': 'Organization', 'name': 'TMK Suite' },
+            'url': url,
+            'mainEntityOfPage': { '@type': 'WebPage', '@id': url }
+          });
+        }
+        // Clear when overlay closed — handled in closeOverlay
+      }
+
+      function clearArticleSeo() {
+        var canonical = document.getElementById('canonicalLink');
+        if (canonical) canonical.href = 'https://tmk-tunnel.pl/';
+        var jsonLd = document.getElementById('articleJsonLd');
+        if (jsonLd) jsonLd.textContent = '';
+      }
+
       function formatArticleBody(bodyHtml) {
         if (!bodyHtml) return '';
         if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(bodyHtml)) {
