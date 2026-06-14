@@ -5059,7 +5059,9 @@
           // Logo
           if (d.logoImage) {
             var logoImg = document.querySelector('.logo-container img');
+            var logoContainer = document.querySelector('.logo-container');
             if (logoImg) { logoImg.src = d.logoImage; if (d.logoWidth) logoImg.width = d.logoWidth; }
+            if (logoContainer && d.logoScale) logoContainer.style.setProperty('--logo-scale', d.logoScale);
           }
 
           // App showcase

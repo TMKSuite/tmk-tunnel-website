@@ -2,6 +2,7 @@
   "logoImage": "/assets/images/logo-hero.webp",
   "logoWidth": 1600,
   "logoHeight": 1519,
+  "logoScale": 1,
   "appShowcase": [
     {
       "name": "TorekMarketKiller",
