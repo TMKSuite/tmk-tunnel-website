@@ -4311,13 +4311,24 @@
         xhrA.onload = function() {
           if (xhrA.status === 200) {
             try {
-              var arr = JSON.parse(xhrA.responseText);
+              var raw = JSON.parse(xhrA.responseText);
+              var arr = Array.isArray(raw) ? raw : (raw.articles || []);
               var obj = {};
               arr.forEach(function(a) { obj[a.id] = a; });
               // Merge into existing ARTICLE_CONTENT (adds new, overwrites existing)
               for (var k in obj) { ARTICLE_CONTENT[k] = obj[k]; }
               window.ARTICLE_CONTENT = ARTICLE_CONTENT;
               loadedArticles = true;
+              // Nadpisz heading/subheading jeśli są w meta
+              if (!Array.isArray(raw) && raw.headingPl) I18N.pl['articles.heading'] = raw.headingPl;
+              if (!Array.isArray(raw) && raw.headingEn) I18N.en['articles.heading'] = raw.headingEn;
+              if (!Array.isArray(raw) && raw.subheadingPl) I18N.pl['articles.subheading'] = raw.subheadingPl;
+              if (!Array.isArray(raw) && raw.subheadingEn) I18N.en['articles.subheading'] = raw.subheadingEn;
+              // Re-aplikuj język dla heading/subheading
+              var headingEl = document.querySelector('[data-i18n="articles.heading"]');
+              if (headingEl && I18N[currentLang] && I18N[currentLang]['articles.heading']) headingEl.innerHTML = I18N[currentLang]['articles.heading'];
+              var subheadingEl = document.querySelector('[data-i18n="articles.subheading"]');
+              if (subheadingEl && I18N[currentLang] && I18N[currentLang]['articles.subheading']) subheadingEl.innerHTML = I18N[currentLang]['articles.subheading'];
               // Odśwież kafelki
               if (window._renderArticleCards) window._renderArticleCards();
             } catch(e) { console.warn('Articles JSON parse error, using hardcoded'); }
@@ -4863,6 +4874,8 @@
             }
             return html || '<p>' + clean.replace(/\n/g, '<br>') + '</p>';
           }
+          if (d.headingPl) I18N.pl['nav.omnie'] = d.headingPl;
+          if (d.headingEn) I18N.en['nav.omnie'] = d.headingEn;
           if (d.rolePl) I18N.pl['about.role'] = d.rolePl;
           if (d.roleEn) I18N.en['about.role'] = d.roleEn;
           if (d.storyPl) I18N.pl['about.story'] = fmtAboutStory(d.storyPl);

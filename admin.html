@@ -207,6 +207,20 @@
 
   <!-- ARTICLES TAB -->
   <div id="tab-articles">
+    <!-- Edycja nagłówka i podtytułu -->
+    <details style="margin-bottom:1rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Nagłówek i podtytuł sekcji</summary>
+      <div style="margin-top:0.6rem" class="form-row">
+        <div class="form-group"><label>Nagłówek (PL)</label><input type="text" id="edArticlesHeadingPl" placeholder="Artykuły"></div>
+        <div class="form-group"><label>Nagłówek (EN)</label><input type="text" id="edArticlesHeadingEn" placeholder="Articles"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Podtytuł (PL)</label><input type="text" id="edArticlesSubheadingPl" placeholder="Jedyna sekcja..."></div>
+        <div class="form-group"><label>Podtytuł (EN)</label><input type="text" id="edArticlesSubheadingEn" placeholder="The only section..."></div>
+      </div>
+      <div style="margin-top:0.5rem;"><button class="btn btn-sm" onclick="publishArticlesMeta()">Zapisz nagłówek</button></div>
+    </details>
+
     <div class="add-bar">
       <button class="btn" onclick="openArticleEditor()">+ Nowy artykuł</button>
       <span style="margin-left:1rem;font-size:0.8rem;color:rgba(230,237,243,0.3)">Zmiany publikowane są na GitHub → auto-deploy na Cloudflare (~30s)</span>
@@ -359,6 +373,19 @@
     </div>
 
     <div id="aboutMsgBox"></div>
+
+    <!-- Edycja nagłówka i podtytułu -->
+    <details style="margin-bottom:1rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Nagłówek i podtytuł sekcji</summary>
+      <div style="margin-top:0.6rem" class="form-row">
+        <div class="form-group"><label>Nagłówek (PL) — nazwa zakładki w menu</label><input type="text" id="edAboutHeadingPl" placeholder="O mnie"></div>
+        <div class="form-group"><label>Nagłówek (EN)</label><input type="text" id="edAboutHeadingEn" placeholder="About me"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Podtytuł (PL)</label><input type="text" id="edAboutSubheadingPl" placeholder="Opcjonalny podtytuł..."></div>
+        <div class="form-group"><label>Podtytuł (EN)</label><input type="text" id="edAboutSubheadingEn" placeholder="Optional subheading..."></div>
+      </div>
+    </details>
 
     <div class="form-group">
       <label>Imię i nazwisko</label>
@@ -663,10 +690,46 @@ function fetchJSON(path, cb) {
   xhr.send();
 }
 
+var articlesMeta = null; // { headingPl, headingEn, subheadingPl, subheadingEn }
+
 function loadArticles() {
   fetchJSON('/data/articles.json', function(data) {
-    articlesData = data || [];
+    if (Array.isArray(data)) {
+      // Stary format — sama tablica
+      articlesData = data;
+      articlesMeta = null;
+    } else if (data && data.articles) {
+      // Nowy format — obiekt z meta
+      articlesMeta = { headingPl: data.headingPl, headingEn: data.headingEn, subheadingPl: data.subheadingPl, subheadingEn: data.subheadingEn };
+      articlesData = data.articles;
+      fillArticlesMeta();
+    } else {
+      articlesData = [];
+      articlesMeta = null;
+    }
     renderArticles();
+  });
+}
+
+function fillArticlesMeta() {
+  if (!articlesMeta) return;
+  setVal('edArticlesHeadingPl', articlesMeta.headingPl || '');
+  setVal('edArticlesHeadingEn', articlesMeta.headingEn || '');
+  setVal('edArticlesSubheadingPl', articlesMeta.subheadingPl || '');
+  setVal('edArticlesSubheadingEn', articlesMeta.subheadingEn || '');
+}
+
+function publishArticlesMeta() {
+  articlesMeta = {
+    headingPl: getVal('edArticlesHeadingPl'),
+    headingEn: getVal('edArticlesHeadingEn'),
+    subheadingPl: getVal('edArticlesSubheadingPl'),
+    subheadingEn: getVal('edArticlesSubheadingEn')
+  };
+  var data = articlesMeta;
+  data.articles = articlesData;
+  saveAndPush('data/articles.json', data, 'Aktualizacja nagłówka ARTYKUŁY', function() {
+    showMsg('Nagłówek zapisany!', 'ok');
   });
 }
 
@@ -741,7 +804,8 @@ function cancelEdit() {
 function deleteArticle(idx) {
   if (!confirm('Na pewno usunąć ten artykuł?')) return;
   articlesData.splice(idx, 1);
-  saveAndPush('data/articles.json', articlesData, 'Usuń artykuł', function() {
+  var data = articlesMeta ? Object.assign({}, articlesMeta, {articles: articlesData}) : articlesData;
+  saveAndPush('data/articles.json', data, 'Usuń artykuł', function() {
     cancelEdit();
     renderArticles();
   });
@@ -972,7 +1036,8 @@ function publishArticle() {
   if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
   showMsg('Publikowanie artykułu + sitemap...', 'info');
 
-  saveAndPush('data/articles.json', articlesData, msg, function() {
+  var articlesPayload = articlesMeta ? Object.assign({}, articlesMeta, {articles: articlesData}) : articlesData;
+  saveAndPush('data/articles.json', articlesPayload, msg, function() {
     cancelEdit();
     renderArticles();
   }, function() {
@@ -1153,6 +1218,10 @@ function getDefaultAbout() {
 }
 
 function fillAboutForm(d) {
+  setVal('edAboutHeadingPl', d.headingPl || '');
+  setVal('edAboutHeadingEn', d.headingEn || '');
+  setVal('edAboutSubheadingPl', d.subheadingPl || '');
+  setVal('edAboutSubheadingEn', d.subheadingEn || '');
   setVal('edAboutName', d.name || '');
   setVal('edAboutBanner', d.bannerImage || '');
   setVal('edAboutPhoto', d.photoImage || '');
@@ -1233,6 +1302,10 @@ function resetPhotoPos() {
 
 function publishAbout() {
   var data = {
+    headingPl: getVal('edAboutHeadingPl'),
+    headingEn: getVal('edAboutHeadingEn'),
+    subheadingPl: getVal('edAboutSubheadingPl'),
+    subheadingEn: getVal('edAboutSubheadingEn'),
     name: getVal('edAboutName'),
     bannerImage: getVal('edAboutBanner'),
     photoImage: getVal('edAboutPhoto'),
