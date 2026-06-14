@@ -790,12 +790,17 @@
       <div style="margin-top:0.6rem;">
         <div style="margin-bottom:0.3rem;display:flex;gap:0.5rem;">
           <button class="btn btn-sm" onclick="document.getElementById('homeIframe').src=document.getElementById('homeIframe').src">⟳ Odśwież</button>
+          <button class="btn btn-sm" onclick="toggleFullPreview()" title="Pełnoekranowy podgląd 1920×1080">🔍 Full HD</button>
           <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Po publikacji zmian odśwież, żeby zobaczyć efekt (~30s na wdrożenie)</span>
         </div>
         <div style="border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);background:#000;max-height:85vh;">
           <div style="width:100%;overflow-x:auto;">
             <iframe id="homeIframe" src="https://tmk-tunnel.pl" style="width:1100px;height:750px;border:none;display:block;margin:0 auto;" loading="lazy"></iframe>
           </div>
+        </div>
+        <div id="fullPreviewOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);padding:1rem;">
+          <button onclick="toggleFullPreview()" style="position:absolute;top:1rem;right:1rem;background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:1.5rem;cursor:pointer;width:40px;height:40px;border-radius:50%;z-index:1;">✕</button>
+          <iframe id="fullPreviewIframe" src="" style="width:1920px;height:1080px;border:none;display:block;margin:0 auto;transform-origin:top center;" loading="lazy"></iframe>
         </div>
       </div>
     </details>
@@ -2334,6 +2339,24 @@ function shiftHomeLogo(dx, dy) {
   setVal('edHomeLogoPosX', px);
   setVal('edHomeLogoPosY', py);
   updateHomeLogoPreview();
+}
+
+function toggleFullPreview() {
+  var overlay = document.getElementById('fullPreviewOverlay');
+  var iframe = document.getElementById('fullPreviewIframe');
+  if (overlay.style.display === 'none' || !overlay.style.display) {
+    iframe.src = 'https://tmk-tunnel.pl';
+    // Scale 1920x1080 to fit screen
+    var scaleX = (window.innerWidth - 40) / 1920;
+    var scaleY = (window.innerHeight - 80) / 1080;
+    var scale = Math.min(scaleX, scaleY, 1);
+    iframe.style.transform = 'scale(' + scale + ')';
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  } else {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 }
 
 function resetHomeLogoPos() {
