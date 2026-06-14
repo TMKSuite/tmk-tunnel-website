@@ -7,7 +7,7 @@
     {
       "name": "TorekMarketKiller",
       "iconImage": "/assets/images/icon-tmk.png",
-      "projectSlug": "torek-market-killer",
+      "projectSlugPl": "torek-market-killer", "projectSlugEn": "torek-market-killer",
       "descPl": "Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie.",
       "descEn": "Trading automation platform TradingView → MT5. Multi-terminal, local and remote."
     },

@@ -5061,8 +5061,11 @@
               var dots = document.getElementById('appDots');
               var html = '', dotsHtml = '';
               d.appShowcase.forEach(function(a,i){
-                var slug = a.projectSlug || '';
-                var tag = slug ? 'a href="/projekt/'+escHtmlAttr(slug)+'"' : 'div';
+                var slugPl = a.projectSlugPl || a.projectSlug || '';
+                var slugEn = a.projectSlugEn || a.projectSlug || '';
+                var slug = currentLang === 'en' ? slugEn : slugPl;
+                var prefix = currentLang === 'en' ? '/en/project/' : '/projekt/';
+                var tag = slug ? 'a href="'+prefix+escHtmlAttr(slug)+'"' : 'div';
                 var endTag = slug ? 'a' : 'div';
                 html += '<'+tag+' class="app-item'+(i===0?' active':'')+'" data-name="'+escHtmlAttr(a.name)+'" data-desc-pl="'+escHtmlAttr(a.descPl||'')+'" data-desc-en="'+escHtmlAttr(a.descEn||'')+'"><img src="'+escHtmlAttr(a.iconImage||'')+'" alt="'+escHtmlAttr(a.name)+'" width="36" height="36"></'+endTag+'>';
                 dotsHtml += '<span class="dot'+(i===0?' active':'')+'"></span>';
