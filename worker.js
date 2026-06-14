@@ -84,8 +84,8 @@ export default {
       if (!token || token.length < 10) {
         throw new Error('GITHUB_TOKEN is missing or too short. Check Worker environment variables.');
       }
-      if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
-        throw new Error('GITHUB_TOKEN does not look like a valid PAT (should start with ghp_ or github_pat_). Got: ' + token.substring(0, 4) + '...');
+      if (!token.startsWith('ghp_') && !token.startsWith('github_pat_') && !token.startsWith('gho_')) {
+        throw new Error('GITHUB_TOKEN does not look like a valid PAT (should start with ghp_, github_pat_, or gho_). Got: ' + token.substring(0, 4) + '...');
       }
 
       // ── Pobierz aktualny SHA pliku (jeśli istnieje) ──
