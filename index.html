@@ -3381,7 +3381,7 @@
             '<li><strong>Auto-trigger aktualizacji</strong> — POST na <code>/api/update-trigger</code> tunelu klienta. Jeśli platforma działa, od razu sprawdza i pobiera nową wersję. Jeśli nie — sprawdzi przy następnym uruchomieniu.</li>' +
             '</ul>' +
             '<h3>Rola w ekosystemie TMK</h3>' +
-            '<p>ClientCreator to narzędzie do dystrybucji platformy. Zamiast ręcznie kopiować pliki i konfigurować tunele dla każdego klienta, cały proces jest zautomatyzowany: jedna komenda → spersonalizowany .exe → GitHub Releases → klient dostaje powiadomienie o aktualizacji. To jest warstwa "devops" całego systemu — most między kodem źródłowym a działającą instancją u klienta.</p>',
+            '<p>ClientCreator to narzędzie do dystrybucji platformy. Zamiast ręcznie kopiować pliki i konfigurować tunele dla każdej instancji platformy, cały proces jest zautomatyzowany: jedna komenda → spersonalizowany .exe → GitHub Releases → instancja dostaje powiadomienie o aktualizacji. To jest warstwa "devops" całego systemu — most między kodem źródłowym a działającą instancją.</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>ClientCreator is a CLI tool for building personalized TMK platform clients. It reads the main <code>TorekMarketKiller.py</code> file, replaces generic placeholders with client-specific tunnel data (Cloudflare Tunnel ID, subdomain, JSON keys), compiles via PyInstaller into a <code>.exe</code>, and uploads to GitHub Releases. Each client gets their own <code>latest-&lt;subdomain&gt;</code> release with their own auto-update channel.</p>' +
             '<p><strong>GUI development is in progress.</strong> The app currently runs only from the command line — you enter a subdomain, build the .exe, decide whether to upload to GitHub. A full graphical interface (PyQt6) is being built, visually consistent with the rest of the TMK tools.</p>' +
@@ -3401,7 +3401,7 @@
             '<li><strong>Auto-update trigger</strong> — POST to the client\'s tunnel <code>/api/update-trigger</code>. If the platform is running, it immediately checks for and downloads the new version. If not — it will check on next startup.</li>' +
             '</ul>' +
             '<h3>Role in the TMK ecosystem</h3>' +
-            '<p>ClientCreator is the distribution layer for the platform. Instead of manually copying files and configuring tunnels for each client, the entire process is automated: one command → personalized .exe → GitHub Releases → client gets an update notification. It\'s the "devops" layer of the system — the bridge between source code and a running instance at the client\'s side.</p>',
+            '<p>ClientCreator is the distribution layer for the platform. Instead of manually copying files and configuring tunnels for each platform instance, the entire process is automated: one command → personalized .exe → GitHub Releases → instance gets an update notification. It\'s the "devops" layer of the system — the bridge between source code and a running instance.</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyInstaller</span><span class="tag">Cloudflare</span><span class="tag">GitHub API</span><span class="tag">CLI</span><span class="tag">DevOps</span><span class="tag">Auto-update</span>'
         },
