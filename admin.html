@@ -2042,7 +2042,6 @@ function copyProjectUrl(idx) {
   if (!url) return;
   navigator.clipboard.writeText(url).then(function(){ showProjMsg('URL skopiowany! ' + url, 'ok'); });
 }
-}
 
 function openProjectEditor() {
   document.getElementById('projectEditorForm').style.display = 'block';
