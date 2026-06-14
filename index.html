@@ -4527,10 +4527,12 @@
         if (!card) return false;
 
         window._currentArticleId = foundId;
-        var title = card.querySelector('.article-title').textContent;
-        var date = card.querySelector('.article-date').textContent;
-        var excerpt = card.querySelector('.article-excerpt').textContent;
         var content = ARTICLE_CONTENT[foundId];
+        var titleKey = currentLang === 'en' ? 'titleEn' : 'titlePl';
+        var excerptKey = currentLang === 'en' ? 'excerptEn' : 'excerptPl';
+        var title = (content && content[titleKey]) || (card.querySelector('.article-title') ? card.querySelector('.article-title').textContent : '');
+        var date = (content && content.date) || (card.querySelector('.article-date') ? card.querySelector('.article-date').textContent : '');
+        var excerpt = (content && content[excerptKey]) || (card.querySelector('.article-excerpt') ? card.querySelector('.article-excerpt').textContent : '');
 
         // Ustaw URL poprawnie (bez pushState, bo już tu jesteśmy)
         if (window.history.replaceState) {
