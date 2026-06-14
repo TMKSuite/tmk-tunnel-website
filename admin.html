@@ -784,8 +784,8 @@
           <button class="btn btn-sm" onclick="document.getElementById('homeIframe').src=document.getElementById('homeIframe').src">⟳ Odśwież</button>
           <span style="font-size:0.7rem;color:rgba(230,237,243,0.3);">Po publikacji zmian odśwież, żeby zobaczyć efekt (~30s na wdrożenie)</span>
         </div>
-        <div style="border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);background:#000;">
-          <iframe id="homeIframe" src="https://tmk-tunnel.pl" style="width:100%;height:500px;border:none;display:block;" loading="lazy"></iframe>
+        <div style="border-radius:8px;overflow:auto;border:1px solid rgba(255,255,255,0.08);background:#000;max-height:80vh;">
+          <iframe id="homeIframe" src="https://tmk-tunnel.pl" style="width:1200px;min-width:1200px;height:750px;border:none;display:block;" loading="lazy"></iframe>
         </div>
       </div>
     </details>
