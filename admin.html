@@ -802,7 +802,7 @@
 
     <!-- Logo -->
     <details open style="margin-bottom:1.2rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
-      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Logo hero</summary>
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Logo hero <button class="btn btn-sm" onclick="toggleFullLogoPreview()" style="margin-left:0.8rem;font-size:0.7rem;" title="Pokaż/ukryj podgląd w pełnej szerokości">🔍 Full preview</button></summary>
       <div style="margin-top:0.6rem">
         <div class="form-row">
           <div class="form-group"><label>Ścieżka do logo</label><input type="text" id="edHomeLogo" oninput="updateHomeLogoPreview()" placeholder="/assets/images/logo-hero.webp"></div>
@@ -835,10 +835,16 @@
           </div>
         </div>
         <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:#000;">
-          <div style="width:100%;max-width:960px;aspect-ratio:16/9;margin:0 auto;display:flex;align-items:center;justify-content:center;position:relative;">
+          <div id="homeLogoPreviewInner" style="width:100%;max-width:960px;aspect-ratio:16/9;margin:0 auto;display:flex;align-items:center;justify-content:center;position:relative;">
             <span style="position:absolute;top:0.4rem;right:0.6rem;font-size:0.55rem;color:rgba(255,255,255,0.12);z-index:1;">Full HD (½ skala)</span>
             <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:auto;max-width:70%;max-height:70%;height:auto;object-fit:contain;object-position:50% 50%;" onerror="this.style.display='none';">
             <div id="homeLogoPlaceholder" style="display:none;color:rgba(230,237,243,0.12);font-size:0.9rem;">Brak podglądu</div>
+          </div>
+        </div>
+        <div id="homeLogoFullPreview" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);padding:2rem;">
+          <button onclick="toggleFullLogoPreview()" style="position:absolute;top:1rem;right:1rem;background:none;border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:1.5rem;cursor:pointer;width:40px;height:40px;border-radius:50%;z-index:1;">✕</button>
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <img id="homeLogoFullPreviewImg" src="" alt="Logo full preview" style="display:block;max-width:90%;max-height:90%;object-fit:contain;object-position:50% 50%;">
           </div>
         </div>
       </div>
@@ -2334,6 +2340,29 @@ function resetHomeLogoPos() {
   setVal('edHomeLogoPosX', 50);
   setVal('edHomeLogoPosY', 50);
   updateHomeLogoPreview();
+}
+
+function toggleFullLogoPreview() {
+  var full = document.getElementById('homeLogoFullPreview');
+  var img = document.getElementById('homeLogoFullPreviewImg');
+  var src = getVal('edHomeLogo') || (homeData && homeData.logoImage) || '';
+  if (full.style.display === 'none' || !full.style.display) {
+    if (!src) return;
+    var scale = parseFloat(getVal('edHomeLogoScaleHidden')) || 1;
+    var px = getVal('edHomeLogoPosX') || '50';
+    var py = getVal('edHomeLogoPosY') || '50';
+    img.src = src;
+    // Apply scale as percentage of viewport
+    var base = 40 * scale;
+    img.style.maxWidth = base + '%';
+    img.style.maxHeight = base + '%';
+    img.style.objectPosition = px + '% ' + py + '%';
+    full.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  } else {
+    full.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 }
 
 // ── App Showcase ──
