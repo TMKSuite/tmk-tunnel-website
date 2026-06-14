@@ -767,26 +767,12 @@
     }
 
     @keyframes shimmerSweep {
-      0%   { background-position: -200% center; }
-      100% { background-position: 200% center; }
+      0%   { text-shadow: -300px 0 25px rgba(255,255,255,0.20), 0 0 40px rgba(255,255,255,0.10), 0 0 80px rgba(255,255,255,0.04); }
+      100% { text-shadow:  600px 0 25px rgba(255,255,255,0.20), 0 0 40px rgba(255,255,255,0.10), 0 0 80px rgba(255,255,255,0.04); }
     }
 
     .section-subheading.shimmer {
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        transparent 35%,
-        rgba(255, 255, 255, 0.25) 48%,
-        rgba(255, 255, 255, 0.55) 50%,
-        rgba(255, 255, 255, 0.25) 52%,
-        transparent 65%,
-        transparent 100%
-      );
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmerSweep 4s ease-in-out infinite;
+      animation: shimmerSweep 3s linear infinite;
     }
 
     .section-subheading {
