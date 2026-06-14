@@ -834,9 +834,12 @@
             <input type="hidden" id="edHomeLogoPosY" value="50">
           </div>
         </div>
-        <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:auto;border:1px solid rgba(255,255,255,0.06);background:#000;display:flex;align-items:center;justify-content:center;min-height:300px;max-height:60vh;">
-          <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:auto;max-width:90%;max-height:55vh;height:auto;object-fit:contain;object-position:50% 50%;" onerror="this.style.display='none';">
-          <div id="homeLogoPlaceholder" style="display:none;padding:4rem;color:rgba(230,237,243,0.15);font-size:0.9rem;">Brak podglądu — wpisz URL lub wgraj logo</div>
+        <div id="homeLogoPreview" style="margin-top:0.5rem;border-radius:6px;overflow:auto;border:1px solid rgba(255,255,255,0.06);background:#000;display:flex;align-items:center;justify-content:center;">
+          <div style="width:960px;height:540px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;">
+            <span style="position:absolute;top:0.5rem;right:0.7rem;font-size:0.6rem;color:rgba(255,255,255,0.15);z-index:1;">1920×1080 (½ skala)</span>
+            <img id="homeLogoPreviewImg" src="" alt="Podgląd logo" style="display:block;width:auto;max-width:70%;max-height:70%;height:auto;object-fit:contain;object-position:50% 50%;" onerror="this.style.display='none';">
+            <div id="homeLogoPlaceholder" style="display:none;color:rgba(230,237,243,0.12);font-size:0.9rem;">Brak podglądu</div>
+          </div>
         </div>
       </div>
     </details>
@@ -2297,7 +2300,9 @@ function updateHomeLogoPreview() {
   var py = getVal('edHomeLogoPosY') || '50';
   if (url) {
     img.src = url;
-    img.style.transform = 'scale(' + scale + ')';
+    var baseSize = 70 * scale; // 70% bazowo × zoom slider
+    img.style.maxWidth = baseSize + '%';
+    img.style.maxHeight = baseSize + '%';
     img.style.objectPosition = px + '% ' + py + '%';
     img.style.display = 'block';
     ph.style.display = 'none';
