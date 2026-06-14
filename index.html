@@ -3266,9 +3266,17 @@
         if (!panel.contains(e.target)) closeOverlay();
       });
 
-      // Escape = zamknij
+      // Klawiatura w overlayu: Escape = zamknij, strzałki góra/dół = przewijanie panelu
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && overlay.classList.contains('open')) closeOverlay();
+        if (!overlay.classList.contains('open')) return;
+        if (e.key === 'Escape') { closeOverlay(); return; }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          panel.scrollBy({top: 120, behavior: 'smooth'});
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          panel.scrollBy({top: -120, behavior: 'smooth'});
+        }
       });
 
       // ── APP_DETAILS: dane aplikacji do overlayu ──
@@ -5108,6 +5116,8 @@
       document.addEventListener('keydown', function(e) {
         // Ignoruj gdy lightbox otwarty — nawigacja zdjęć ma priorytet
         if (document.getElementById('lightbox').classList.contains('open')) return;
+        // Ignoruj gdy overlay otwarty — przewijanie panelu ma priorytet
+        if (document.getElementById('appOverlay').classList.contains('open')) return;
         // Ignoruj gdy użytkownik jest w polu tekstowym
         var tag = document.activeElement ? document.activeElement.tagName : '';
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
