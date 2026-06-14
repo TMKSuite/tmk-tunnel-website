@@ -3334,8 +3334,7 @@
             '<li><strong>Eksport raportu TXT</strong> — automatyczna nazwa pliku z nazwami porównywanych plików i timestampem.</li>' +
             '</ul>' +
             '<h3>Rola w pipeline TMK</h3>' +
-            '<p>Trzeci krok w pipeline TMK. Mając już dane z TradingView (pobrane przez CandlesDownloader) i CSV z brokera MT5, porównujesz feedy i dostajesz raport rozjazdu. Wynik pokazuje, <strong>feed którego brokera jest najbardziej zbliżony do feedu w TradingView</strong>, na którym budowałeś strategię. Na podstawie tej analizy wybierasz brokera do dalszych testów w symulatorze (PC2).</p>' +
-            '<p>To etap, który 95% retail-traderów pomija. Biorą pierwszego brokera oferującego challenge i puszczają strategię. Potem szukają odpowiedzi na pytanie "czemu moje SL hituje, a w TV nie?". Ty zmierzyłeś to empirycznie <strong>zanim</strong> zaryzykowałeś pierwsze pieniądze.</p>',
+            '<p>To etap, który 95% retail-traderów pomija. Biorą pierwszego brokera oferującego challenge i puszczają strategię. Potem szukają odpowiedzi na pytanie "czemu moje SL hituje, a w TV nie?".</p>',
           bodyEn: '<h3>Description</h3>' +
             '<p>CandleComparison is a digital OHLC candle comparator — it measures the empirical divergence between an MT5 broker feed and TradingView data. Instead of raw price differences, it operates in <strong>ticks</strong> — the unit that actually impacts SL/TP levels. Auto CSV format detection, 4-section report, two analysis windows.</p>' +
             '<p>The app takes two CSV files (broker + TradingView), automatically detects the format (MT5 tab-separated vs TV/FXCM comma-separated), merges on time index with optional time shift, converts HIGH/LOW differences to ticks, and generates a diagnostic report.</p>' +
@@ -3350,8 +3349,7 @@
             '<li><strong>TXT report export</strong> — automatic filename with compared file names and timestamp.</li>' +
             '</ul>' +
             '<h3>Role in the TMK pipeline</h3>' +
-            '<p>Third step in the TMK pipeline. With TradingView data already downloaded (via CandlesDownloader) and MT5 broker CSV, you compare feeds and get a divergence report. The result shows <strong>which broker\'s feed is closest to the TradingView feed</strong> you built your strategy on. Based on this analysis, you pick a broker for further testing in the simulator (PC2).</p>' +
-            '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?" You measured it empirically <strong>before</strong> risking your first dollar.</p>',
+            '<p>This is the stage that 95% of retail traders skip. They grab the first broker offering a challenge and run their strategy. Then they wonder "why is my SL getting hit when it doesn\'t on TV?"</p>',
           tagsPl: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>',
           tagsEn: '<span class="tag">Python</span><span class="tag">PyQt6</span><span class="tag">pandas</span><span class="tag">numpy</span><span class="tag">Tick Analysis</span><span class="tag">MT5</span><span class="tag">TradingView</span><span class="tag">PyInstaller</span>'
         },
