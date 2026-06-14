@@ -4864,6 +4864,7 @@
             if (photoImg) {
               photoImg.src = d.photoImage;
               if (d.photoPosition) photoImg.style.objectPosition = d.photoPosition;
+              if (d.photoScale) photoImg.style.transform = 'scale(' + d.photoScale + ')';
             }
           }
 

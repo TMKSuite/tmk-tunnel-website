@@ -465,6 +465,11 @@
               <code id="aboutPhotoPosLabel" style="font-size:0.75rem;color:var(--accent);">50% 50%</code>
             </div>
             <input type="hidden" id="edAboutPhotoPosition" value="50% 50%">
+            <div style="margin-top:0.6rem;">
+              <div style="font-size:0.7rem;color:rgba(230,237,243,0.3);margin-bottom:0.2rem;">Zoom: <code id="aboutPhotoScaleLabel" style="color:var(--accent);">1.50</code>×</div>
+              <input type="range" id="edAboutPhotoScale" min="1.0" max="3.0" step="0.05" value="1.5" oninput="updateAboutScale()" style="width:100%;accent-color:var(--accent);">
+              <input type="hidden" id="edAboutPhotoScaleHidden" value="1.5">
+            </div>
           </div>
         </div>
         <div id="aboutPhotoDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.2rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
@@ -1065,6 +1070,9 @@ function fillAboutForm(d) {
   setVal('edAboutBanner', d.bannerImage || '');
   setVal('edAboutPhoto', d.photoImage || '');
   setVal('edAboutPhotoPosition', d.photoPosition || '50% 50%');
+  var scale = d.photoScale || 1.5;
+  setVal('edAboutPhotoScale', scale);
+  setVal('edAboutPhotoScaleHidden', scale);
   setVal('edAboutRolePl', d.rolePl || '');
   setVal('edAboutRoleEn', d.roleEn || '');
   setVal('edAboutStoryPl', d.storyPl || '');
@@ -1076,6 +1084,7 @@ function updateAboutImagePreviews() {
   var bannerUrl = getVal('edAboutBanner');
   var photoUrl = getVal('edAboutPhoto');
   var photoPos = getVal('edAboutPhotoPosition') || '50% 50%';
+  var scale = parseFloat(getVal('edAboutPhotoScaleHidden')) || 1.5;
 
   // Banner preview
   var bannerImg = document.getElementById('aboutBannerLiveImg');
@@ -1095,6 +1104,7 @@ function updateAboutImagePreviews() {
   if (photoUrl) {
     photoImg.src = photoUrl;
     photoImg.style.objectPosition = photoPos;
+    photoImg.style.transform = 'scale(' + scale + ')';
     photoImg.style.display = 'block';
     photoPlaceholder.style.display = 'none';
   } else {
@@ -1102,6 +1112,16 @@ function updateAboutImagePreviews() {
     photoPlaceholder.style.display = 'flex';
   }
   document.getElementById('aboutPhotoPosLabel').textContent = photoPos;
+  document.getElementById('aboutPhotoScaleLabel').textContent = scale.toFixed(2);
+}
+
+function updateAboutScale() {
+  var scale = parseFloat(document.getElementById('edAboutPhotoScale').value);
+  document.getElementById('edAboutPhotoScaleHidden').value = scale;
+  document.getElementById('aboutPhotoScaleLabel').textContent = scale.toFixed(2);
+  // Apply scale to preview live
+  var photoImg = document.getElementById('aboutPhotoLiveImg');
+  if (photoImg) photoImg.style.transform = 'scale(' + scale + ')';
 }
 
 function shiftPhotoPos(dx, dy) {
@@ -1118,6 +1138,9 @@ function shiftPhotoPos(dx, dy) {
 
 function resetPhotoPos() {
   setVal('edAboutPhotoPosition', '50% 50%');
+  setVal('edAboutPhotoScale', '1.5');
+  setVal('edAboutPhotoScaleHidden', '1.5');
+  document.getElementById('aboutPhotoScaleLabel').textContent = '1.50';
   updateAboutImagePreviews();
 }
 
@@ -1127,6 +1150,7 @@ function publishAbout() {
     bannerImage: getVal('edAboutBanner'),
     photoImage: getVal('edAboutPhoto'),
     photoPosition: getVal('edAboutPhotoPosition') || '50% 50%',
+    photoScale: parseFloat(getVal('edAboutPhotoScaleHidden')) || 1.5,
     rolePl: getVal('edAboutRolePl'),
     roleEn: getVal('edAboutRoleEn'),
     storyPl: getVal('edAboutStoryPl'),
