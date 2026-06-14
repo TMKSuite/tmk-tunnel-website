@@ -57,13 +57,14 @@ export default {
       });
     }
 
-    // Tylko dozwolone ścieżki
+    // Dozwolone ścieżki — konkretne pliki lub prefix dla obrazków
     const allowedPaths = [
       'data/articles.json',
       'data/news.json',
       'sitemap.xml'
     ];
-    if (!allowedPaths.includes(file)) {
+    const isImageUpload = file.startsWith('assets/images/articles/');
+    if (!allowedPaths.includes(file) && !isImageUpload) {
       return new Response(JSON.stringify({ error: 'File not allowed: ' + file }), {
         status: 403,
         headers: { ...corsHeaders(), 'Content-Type': 'application/json' }
@@ -123,9 +124,11 @@ export default {
         return btoa(binary);
       }
 
+      // Jeśli contentBase64=true, użyj contentu bezpośrednio (obrazek już zakodowany przez klienta)
+      const contentBase64 = body.contentBase64 === true;
       const putBody = {
         message: message,
-        content: toBase64(content),
+        content: contentBase64 ? content : toBase64(content),
         branch: 'master'
       };
       if (sha) {

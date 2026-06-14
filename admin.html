@@ -249,6 +249,33 @@
         <textarea id="edBodyEn" rows="15" placeholder="<p>First paragraph...</p>"></textarea>
       </div>
 
+      <!-- Upload obrazków -->
+      <details style="margin-bottom:1.5rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+        <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Obrazki — upload i wstawianie do treści</summary>
+        <div style="margin-top:0.6rem">
+          <div id="imgDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:8px;padding:1.5rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;">
+            Upuść obrazek tutaj lub kliknij, aby wybrać<br>
+            <span style="font-size:0.75rem;">(PNG, JPG, WebP — max 2MB)</span>
+            <input type="file" id="imgFileInput" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="handleImageSelect(event)">
+          </div>
+          <div id="imgPreview" style="margin-top:0.5rem;display:none;">
+            <img id="imgPreviewImg" style="max-width:100%;max-height:200px;border-radius:4px;border:1px solid rgba(255,255,255,0.1);">
+            <div style="margin-top:0.4rem;display:flex;gap:0.5rem;align-items:center;">
+              <span id="imgStatus" style="color:rgba(230,237,243,0.3);font-size:0.8rem;">Gotowy do uploadu</span>
+              <button class="btn btn-sm" onclick="uploadImage()">Wyślij na serwer</button>
+            </div>
+            <div id="imgUrlBox" style="margin-top:0.4rem;display:none;">
+              <input type="text" id="imgUrlInput" readonly style="width:100%;padding:0.4rem 0.6rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;color:var(--accent);font-size:0.8rem;font-family:monospace;">
+              <div style="margin-top:0.3rem;display:flex;gap:0.3rem;">
+                <button class="btn btn-sm" onclick="copyImgUrl()">Kopiuj URL</button>
+                <button class="btn btn-sm" onclick="insertImgToBody('edBodyPl')">Wstaw do PL</button>
+                <button class="btn btn-sm" onclick="insertImgToBody('edBodyEn')">Wstaw do EN</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
       <details style="margin-bottom:1.5rem;font-size:0.85rem;color:rgba(230,237,243,0.4);background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
         <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Ściąga formatowania</summary>
         <div style="margin-top:0.6rem;line-height:1.8;">
@@ -711,6 +738,116 @@ function togglePreview() {
   } else {
     box.style.display = 'none';
   }
+}
+
+// ══════════ IMAGE UPLOAD ══════════
+var pendingImageBase64 = null;
+var pendingImageExt = 'png';
+
+(function() {
+  var dropZone = document.getElementById('imgDropZone');
+  var fileInput = document.getElementById('imgFileInput');
+  if (!dropZone || !fileInput) return;
+
+  dropZone.addEventListener('click', function() { fileInput.click(); });
+  dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.style.borderColor = 'var(--accent)'; });
+  dropZone.addEventListener('dragleave', function() { dropZone.style.borderColor = ''; });
+  dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropZone.style.borderColor = '';
+    if (e.dataTransfer.files.length) processImageFile(e.dataTransfer.files[0]);
+  });
+})();
+
+function handleImageSelect(e) {
+  if (e.target.files.length) processImageFile(e.target.files[0]);
+}
+
+function processImageFile(file) {
+  if (file.size > 2 * 1024 * 1024) { alert('Plik za duży — max 2MB'); return; }
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','webp'].indexOf(ext) === -1) { alert('Niedozwolony format — tylko PNG, JPG, WebP'); return; }
+  pendingImageExt = ext === 'jpeg' ? 'jpg' : ext;
+
+  var reader = new FileReader();
+  reader.onload = function() {
+    pendingImageBase64 = reader.result.split(',')[1]; // usuń prefix data:...
+    document.getElementById('imgPreviewImg').src = reader.result;
+    document.getElementById('imgPreview').style.display = 'block';
+    document.getElementById('imgStatus').textContent = file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+    document.getElementById('imgUrlBox').style.display = 'none';
+    document.getElementById('imgStatus').style.color = 'rgba(230,237,243,0.5)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadImage() {
+  if (!pendingImageBase64) return;
+  var workerSecret = prompt('Hasło:', '');
+  if (!workerSecret) return;
+
+  var filename = 'img_' + Date.now() + '.' + pendingImageExt;
+  var path = 'assets/images/articles/' + filename;
+  document.getElementById('imgStatus').textContent = 'Wysyłanie...';
+  document.getElementById('imgStatus').style.color = 'var(--accent)';
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) {
+          var url = '/' + path;
+          document.getElementById('imgUrlInput').value = url;
+          document.getElementById('imgUrlBox').style.display = 'block';
+          document.getElementById('imgStatus').textContent = 'Wysłano! URL: ' + url;
+          document.getElementById('imgStatus').style.color = 'var(--success)';
+        } else {
+          document.getElementById('imgStatus').textContent = 'Błąd: ' + (resp.error || 'nieznany');
+          document.getElementById('imgStatus').style.color = 'var(--danger)';
+        }
+      } catch(e) {
+        document.getElementById('imgStatus').textContent = 'Błąd parsowania odpowiedzi';
+        document.getElementById('imgStatus').style.color = 'var(--danger)';
+      }
+    } else {
+      document.getElementById('imgStatus').textContent = 'Błąd ' + xhr.status;
+      document.getElementById('imgStatus').style.color = 'var(--danger)';
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('imgStatus').textContent = 'Błąd połączenia';
+    document.getElementById('imgStatus').style.color = 'var(--danger)';
+  };
+  xhr.send(JSON.stringify({
+    file: path,
+    content: pendingImageBase64,
+    contentBase64: true,
+    message: 'Upload image: ' + filename,
+    secret: workerSecret
+  }));
+}
+
+function copyImgUrl() {
+  var input = document.getElementById('imgUrlInput');
+  input.select();
+  document.execCommand('copy');
+  showMsg('URL skopiowany!', 'ok');
+}
+
+function insertImgToBody(textareaId) {
+  var url = document.getElementById('imgUrlInput').value;
+  if (!url) return;
+  var ta = document.getElementById(textareaId);
+  var imgTag = '<img src="' + url + '" alt="" style="max-width:100%;border-radius:4px;">';
+  var start = ta.selectionStart;
+  var end = ta.selectionEnd;
+  var text = ta.value;
+  ta.value = text.substring(0, start) + '\n' + imgTag + '\n' + text.substring(end);
+  ta.focus();
+  showMsg('Obrazek wstawiony do ' + (textareaId === 'edBodyPl' ? 'PL' : 'EN'), 'ok');
 }
 
 // ══════════ INIT ══════════
