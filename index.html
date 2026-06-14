@@ -3623,7 +3623,6 @@
       // Otwórz projekt z URL przy bezpośrednim wejściu
       window._openProjectFromUrl = function() {
         var path = window.location.pathname;
-        console.log('[PROJECT-URL] path=' + path);
         var isProject = false;
         var slug = '';
         var isEn = false;
@@ -3635,15 +3634,13 @@
           isProject = true;
           slug = plMatch[1];
           isEn = false;
-          console.log('[PROJECT-URL] PL match, slug=' + slug);
         } else if (enMatch) {
           isProject = true;
           slug = enMatch[1];
           isEn = true;
-          console.log('[PROJECT-URL] EN match, slug=' + slug);
         }
 
-        if (!isProject) { console.log('[PROJECT-URL] not a project URL'); return false; }
+        if (!isProject) return false;
 
         // Znajdź projekt po slugu
         var foundName = null;
@@ -4664,11 +4661,8 @@
     });
 
     // Przy starcie sprawdź URL — jeśli /artykul/... lub /projekt/... to otwórz od razu
-    // setTimeout daje czas na pełne załadowanie DOM + JSON (dla artykułów)
-    setTimeout(function() {
-      if (window._openArticleFromUrl) window._openArticleFromUrl();
-      if (window._openProjectFromUrl) window._openProjectFromUrl();
-    }, 200);
+    if (window._openArticleFromUrl) window._openArticleFromUrl();
+    if (window._openProjectFromUrl) window._openProjectFromUrl();
 
     // ── Tech stack: cykliczne podświetlanie ──
     (function() {
