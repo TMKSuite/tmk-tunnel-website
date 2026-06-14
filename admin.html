@@ -2023,15 +2023,25 @@ function renderProjects() {
   }
   var html = '';
   projects.forEach(function(p, i) {
+    var projUrl = 'https://tmk-tunnel.pl/projekt/' + (p.slugPl || p.id || '');
     html += '<div class="list-item">'
       + '<div class="info"><div class="title">' + escHtml(p.name||'(bez nazwy)') + '</div>'
-      + '<div class="meta">' + (p.group||'') + ' · ' + (p.badges||[]).join(',') + ' · ' + (p.loc||'') + ' · ' + escHtml(p.slugPl||'') + '</div></div>'
+      + '<div class="meta">' + (p.group||'') + ' · ' + (p.badges||[]).join(',') + ' · ' + (p.loc||'') + ' · <code style="color:var(--accent);font-size:0.75rem;">' + escHtml(projUrl) + '</code> <button class="btn btn-sm" onclick="copyProjectUrl(' + i + ')" style="padding:0.1rem 0.4rem;font-size:0.65rem;" title="Kopiuj URL">📋</button></div></div>'
       + '<div class="actions">'
       + '<button class="btn btn-sm" onclick="editProject(' + i + ')">Edytuj</button>'
       + '<button class="btn btn-sm btn-danger" onclick="deleteProject(' + i + ')">Usuń</button>'
       + '</div></div>';
   });
+  // Store URLs for copy function
+  window._projectUrls = projects.map(function(p){ return 'https://tmk-tunnel.pl/projekt/' + (p.slugPl || p.id || ''); });
   list.innerHTML = html;
+}
+
+function copyProjectUrl(idx) {
+  var url = window._projectUrls && window._projectUrls[idx];
+  if (!url) return;
+  navigator.clipboard.writeText(url).then(function(){ showProjMsg('URL skopiowany! ' + url, 'ok'); });
+}
 }
 
 function openProjectEditor() {
