@@ -3133,9 +3133,10 @@
         { date: '13.06', pl: 'Start nowej witryny TMK Suite', en: 'New TMK Suite website launched' }
       ];
       var current = 0;
-      var total = entries.length;
       var timer;
       var interval = 5000;
+
+      function getEntries() { return window._newsEntries || entries; }
 
       function buildSlot(entry) {
         var lang = currentLang === 'en' ? 'en' : 'pl';
@@ -3150,20 +3151,29 @@
       }
 
       function updateSlots() {
+        var list = getEntries();
+        var total = list.length;
         slot0.style.opacity = '0';
         slot1.style.opacity = '0';
         setTimeout(function() {
-          slot0.innerHTML = buildSlot(entries[current]);
-          slot1.innerHTML = buildSlot(entries[(current + 1) % total]);
+          slot0.innerHTML = buildSlot(list[current % total]);
+          slot1.innerHTML = buildSlot(list[(current + 1) % total]);
           slot0.style.opacity = '1';
           slot1.style.opacity = '1';
         }, 200);
       }
 
       function rotate() {
+        var list = getEntries();
+        var total = list.length;
         current = (current + 1) % total;
         updateSlots();
       }
+
+      window._refreshNewsDisplay = function() {
+        current = 0;
+        updateSlots();
+      };
 
       function startTimer() { timer = setInterval(rotate, interval); }
       function stopTimer() { clearInterval(timer); }
@@ -4075,6 +4085,48 @@
           if (excerptEl) excerptEl.textContent = excerpt;
         }
       };
+
+      // ═══ Load external content (JSON), fallback to hardcoded ═══
+      (function() {
+        var loadedArticles = false;
+        var loadedNews = false;
+
+        // Load articles
+        var xhrA = new XMLHttpRequest();
+        xhrA.open('GET', '/data/articles.json', true);
+        xhrA.onload = function() {
+          if (xhrA.status === 200) {
+            try {
+              var arr = JSON.parse(xhrA.responseText);
+              var obj = {};
+              arr.forEach(function(a) { obj[a.id] = a; });
+              // Merge into existing ARTICLE_CONTENT (adds new, overwrites existing)
+              for (var k in obj) { ARTICLE_CONTENT[k] = obj[k]; }
+              window.ARTICLE_CONTENT = ARTICLE_CONTENT;
+              loadedArticles = true;
+            } catch(e) { console.warn('Articles JSON parse error, using hardcoded'); }
+          }
+        };
+        xhrA.onerror = function() { /* fallback to hardcoded */ };
+        xhrA.send();
+
+        // Load news
+        var xhrN = new XMLHttpRequest();
+        xhrN.open('GET', '/data/news.json', true);
+        xhrN.onload = function() {
+          if (xhrN.status === 200) {
+            try {
+              var newsArr = JSON.parse(xhrN.responseText);
+              window._newsEntries = newsArr;  // Override hardcoded entries
+              loadedNews = true;
+              // Refresh news display if already visible
+              if (window._refreshNewsDisplay) window._refreshNewsDisplay();
+            } catch(e) { console.warn('News JSON parse error, using hardcoded'); }
+          }
+        };
+        xhrN.onerror = function() { /* fallback */ };
+        xhrN.send();
+      })();
 
       var ARTICLE_CONTENT = {
         '1': {
