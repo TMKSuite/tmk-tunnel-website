@@ -1,0 +1,44 @@
+{
+  "headingPl": "Kontakt",
+  "headingEn": "Contact",
+  "subheadingPl": "Masz pytanie? Chcesz pogadać o AI, tradingu albo współpracy? Odezwij się.",
+  "subheadingEn": "Have a question? Want to talk about AI, trading, or collaboration? Reach out.",
+  "cards": [
+    {
+      "id": "email",
+      "label": "Email",
+      "url": "mailto:pozawykresemztmk@gmail.com",
+      "descPl": "pozawykresemztmk@gmail.com",
+      "descEn": "pozawykresemztmk@gmail.com",
+      "icon": "email",
+      "targetBlank": false
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/TMKSuite",
+      "descPl": "Otwarte repozytorium strony i projektów pobocznych",
+      "descEn": "Open repository for the website and side projects",
+      "icon": "github",
+      "targetBlank": true
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/krycha-tmk/",
+      "descPl": "Profil zawodowy — napisz i poznajmy się",
+      "descEn": "Professional profile — connect and say hi",
+      "icon": "linkedin",
+      "targetBlank": true
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "url": "https://www.youtube.com/@PozaWykresemzTMK",
+      "descPl": "Handel algorytmiczny, anomalie w danych, strategie tradingowe",
+      "descEn": "Algorithmic trading, data anomalies, trading strategies",
+      "icon": "youtube",
+      "targetBlank": true
+    }
+  ]
+}

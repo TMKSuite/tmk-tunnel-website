@@ -201,6 +201,7 @@
     <button class="tab active" data-tab="articles" onclick="switchTab('articles')">Artykuły</button>
     <button class="tab" data-tab="news" onclick="switchTab('news')">Co nowego</button>
     <button class="tab" data-tab="about" onclick="switchTab('about')">O mnie</button>
+    <button class="tab" data-tab="contact" onclick="switchTab('contact')">Kontakt</button>
   </div>
 
   <!-- ARTICLES TAB -->
@@ -498,6 +499,84 @@
     </div>
   </div>
 
+  <!-- CONTACT TAB -->
+  <div id="tab-contact" style="display:none">
+    <div class="add-bar">
+      <button class="btn" onclick="openContactEditor()">+ Nowy kafelek</button>
+      <span style="margin-left:1rem;font-size:0.8rem;color:rgba(230,237,243,0.3)">Zmiany publikowane są na GitHub → auto-deploy na Cloudflare (~30s)</span>
+    </div>
+
+    <!-- Edycja nagłówka i podtytułu -->
+    <details style="margin-bottom:1rem;font-size:0.85rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:0.8rem 1rem;">
+      <summary style="cursor:pointer;color:rgba(230,237,243,0.5);font-weight:500;">Nagłówek i podtytuł sekcji</summary>
+      <div style="margin-top:0.6rem" class="form-row">
+        <div class="form-group"><label>Nagłówek (PL)</label><input type="text" id="edContactHeadingPl" placeholder="Kontakt"></div>
+        <div class="form-group"><label>Nagłówek (EN)</label><input type="text" id="edContactHeadingEn" placeholder="Contact"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Podtytuł (PL)</label><input type="text" id="edContactSubheadingPl" placeholder="Masz pytanie?..."></div>
+        <div class="form-group"><label>Podtytuł (EN)</label><input type="text" id="edContactSubheadingEn" placeholder="Have a question?..."></div>
+      </div>
+      <div style="margin-top:0.5rem;"><button class="btn btn-sm" onclick="publishContactMeta()">Zapisz nagłówek</button></div>
+    </details>
+
+    <div id="contactMsgBox"></div>
+    <div id="contactCardsList"></div>
+
+    <!-- Contact Card Editor -->
+    <div id="contactEditorForm" style="display:none">
+      <h3 style="margin-bottom:1.5rem" id="contactEditorTitle">Nowy kafelek</h3>
+      <input type="hidden" id="edContactId" value="">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Etykieta (PL i EN — wspólna)</label>
+          <input type="text" id="edContactLabel" placeholder="GitHub">
+        </div>
+        <div class="form-group">
+          <label>Ikona</label>
+          <select id="edContactIcon" style="width:100%;padding:0.7rem 1rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.95rem;">
+            <option value="email">Email</option>
+            <option value="github">GitHub</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="youtube">YouTube</option>
+            <option value="website">Strona WWW</option>
+            <option value="discord">Discord</option>
+            <option value="twitter">Twitter / X</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>URL / link</label>
+        <input type="text" id="edContactUrl" placeholder="https://github.com/TMKSuite">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Opis (PL)</label>
+          <input type="text" id="edContactDescPl" placeholder="Otwarte repozytorium...">
+        </div>
+        <div class="form-group">
+          <label>Opis (EN)</label>
+          <input type="text" id="edContactDescEn" placeholder="Open repository...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label style="cursor:pointer;font-size:0.85rem;color:rgba(230,237,243,0.5)">
+          <input type="checkbox" id="edContactTargetBlank" checked> Otwieraj w nowej karcie (target="_blank")
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn" onclick="publishContactCard()">Zapisz kafelek</button>
+        <button class="btn" onclick="cancelContactEdit()" style="border-color:rgba(255,255,255,0.2);color:rgba(230,237,243,0.5)">Anuluj</button>
+        <button class="btn btn-danger btn-sm" id="contactDeleteBtn" style="display:none;margin-left:auto" onclick="deleteContactCard()">Usuń kafelek</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -558,7 +637,9 @@ function switchTab(tab) {
   document.getElementById('tab-articles').style.display = tab === 'articles' ? 'block' : 'none';
   document.getElementById('tab-news').style.display = tab === 'news' ? 'block' : 'none';
   document.getElementById('tab-about').style.display = tab === 'about' ? 'block' : 'none';
+  document.getElementById('tab-contact').style.display = tab === 'contact' ? 'block' : 'none';
   if (tab === 'about') loadAbout();
+  if (tab === 'contact') loadContact();
 }
 
 // ══════════ DATA ══════════
@@ -1377,6 +1458,140 @@ function copyAboutPhotoUrl() {
   setVal('edAboutPhoto', url);
   updateAboutImagePreviews();
   showAboutMsg('URL zdjęcia wstawiony do pola!', 'ok');
+}
+
+// ══════════ CONTACT (KONTAKT) ══════════
+var contactData = null;
+
+function loadContact() {
+  fetchJSON('/data/contact.json', function(data) {
+    contactData = data || getDefaultContact();
+    fillContactMeta(contactData);
+    renderContactCards();
+  });
+}
+
+function getDefaultContact() {
+  return { headingPl: 'Kontakt', headingEn: 'Contact', subheadingPl: '', subheadingEn: '', cards: [] };
+}
+
+function fillContactMeta(d) {
+  setVal('edContactHeadingPl', d.headingPl || '');
+  setVal('edContactHeadingEn', d.headingEn || '');
+  setVal('edContactSubheadingPl', d.subheadingPl || '');
+  setVal('edContactSubheadingEn', d.subheadingEn || '');
+}
+
+function publishContactMeta() {
+  if (!contactData) return;
+  contactData.headingPl = getVal('edContactHeadingPl');
+  contactData.headingEn = getVal('edContactHeadingEn');
+  contactData.subheadingPl = getVal('edContactSubheadingPl');
+  contactData.subheadingEn = getVal('edContactSubheadingEn');
+  saveAndPush('data/contact.json', contactData, 'Aktualizacja nagłówka KONTAKT', function() {
+    showContactMsg('Nagłówek zapisany!', 'ok');
+  });
+}
+
+function renderContactCards() {
+  var list = document.getElementById('contactCardsList');
+  var cards = contactData ? (contactData.cards || []) : [];
+  if (!cards.length) {
+    list.innerHTML = '<div class="empty">Brak kafelków. Kliknij "+ Nowy kafelek" aby dodać.</div>';
+    return;
+  }
+  var html = '';
+  cards.forEach(function(c, i) {
+    html += '<div class="list-item">'
+      + '<div class="info"><div class="title">' + escHtml(c.label || '(bez etykiety)') + '</div>'
+      + '<div class="meta">' + escHtml(c.icon||'') + ' · ' + escHtml(c.url||'') + '</div></div>'
+      + '<div class="actions">'
+      + '<button class="btn btn-sm" onclick="editContactCard(' + i + ')">Edytuj</button>'
+      + '<button class="btn btn-sm btn-danger" onclick="deleteContactCard(' + i + ')">Usuń</button>'
+      + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function openContactEditor() {
+  document.getElementById('contactEditorForm').style.display = 'block';
+  document.getElementById('contactEditorTitle').textContent = 'Nowy kafelek';
+  document.getElementById('edContactId').value = '';
+  document.getElementById('contactDeleteBtn').style.display = 'none';
+  clearContactForm();
+}
+
+function editContactCard(idx) {
+  var c = contactData.cards[idx];
+  document.getElementById('contactEditorForm').style.display = 'block';
+  document.getElementById('contactEditorTitle').textContent = 'Edycja: ' + (c.label || '');
+  document.getElementById('edContactId').value = c.id || '';
+  document.getElementById('contactDeleteBtn').style.display = 'inline-block';
+  document.getElementById('contactDeleteBtn').setAttribute('data-idx', idx);
+  setVal('edContactLabel', c.label||'');
+  setVal('edContactIcon', c.icon||'website');
+  setVal('edContactUrl', c.url||'');
+  setVal('edContactDescPl', c.descPl||'');
+  setVal('edContactDescEn', c.descEn||'');
+  document.getElementById('edContactTargetBlank').checked = c.targetBlank !== false;
+  document.getElementById('contactEditorForm').scrollIntoView({behavior:'smooth'});
+}
+
+function cancelContactEdit() {
+  document.getElementById('contactEditorForm').style.display = 'none';
+  clearContactForm();
+}
+
+function deleteContactCard(idx) {
+  if (idx === undefined) {
+    // Called from delete button — get idx from attribute
+    idx = parseInt(document.getElementById('contactDeleteBtn').getAttribute('data-idx'));
+    if (isNaN(idx)) return;
+  }
+  if (!confirm('Na pewno usunąć ten kafelek?')) return;
+  contactData.cards.splice(idx, 1);
+  saveAndPush('data/contact.json', contactData, 'Usuń kafelek KONTAKT', function() {
+    cancelContactEdit();
+    renderContactCards();
+  });
+}
+
+function publishContactCard() {
+  if (!contactData) { contactData = getDefaultContact(); }
+  var id = document.getElementById('edContactId').value || ('c_' + Date.now().toString(36));
+  var card = {
+    id: id,
+    label: getVal('edContactLabel'),
+    icon: getVal('edContactIcon'),
+    url: getVal('edContactUrl'),
+    descPl: getVal('edContactDescPl'),
+    descEn: getVal('edContactDescEn'),
+    targetBlank: document.getElementById('edContactTargetBlank').checked
+  };
+
+  var found = false;
+  for (var i = 0; i < contactData.cards.length; i++) {
+    if (contactData.cards[i].id === id) { contactData.cards[i] = card; found = true; break; }
+  }
+  if (!found) contactData.cards.push(card);
+
+  saveAndPush('data/contact.json', contactData, found ? 'Aktualizacja kafelka KONTAKT: ' + card.label : 'Nowy kafelek KONTAKT: ' + card.label, function() {
+    cancelContactEdit();
+    renderContactCards();
+  });
+}
+
+function clearContactForm() {
+  ['edContactId','edContactLabel','edContactIcon','edContactUrl','edContactDescPl','edContactDescEn'].forEach(function(id){ setVal(id,''); });
+  document.getElementById('edContactTargetBlank').checked = true;
+  document.getElementById('contactDeleteBtn').style.display = 'none';
+}
+
+function showContactMsg(msg, type) {
+  var box = document.getElementById('contactMsgBox');
+  box.className = 'msg msg-' + type;
+  box.textContent = msg;
+  setTimeout(function() { box.className = 'msg'; box.textContent = ''; }, 5000);
 }
 
 // ══════════ INIT ══════════
