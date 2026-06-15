@@ -413,23 +413,41 @@
       color: var(--color-accent);
     }
 
+    /* ── KARUZELA APLIKACJI ── */
     .app-showcase {
+      --item-w: 63px;
+      --item-gap: 1.4rem;
+      position: relative;
+      width: fit-content;
+    }
+    .app-viewport {
+      overflow: hidden;
+      width: calc(4 * var(--item-w) + 3 * var(--item-gap));
+    }
+
+    .app-track {
       display: flex;
       flex-direction: row;
-      gap: 2.1rem;
+      gap: var(--item-gap);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .app-track.no-transition {
+      transition: none !important;
     }
 
     .app-item {
       cursor: pointer;
       position: relative;
-      transition: transform 0.3s ease, filter 0.3s ease;
+      transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
       opacity: 0.5;
       filter: grayscale(0.5);
+      flex-shrink: 0;
     }
 
     .app-item img {
-      width: 63px;
-      height: 63px;
+      width: var(--item-w);
+      height: var(--item-w);
       display: block;
     }
 
@@ -437,6 +455,37 @@
       opacity: 1;
       filter: none;
       transform: translateY(-2px);
+    }
+
+    /* Strzałki karuzeli */
+    .app-arrows {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: -28px;
+      right: -28px;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .app-arrows.visible {
+      display: flex;
+      justify-content: space-between;
+    }
+    .app-arrow {
+      pointer-events: auto;
+      background: none;
+      border: none;
+      color: rgba(230, 237, 243, 0.3);
+      font-size: 1.15rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      transition: color 0.3s ease;
+      line-height: 1;
+      user-select: none;
+    }
+    .app-arrow:hover {
+      color: var(--color-accent);
     }
 
     /* Kropki pod ikonami */
@@ -2420,8 +2469,15 @@
           z-index: 5;
         }
         .app-showcase {
-          display: flex !important;
-          flex-direction: row;
+          --item-w: 38px;
+          --item-gap: 0.8rem;
+          display: block !important;
+        }
+        .app-viewport {
+          overflow: hidden;
+          width: calc(4 * 38px + 3 * 0.8rem);
+        }
+        .app-track {
           gap: 0.8rem;
         }
         .app-item img {
@@ -2642,27 +2698,35 @@
     <!-- Pływające elementy hero (poza hero-inner — niezależne originy skalowania) -->
     <div class="app-wrapper">
     <div class="app-showcase" id="appShowcase">
-      <div class="app-item active" data-name="TorekMarketKiller"
-           data-desc-pl="Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie."
-           data-desc-en="Trading automation platform TradingView → MT5. Multi-terminal, local and remote.">
-        <img src="/assets/images/icon-tmk.png" alt="TMK Platform" width="36" height="36">
+      <div class="app-arrows" id="appArrows">
+        <button class="app-arrow" id="appArrowLeft" aria-label="Poprzednia">◀</button>
+        <button class="app-arrow" id="appArrowRight" aria-label="Następna">▶</button>
       </div>
-      <div class="app-item" data-name="PortfolioCommandCenter"
-           data-desc-pl="Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne."
-           data-desc-en="Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs.">
-        <img src="/assets/images/icon-pc2.png" alt="PC2 Symulator" width="36" height="36">
-      </div>
-      <div class="app-item" data-name="CandleComparison"
-           data-desc-pl="Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty."
-           data-desc-en="Candle data comparison MT5 vs TradingView. Tick size, time shift, reports.">
-        <img src="/assets/images/icon-comparator.png" alt="Komparator" width="36" height="36">
-      </div>
-      <div class="app-item" data-name="CandleDownloader"
-           data-desc-pl="Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy."
-           data-desc-en="Candle data download from TradingView via WebSocket. CSV ready for analysis.">
-        <img src="/assets/images/icon-downloader.png" alt="Downloader" width="36" height="36">
-      </div>
-    </div>
+      <div class="app-viewport">
+        <div class="app-track" id="appTrack">
+        <div class="app-item active" data-name="TorekMarketKiller"
+             data-desc-pl="Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie."
+             data-desc-en="Trading automation platform TradingView → MT5. Multi-terminal, local and remote.">
+          <img src="/assets/images/icon-tmk.png" alt="TMK Platform" width="36" height="36">
+        </div>
+        <div class="app-item" data-name="PortfolioCommandCenter"
+             data-desc-pl="Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne."
+             data-desc-en="Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs.">
+          <img src="/assets/images/icon-pc2.png" alt="PC2 Symulator" width="36" height="36">
+        </div>
+        <div class="app-item" data-name="CandleComparison"
+             data-desc-pl="Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty."
+             data-desc-en="Candle data comparison MT5 vs TradingView. Tick size, time shift, reports.">
+          <img src="/assets/images/icon-comparator.png" alt="Komparator" width="36" height="36">
+        </div>
+        <div class="app-item" data-name="CandleDownloader"
+             data-desc-pl="Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy."
+             data-desc-en="Candle data download from TradingView via WebSocket. CSV ready for analysis.">
+          <img src="/assets/images/icon-downloader.png" alt="Downloader" width="36" height="36">
+        </div>
+      </div><!-- /.app-track -->
+      </div><!-- /.app-viewport -->
+    </div><!-- /.app-showcase -->
 
     <div class="app-dots" id="appDots">
       <span class="dot active"></span>
@@ -3868,79 +3932,247 @@
       };
     })();
 
-    // ── App showcase rotation ──
+    // ── App showcase carousel (Model A: viewport 4, slide-by-1, wandering dot) ──
     (function() {
-      var items = document.querySelectorAll('.app-item');
-      var dots = document.querySelectorAll('.dot');
+      var VISIBLE = 4;
+      var INTERVAL = 4000;
+
+      var track = document.getElementById('appTrack');
+      var dotsContainer = document.getElementById('appDots');
       var descPanel = document.getElementById('appDesc');
       var descStrong = descPanel.querySelector('strong');
       var descSpan = descPanel.querySelector('.desc-body');
-      var current = 0;
-      var total = items.length;
-      var interval = 4000;
-      var timer;
+      var arrowLeft = document.getElementById('appArrowLeft');
+      var arrowRight = document.getElementById('appArrowRight');
+      var arrowsWrap = document.getElementById('appArrows');
 
-      function getDesc(item) {
-        return item.dataset['desc' + (currentLang === 'en' ? 'En' : 'Pl')] || item.dataset.descPl || '';
+      var realItems = [];       // DOM elements (no clones)
+      var totalReal = 0;        // count of real items
+      var trackOffset = 0;      // which real-item index is at leftmost visible position
+      var dotIndex = 0;         // which dot (0..VISIBLE-1) is currently active
+      var stepWidth = 0;        // px per slide step (item width + gap)
+      var timer = null;
+      var needsReset = false;   // flag: transitionend should stealth-reset to 0
+
+      function getDesc(el) {
+        return el.dataset['desc' + (currentLang === 'en' ? 'En' : 'Pl')] || el.dataset.descPl || '';
       }
 
-      function showItem(i) {
-        items.forEach(function(el) { el.classList.remove('active'); });
-        dots.forEach(function(d) { d.classList.remove('active'); });
-        items[i].classList.add('active');
-        dots[i].classList.add('active');
-        descStrong.textContent = items[i].dataset.name;
-        descSpan.textContent = getDesc(items[i]);
-        descPanel.classList.add('visible');
-        current = i;
+      function getActiveRealIndex() {
+        if (totalReal === 0) return 0;
+        return ((trackOffset + dotIndex) % totalReal + totalReal) % totalReal;
       }
 
-      function refreshAppDesc() {
-        descSpan.textContent = getDesc(items[current]);
+      function updateDesc() {
+        var idx = getActiveRealIndex();
+        if (idx < realItems.length) {
+          descStrong.textContent = realItems[idx].dataset.name;
+          descSpan.textContent = getDesc(realItems[idx]);
+          descPanel.classList.add('visible');
+        }
       }
 
-      function rotate() {
-        showItem((current + 1) % total);
+      function updateDots() {
+        var dots = dotsContainer.querySelectorAll('.dot');
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === dotIndex); });
+        // Highlight the active track item (real or clone)
+        var allTrackItems = track.querySelectorAll('.app-item');
+        allTrackItems.forEach(function(el) { el.classList.remove('active'); });
+        var activeEl = allTrackItems[trackOffset + dotIndex];
+        if (activeEl) activeEl.classList.add('active');
+      }
+
+      function applyTrackPos(offset, animate) {
+        trackOffset = offset;
+        track.classList.toggle('no-transition', !animate);
+        track.style.transform = 'translateX(' + (-trackOffset * stepWidth) + 'px)';
+      }
+
+      function advance() {
+        if (totalReal === 0) return;
+        if (totalReal <= VISIBLE) {
+          dotIndex = (dotIndex + 1) % totalReal;
+          updateDots();
+          updateDesc();
+          return;
+        }
+
+        if (dotIndex < VISIBLE - 1) {
+          dotIndex++;
+        } else {
+          dotIndex = 0;
+          var newOffset = trackOffset + 1;
+          if (newOffset >= totalReal) {
+            needsReset = true;
+            applyTrackPos(newOffset, true);
+            return; // transitionend will stealth-reset
+          }
+          applyTrackPos(newOffset, true);
+        }
+        updateDots();
+        updateDesc();
+      }
+
+      function retreat() {
+        if (totalReal === 0 || totalReal <= VISIBLE) return;
+
+        if (dotIndex > 0) {
+          dotIndex--;
+        } else if (trackOffset > 0) {
+          dotIndex = VISIBLE - 1;
+          applyTrackPos(trackOffset - 1, true);
+        } else {
+          // Wrap to end: stealth to clone position, then animate one step back
+          dotIndex = VISIBLE - 1;
+          applyTrackPos(totalReal, false);
+          track.offsetHeight;
+          applyTrackPos(totalReal - 1, true);
+        }
+        updateDots();
+        updateDesc();
+      }
+
+      function jumpToItem(el) {
+        if (totalReal <= VISIBLE) {
+          // Simple mode: find item index and set dot
+          var simpleIdx = realItems.indexOf(el);
+          if (simpleIdx !== -1) { dotIndex = simpleIdx; updateDots(); updateDesc(); }
+          return;
+        }
+        var allTrackItems = Array.from(track.querySelectorAll('.app-item'));
+        var idx = allTrackItems.indexOf(el);
+        if (idx === -1) return;
+
+        var windowStart = trackOffset;
+        var windowEnd = trackOffset + VISIBLE - 1;
+
+        if (idx >= windowStart && idx <= windowEnd) {
+          dotIndex = idx - windowStart;
+        } else {
+          var newOffset = Math.max(0, Math.min(idx - 1, totalReal - 1));
+          dotIndex = idx - newOffset;
+          if (dotIndex < 0 || dotIndex >= VISIBLE) { dotIndex = 0; newOffset = Math.min(idx, totalReal - 1); }
+          applyTrackPos(newOffset, true);
+        }
+        updateDots();
+        updateDesc();
       }
 
       function startTimer() {
-        timer = setInterval(rotate, interval);
+        stopTimer();
+        timer = setInterval(advance, INTERVAL);
       }
 
       function stopTimer() {
-        clearInterval(timer);
+        if (timer) { clearInterval(timer); timer = null; }
       }
 
-      // Init
-      showItem(0);
-      startTimer();
+      function measureStepWidth() {
+        if (track.children.length < 2) { stepWidth = 0; return; }
+        var first = track.children[0].getBoundingClientRect();
+        var second = track.children[1].getBoundingClientRect();
+        stepWidth = second.left - first.left;
+      }
 
-      // Hover: pause, show that item
-      items.forEach(function(item, i) {
-        item.addEventListener('mouseenter', function() {
-          stopTimer();
-          showItem(i);
-        });
-        item.addEventListener('mouseleave', function() {
-          startTimer();
-        });
-        // Kliknięcie — otwórz overlay projektu
-        item.addEventListener('click', function() {
-          var name = item.dataset.name;
-          var card = document.querySelector('.project-card .card-name');
-          var allCards = document.querySelectorAll('.project-card');
-          var targetCard = null;
-          allCards.forEach(function(c) {
-            var cn = c.querySelector('.card-name');
-            if (cn && cn.textContent === name) targetCard = c;
-          });
-          if (targetCard) targetCard.click();
+      function createClones() {
+        track.querySelectorAll('.app-item.clone').forEach(function(c) { c.remove(); });
+        if (totalReal <= VISIBLE) return;
+        for (var i = 0; i < VISIBLE; i++) {
+          var clone = realItems[i].cloneNode(true);
+          clone.classList.add('clone');
+          clone.classList.remove('active');
+          track.appendChild(clone);
+        }
+        // Re-measure after appending clones
+        measureStepWidth();
+      }
+
+      function updateArrows() {
+        arrowsWrap.classList.toggle('visible', totalReal > VISIBLE);
+      }
+
+      // ── Event: stealth-reset after wrap-around transition ──
+      track.addEventListener('transitionend', function() {
+        if (needsReset) {
+          needsReset = false;
+          applyTrackPos(0, false);
+          track.offsetHeight; // force reflow
+          track.classList.remove('no-transition');
+          updateDots();
+          updateDesc();
+        }
+      });
+
+      // ── Arrow clicks ──
+      arrowLeft.addEventListener('click', function(e) {
+        e.stopPropagation();
+        stopTimer();
+        retreat();
+        startTimer();
+      });
+      arrowRight.addEventListener('click', function(e) {
+        e.stopPropagation();
+        stopTimer();
+        advance();
+        startTimer();
+      });
+
+      // ── Hover: pause timer, show hovered item ──
+      track.addEventListener('mouseenter', function() { stopTimer(); });
+      track.addEventListener('mouseleave', function() { startTimer(); });
+      track.addEventListener('mouseover', function(e) {
+        var itemEl = e.target.closest('.app-item');
+        if (itemEl) jumpToItem(itemEl);
+      });
+
+      // ── Click → open project overlay ──
+      track.addEventListener('click', function(e) {
+        var itemEl = e.target.closest('.app-item');
+        if (!itemEl) return;
+        var name = itemEl.dataset.name;
+        var allCards = document.querySelectorAll('.project-card');
+        allCards.forEach(function(c) {
+          var cn = c.querySelector('.card-name');
+          if (cn && cn.textContent === name) c.click();
         });
       });
 
-      // Expose for lang switch
-      window._refreshAppDesc = refreshAppDesc;
-      window._getCurrentItem = function() { return items[current]; };
+      // ── Init ──
+      function init() {
+        realItems = Array.from(track.querySelectorAll('.app-item:not(.clone)'));
+        totalReal = realItems.length;
+
+        // Rebuild dots
+        var dotCount = Math.min(totalReal, VISIBLE);
+        var dotsHtml = '';
+        for (var i = 0; i < dotCount; i++) {
+          dotsHtml += '<span class="dot' + (i === 0 ? ' active' : '') + '"></span>';
+        }
+        dotsContainer.innerHTML = dotsHtml;
+
+        trackOffset = 0;
+        dotIndex = 0;
+        needsReset = false;
+        track.classList.add('no-transition');
+        track.style.transform = 'translateX(0)';
+
+        createClones();
+        // Small delay so layout settles before measuring & showing
+        setTimeout(function() {
+          measureStepWidth();
+          track.classList.remove('no-transition');
+          updateArrows();
+          updateDots();
+          updateDesc();
+        }, 60);
+      }
+
+      init();
+      startTimer();
+
+      // Expose for external use (lang switch, JSON data reload)
+      window._initAppShowcase = function() { stopTimer(); init(); startTimer(); };
+      window._refreshAppDesc = function() { updateDesc(); };
     })();
 
     // ── Spis projektów: kliknięcie + język ──
@@ -5055,15 +5287,14 @@
               if (d.logoWidth) logoImg.width = d.logoWidth;
               if (d.logoPositionX !== undefined) logoImg.style.objectPosition = (d.logoPositionX||50) + '% ' + (d.logoPositionY||50) + '%';
             }
-            if (logoContainer && d.logoScale) logoContainer.style.setProperty('--logo-scale', d.logoScale);
+            if (logoContainer && d.logoScale && d.logoScale !== 1) { logoContainer.style.setProperty('--logo-scale', d.logoScale); } else if (logoContainer) { logoContainer.style.removeProperty('--logo-scale'); }
           }
 
           // App showcase — ikony jako linki do projektów
           if (d.appShowcase && d.appShowcase.length) {
-            var showcase = document.getElementById('appShowcase');
-            if (showcase) {
-              var dots = document.getElementById('appDots');
-              var html = '', dotsHtml = '';
+            var trackEl = document.getElementById('appTrack');
+            if (trackEl) {
+              var html = '';
               d.appShowcase.forEach(function(a,i){
                 var slugPl = a.projectSlugPl || a.projectSlug || '';
                 var slugEn = a.projectSlugEn || a.projectSlug || '';
@@ -5072,11 +5303,9 @@
                 var tag = slug ? 'a href="'+prefix+escHtmlAttr(slug)+'"' : 'div';
                 var endTag = slug ? 'a' : 'div';
                 html += '<'+tag+' class="app-item'+(i===0?' active':'')+'" data-name="'+escHtmlAttr(a.name)+'" data-desc-pl="'+escHtmlAttr(a.descPl||'')+'" data-desc-en="'+escHtmlAttr(a.descEn||'')+'"><img src="'+escHtmlAttr(a.iconImage||'')+'" alt="'+escHtmlAttr(a.name)+'" width="36" height="36"></'+endTag+'>';
-                dotsHtml += '<span class="dot'+(i===0?' active':'')+'"></span>';
               });
-              showcase.innerHTML = html;
-              if (dots) dots.innerHTML = dotsHtml;
-              // Re-initialize carousel if needed
+              trackEl.innerHTML = html;
+              // Re-initialize carousel (dots, clones, arrows, measure — all inside _initAppShowcase)
               if (window._initAppShowcase) window._initAppShowcase();
             }
           }
