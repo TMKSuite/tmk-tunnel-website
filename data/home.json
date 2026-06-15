@@ -2,14 +2,15 @@
   "logoImage": "/assets/images/logo-hero.webp",
   "logoWidth": 1600,
   "logoHeight": 1519,
-  "logoScale": 1,
+  "logoScale": 0.75,
   "logoPositionX": 50,
   "logoPositionY": 50,
   "appShowcase": [
     {
       "name": "TorekMarketKiller",
       "iconImage": "/assets/images/icon-tmk.png",
-      "projectSlugPl": "torek-market-killer", "projectSlugEn": "torek-market-killer",
+      "projectSlugPl": "torek-market-killer",
+      "projectSlugEn": "torek-market-killer",
       "descPl": "Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie.",
       "descEn": "Trading automation platform TradingView → MT5. Multi-terminal, local and remote."
     },
@@ -36,23 +37,71 @@
     }
   ],
   "stats": [
-    { "value": 4, "suffix": "", "labelPl": "Aplikacje", "labelEn": "Applications" },
-    { "value": 13, "suffix": "", "labelPl": "Miesięcy pracy", "labelEn": "Months of work" },
-    { "value": 45, "suffix": "K", "labelPl": "Linii kodu AI", "labelEn": "AI lines of code" }
+    {
+      "value": 4,
+      "suffix": "",
+      "labelPl": "Aplikacje",
+      "labelEn": "Applications"
+    },
+    {
+      "value": 13,
+      "suffix": "",
+      "labelPl": "Miesięcy pracy",
+      "labelEn": "Months of work"
+    },
+    {
+      "value": 45,
+      "suffix": "K",
+      "labelPl": "Linii kodu AI",
+      "labelEn": "AI lines of code"
+    }
   ],
   "socialLinks": [
-    { "icon": "github", "url": "https://github.com/TMKSuite", "title": "GitHub" },
-    { "icon": "linkedin", "url": "https://www.linkedin.com/in/krycha-tmk/", "title": "LinkedIn" },
-    { "icon": "youtube", "url": "https://www.youtube.com/@PozaWykresemzTMK", "title": "YouTube" }
+    {
+      "icon": "github",
+      "url": "https://github.com/TMKSuite",
+      "title": "GitHub"
+    },
+    {
+      "icon": "linkedin",
+      "url": "https://www.linkedin.com/in/krycha-tmk/",
+      "title": "LinkedIn"
+    },
+    {
+      "icon": "youtube",
+      "url": "https://www.youtube.com/@PozaWykresemzTMK",
+      "title": "YouTube"
+    }
   ],
   "techStack": [
-    { "icon": "/assets/icons/python.svg", "label": "Python" },
-    { "icon": "/assets/icons/fastapi.svg", "label": "FastAPI" },
-    { "icon": "/assets/icons/Metatrader5.svg", "label": "MT5" },
-    { "icon": "/assets/icons/claude.svg", "label": "Claude" },
-    { "icon": "/assets/icons/deepseek.svg", "label": "DeepSeek" },
-    { "icon": "/assets/icons/cloudflare.svg", "label": "Cloudflare" },
-    { "icon": "/assets/icons/tradingview.svg", "label": "TradingView" }
+    {
+      "icon": "/assets/icons/python.svg",
+      "label": "Python"
+    },
+    {
+      "icon": "/assets/icons/fastapi.svg",
+      "label": "FastAPI"
+    },
+    {
+      "icon": "/assets/icons/Metatrader5.svg",
+      "label": "MT5"
+    },
+    {
+      "icon": "/assets/icons/claude.svg",
+      "label": "Claude"
+    },
+    {
+      "icon": "/assets/icons/deepseek.svg",
+      "label": "DeepSeek"
+    },
+    {
+      "icon": "/assets/icons/cloudflare.svg",
+      "label": "Cloudflare"
+    },
+    {
+      "icon": "/assets/icons/tradingview.svg",
+      "label": "TradingView"
+    }
   ],
   "newsButtonPl": "CO NOWEGO",
   "newsButtonEn": "WHAT'S NEW",
