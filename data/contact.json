@@ -7,10 +7,10 @@
     {
       "id": "email",
       "label": "Email",
-      "url": "mailto:pozawykresemztmk@gmail.com",
-      "descPl": "pozawykresemztmk@gmail.com",
-      "descEn": "pozawykresemztmk@gmail.com",
       "icon": "email",
+      "url": "mailto:kontakt@tmk-tunnel.pl",
+      "descPl": "kontakt@tmk-tunnel.pl",
+      "descEn": "kontakt@tmk-tunnel.pl",
       "targetBlank": false
     },
     {
