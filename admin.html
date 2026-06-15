@@ -969,6 +969,7 @@ function doLogin() {
 
   if (pass === testHash) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
+    sessionStorage.setItem('tmk_admin_pass', pass);
     showPanel();
     return false;
   }
@@ -978,6 +979,7 @@ function doLogin() {
 
 function doLogout() {
   sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem('tmk_admin_pass');
   document.getElementById('adminPanel').style.display = 'none';
   document.getElementById('loginGate').style.display = 'flex';
   document.getElementById('passInput').value = '';
@@ -1257,9 +1259,17 @@ function publishNews() {
 }
 
 // ══════════ WORKER COMM ══════════
+function getWorkerSecret() {
+  var cached = sessionStorage.getItem('tmk_admin_pass');
+  if (cached) return cached;
+  var secret = prompt('Hasło do publikacji:', '');
+  if (secret) sessionStorage.setItem('tmk_admin_pass', secret);
+  return secret;
+}
+
 function saveAndPush(file, data, message, onSuccess, extraCallback) {
   var content = JSON.stringify(data, null, 2);
-  var workerSecret = prompt('Hasło do publikacji (takie samo jak do logowania):', '');
+  var workerSecret = getWorkerSecret();
   if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
 
   showMsg('Publikowanie...', 'info');
@@ -1398,7 +1408,7 @@ function publishArticle() {
   if (!found) articlesData.push(article);
 
   var msg = found ? 'Aktualizacja artykułu: ' + article.titlePl : 'Nowy artykuł: ' + article.titlePl;
-  var workerSecret = prompt('Hasło do publikacji (takie samo jak do logowania):', '');
+  var workerSecret = getWorkerSecret();
   if (!workerSecret) { showMsg('Publikacja anulowana.', 'info'); return; }
   showMsg('Publikowanie artykułu + sitemap...', 'info');
 
@@ -1491,7 +1501,7 @@ function processImageFile(file) {
 
 function uploadImage() {
   if (!pendingImageBase64) return;
-  var workerSecret = prompt('Hasło:', '');
+  var workerSecret = getWorkerSecret();
   if (!workerSecret) return;
 
   var filename = 'img_' + Date.now() + '.' + pendingImageExt;
@@ -1805,7 +1815,7 @@ function uploadAboutBanner() {
   };
   xhr.send(JSON.stringify({
     file: path, content: pendingAboutBannerBase64, contentBase64: true,
-    message: 'Upload about banner: ' + filename, secret: prompt('Hasło:', '')
+    message: 'Upload about banner: ' + filename, secret: getWorkerSecret()
   }));
 }
 
@@ -1893,7 +1903,7 @@ function uploadAboutPhoto() {
   };
   xhr.send(JSON.stringify({
     file: path, content: pendingAboutPhotoBase64, contentBase64: true,
-    message: 'Upload about photo: ' + filename, secret: prompt('Hasło:', '')
+    message: 'Upload about photo: ' + filename, secret: getWorkerSecret()
   }));
 }
 
@@ -2388,7 +2398,7 @@ function uploadHomeLogoFile(file) {
       } else { statusEl.textContent = 'Błąd ' + xhr.status; statusEl.style.color = 'var(--danger)'; }
     };
     xhr.onerror = function() { statusEl.textContent = 'Błąd sieci'; statusEl.style.color = 'var(--danger)'; };
-    xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload logo: '+filename, secret: prompt('Hasło:','') }));
+    xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload logo: '+filename, secret: getWorkerSecret() }));
   };
   reader.readAsDataURL(file);
 }
@@ -2531,7 +2541,7 @@ function handleHomeAppIconFor(e, idx) {
         } catch(e) { alert('Błąd parsowania'); }
       } else { alert('Błąd ' + xhr.status); }
     };
-    xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload app icon: '+filename, secret: prompt('Hasło:','') }));
+    xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload app icon: '+filename, secret: getWorkerSecret() }));
   };
   reader.readAsDataURL(file);
 }
@@ -2793,7 +2803,7 @@ function uploadProjScreenshots(files) {
         uploadNext(idx + 1);
       };
       xhr.onerror = function() { statusEl.textContent = 'Błąd sieci dla ' + file.name; uploadNext(idx+1); };
-      xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload screenshot: '+filename, secret: prompt('Hasło:','') }));
+      xhr.send(JSON.stringify({ file: path, content: b64, contentBase64: true, message: 'Upload screenshot: '+filename, secret: getWorkerSecret() }));
     };
     reader.readAsDataURL(file);
   }
