@@ -959,21 +959,40 @@ function checkSession() {
 
 function doLogin() {
   var pass = document.getElementById('passInput').value;
-  // Hash porównawczy (SHA-256 pierwszych 8 znaków — prosty ale skuteczny)
-  // Użytkownik ustawia własne hasło przy deployu
   if (!pass) return false;
 
-  // Testowe hasło — ZMIEŃ PRZED PRODUKCJĄ!
-  // docelowo hasło będzie walidowane przez Workera
-  var testHash = 'TorekMarketK!ller1991';
+  // Wyślij do Workera — hasło tylko w zmiennej środowiskowej Cloudflare
+  var btn = document.querySelector('#loginForm .btn');
+  var originalText = btn.textContent;
+  btn.textContent = 'Sprawdzam...';
+  btn.disabled = true;
+  document.getElementById('loginErr').style.display = 'none';
 
-  if (pass === testHash) {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
-    sessionStorage.setItem('tmk_admin_pass', pass);
-    showPanel();
-    return false;
-  }
-  document.getElementById('loginErr').style.display = 'block';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', WORKER_URL.replace('/api/admin/commit', '/api/admin/auth'), true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    btn.textContent = originalText;
+    btn.disabled = false;
+    if (xhr.status === 200) {
+      try {
+        var resp = JSON.parse(xhr.responseText);
+        if (resp.success) {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }));
+          sessionStorage.setItem('tmk_admin_pass', pass);
+          showPanel();
+          return;
+        }
+      } catch(e) {}
+    }
+    document.getElementById('loginErr').style.display = 'block';
+  };
+  xhr.onerror = function() {
+    btn.textContent = originalText;
+    btn.disabled = false;
+    document.getElementById('loginErr').style.display = 'block';
+  };
+  xhr.send(JSON.stringify({ secret: pass }));
   return false;
 }
 
