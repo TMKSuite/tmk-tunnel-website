@@ -1,4 +1,4 @@
-﻿{
+{
   "logoImage": "/assets/images/logo-hero.webp",
   "logoWidth": 1600,
   "logoHeight": 1519,
@@ -34,7 +34,7 @@
       "projectSlug": "candles-downloader",
       "descPl": "Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.",
       "descEn": "Candle data download from TradingView via WebSocket. CSV ready for analysis."
-    },
+    }
   ],
   "stats": [
     {
