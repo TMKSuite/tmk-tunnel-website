@@ -2800,7 +2800,7 @@
         <div class="stat-label" data-i18n="stats.time">Miesięcy pracy</div>
       </div>
       <div class="stat-item">
-        <div class="stat-value" data-count="45" data-suffix="K" data-duration="2000">0</div>
+        <div class="stat-value" data-count="45" data-suffix="K" data-duration="1200">0</div>
         <div class="stat-label" data-i18n="stats.loc">Linii kodu AI</div>
       </div>
     </div>
@@ -2864,7 +2864,7 @@
         <div class="stats-mobile-label" data-i18n="stats.time">Miesięcy pracy</div>
       </div>
       <div class="stats-mobile-item">
-        <div class="stats-mobile-value" data-count="45" data-suffix="K" data-duration="2000">0</div>
+        <div class="stats-mobile-value" data-count="45" data-suffix="K" data-duration="1200">0</div>
         <div class="stats-mobile-label" data-i18n="stats.loc">Linii kodu AI</div>
       </div>
     </div>
@@ -5014,7 +5014,7 @@
     (function() {
       var counters = document.querySelectorAll('.stat-value[data-count], .stats-mobile-value[data-count]');
       var animated = false;
-      var DURATION = 1800; // ms
+      var DURATION = 1000; // ms
 
       function animateCounter(el) {
         var target = parseInt(el.dataset.count, 10);
@@ -5041,7 +5041,7 @@
         if (animated) return;
         animated = true;
         // Opóźnienia dopasowane do CSS fadeInLink: 0.3s/0.6s/0.9s delay + 0.5s animacja
-        var delays = [1100, 1700, 2300, 1100, 1700, 2300];
+        var delays = [700, 1000, 1300, 700, 1000, 1300];
         counters.forEach(function(el, i) {
           setTimeout(function() { animateCounter(el); }, delays[i] || 0);
         });
