@@ -5402,7 +5402,9 @@
               var socialHtml = '';
               d.socialLinks.forEach(function(l){
                 var svg = SOCIAL_ICONS_HOME[l.icon] || '';
-                socialHtml += '<a href="'+escHtmlAttr(l.url)+'" target="_blank" rel="noopener" title="'+escHtmlAttr(l.title||'')+'">'+svg+'</a>';
+                var url = (l.url||'').trim();
+                if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
+                socialHtml += '<a href="'+escHtmlAttr(url)+'" target="_blank" rel="noopener" title="'+escHtmlAttr(l.title||'')+'">'+svg+'</a>';
               });
               socialEl.innerHTML = socialHtml;
             }

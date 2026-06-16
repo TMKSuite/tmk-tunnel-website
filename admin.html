@@ -2724,6 +2724,14 @@ function publishHome() {
   homeData.newsButtonEn = getVal('edHomeNewsBtnEn');
   homeData.footerDescPl = getVal('edHomeFooterPl');
   homeData.footerDescEn = getVal('edHomeFooterEn');
+  // Auto-fix social link URLs: dodaj https:// jesli brak protokolu
+  if (homeData.socialLinks) {
+    homeData.socialLinks.forEach(function(l) {
+      if (l.url && !/^https?:\/\//i.test(l.url.trim())) {
+        l.url = 'https://' + l.url.trim();
+      }
+    });
+  }
   saveAndPush('data/home.json', homeData, 'Aktualizacja HOME', function() {
     showHomeMsg('Opublikowano! Zmiany na stronie za ~30s.', 'ok');
   });
