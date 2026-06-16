@@ -1,0 +1,30 @@
+# TMK Suite — AI-powered algorithmic trading platform
+
+TMK Suite to platforma do automatyzacji handlu algorytmicznego — algotrading, handel ilościowy, automatyzacja strategii TradingView → MT5.
+
+## About the project
+
+- [About TMK Suite](https://tmk-tunnel.pl)
+- [About the creator](https://tmk-tunnel.pl/#about)
+
+## Applications
+
+- [TorekMarketKiller — Platforma tradingowa TradingView → MT5](https://tmk-tunnel.pl/projekt/torek-market-killer)
+- [Portfolio Command Center — Symulator portfela strategii](https://tmk-tunnel.pl/projekt/portfolio-command-center)
+- [Candle Comparison — Komparator danych świecowych](https://tmk-tunnel.pl/projekt/candle-comparison)
+- [Candles Downloader — Downloader danych z TradingView](https://tmk-tunnel.pl/projekt/candles-downloader)
+- [Client Creator — Kreator klienta](https://tmk-tunnel.pl/projekt/client-creator)
+
+## Articles
+
+- [Paradoks Achillesa — wysoka stopa zwrotu z przypadku](https://tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu)
+
+## Tech Stack
+
+Python • FastAPI • MT5 (MQL5) • Claude AI • DeepSeek • Cloudflare • TradingView
+
+## Contact
+
+- [GitHub](https://github.com/TMKSuite)
+- [LinkedIn](https://www.linkedin.com/in/tmk-suite)
+- [YouTube](https://www.youtube.com/@PozaWykresemzTMK)
