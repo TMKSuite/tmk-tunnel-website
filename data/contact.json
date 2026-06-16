@@ -25,10 +25,10 @@
     {
       "id": "linkedin",
       "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/krycha-tmk/",
+      "icon": "linkedin",
+      "url": "www.linkedin.com/in/tmk-suite",
       "descPl": "Profil zawodowy — napisz i poznajmy się",
       "descEn": "Professional profile — connect and say hi",
-      "icon": "linkedin",
       "targetBlank": true
     },
     {
