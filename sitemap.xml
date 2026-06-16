@@ -4,6 +4,7 @@
   <!-- Strona główna -->
   <url>
     <loc>https://tmk-tunnel.pl/</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,7 +12,7 @@
   <!-- ARTYKUŁY -->
   <url>
     <loc>https://tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="pl" href="https://tmk-tunnel.pl/artykul/paradoks-achillesa-wysoka-stopa-zwrotu"/>
@@ -19,7 +20,7 @@
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/en/article/achilles-paradox-high-return-rate</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://tmk-tunnel.pl/en/article/achilles-paradox-high-return-rate"/>
@@ -29,31 +30,31 @@
   <!-- PROJEKTY — PL -->
   <url>
     <loc>https://tmk-tunnel.pl/projekt/torek-market-killer</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/projekt/portfolio-command-center</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/projekt/candle-comparison</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/projekt/candles-downloader</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/projekt/client-creator</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -61,31 +62,31 @@
   <!-- PROJEKTY — EN -->
   <url>
     <loc>https://tmk-tunnel.pl/en/project/torek-market-killer</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/en/project/portfolio-command-center</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/en/project/candle-comparison</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/en/project/candles-downloader</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://tmk-tunnel.pl/en/project/client-creator</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
