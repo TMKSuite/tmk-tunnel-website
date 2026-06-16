@@ -1,11 +1,11 @@
-{
+﻿{
   "headingPl": "O mnie",
   "headingEn": "About me",
   "subheadingPl": "",
   "subheadingEn": "",
   "name": "Krystian",
-  "bannerImage": "/assets/images/banner4.png",
-  "photoImage": "/assets/images/face.png",
+  "bannerImage": "/assets/images/banner4.webp",
+  "photoImage": "/assets/images/face.webp",
   "photoPosition": "50% 50%",
   "photoScale": 1.5,
   "rolePl": "Architekt systemów • Budowniczy z AI",

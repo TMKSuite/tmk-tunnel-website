@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
@@ -453,7 +453,7 @@
       <div style="margin-top:0.6rem">
         <div class="form-group">
           <label>Ścieżka do bannera (lub wgraj nowy)</label>
-          <input type="text" id="edAboutBanner" placeholder="/assets/images/banner.png" oninput="updateAboutImagePreviews()">
+          <input type="text" id="edAboutBanner" placeholder="/assets/images/banner.webp" oninput="updateAboutImagePreviews()">
         </div>
         <div id="aboutBannerLivePreview" style="margin-bottom:0.6rem;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.3);">
           <img id="aboutBannerLiveImg" src="" alt="Podgląd bannera" style="display:block;width:100%;height:auto;min-height:40px;" onerror="this.style.display='none';">
@@ -484,7 +484,7 @@
       <div style="margin-top:0.6rem">
         <div class="form-group">
           <label>Ścieżka do zdjęcia (lub wgraj nowe)</label>
-          <input type="text" id="edAboutPhoto" placeholder="/assets/images/photo.png" oninput="updateAboutImagePreviews()">
+          <input type="text" id="edAboutPhoto" placeholder="/assets/images/photo.webp" oninput="updateAboutImagePreviews()">
         </div>
         <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
           <!-- Kółko z podglądem -->
@@ -687,7 +687,7 @@
       <div class="form-row">
         <div class="form-group">
           <label>Ścieżka do ikony</label>
-          <input type="text" id="edProjectIcon" placeholder="/assets/images/ikona.png">
+          <input type="text" id="edProjectIcon" placeholder="/assets/images/ikona.webp">
         </div>
         <div class="form-group">
           <label>LOC (np. ~36 700)</label>
@@ -728,7 +728,7 @@
 
       <div class="form-group">
         <label>Screenshoty — ścieżki oddzielone przecinkiem</label>
-        <input type="text" id="edProjectScreenshots" placeholder="/assets/screenshots/projekt/01.png, /assets/screenshots/projekt/02.png">
+        <input type="text" id="edProjectScreenshots" placeholder="/assets/screenshots/projekt/01.webp, /assets/screenshots/projekt/02.webp">
         <div style="margin-top:0.3rem;">
           <div id="projScreenshotDropZone" style="border:2px dashed rgba(255,255,255,0.12);border-radius:6px;padding:0.6rem;text-align:center;color:rgba(230,237,243,0.3);cursor:pointer;transition:border-color 0.2s;font-size:0.75rem;">
             Upuść screenshot(y) tutaj lub kliknij, aby dodać<br>
@@ -1604,8 +1604,8 @@ function loadAbout() {
 function getDefaultAbout() {
   return {
     name: '',
-    bannerImage: '/assets/images/banner4.png',
-    photoImage: '/assets/images/face.png',
+    bannerImage: '/assets/images/banner4.webp',
+    photoImage: '/assets/images/face.webp',
     rolePl: '',
     roleEn: '',
     storyPl: '',

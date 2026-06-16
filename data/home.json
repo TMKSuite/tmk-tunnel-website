@@ -1,4 +1,4 @@
-{
+﻿{
   "logoImage": "/assets/images/logo-hero.webp",
   "logoWidth": 1600,
   "logoHeight": 1519,
@@ -8,7 +8,7 @@
   "appShowcase": [
     {
       "name": "TorekMarketKiller",
-      "iconImage": "/assets/images/icon-tmk.png",
+      "iconImage": "/assets/images/icon-tmk.webp",
       "projectSlugPl": "torek-market-killer",
       "projectSlugEn": "torek-market-killer",
       "descPl": "Platforma do automatyzacji handlu TradingView → MT5. Multi-terminal lokalnie i zdalnie.",
@@ -16,21 +16,21 @@
     },
     {
       "name": "PortfolioCommandCenter",
-      "iconImage": "/assets/images/icon-pc2.png",
+      "iconImage": "/assets/images/icon-pc2.webp",
       "projectSlug": "portfolio-command-center",
       "descPl": "Symulator portfela strategii. Optymalizacja GA+ILS, Walk-Forward, koszty transakcyjne.",
       "descEn": "Strategy portfolio simulator. GA+ILS optimization, Walk-Forward, transaction costs."
     },
     {
       "name": "CandleComparison",
-      "iconImage": "/assets/images/icon-comparator.png",
+      "iconImage": "/assets/images/icon-comparator.webp",
       "projectSlug": "candle-comparison",
       "descPl": "Porównanie danych świecowych MT5 vs TradingView. Tick size, time shift, raporty.",
       "descEn": "Candle data comparison MT5 vs TradingView. Tick size, time shift, reports."
     },
     {
       "name": "CandleDownloader",
-      "iconImage": "/assets/images/icon-downloader.png",
+      "iconImage": "/assets/images/icon-downloader.webp",
       "projectSlug": "candles-downloader",
       "descPl": "Pobieranie danych świecowych z TradingView przez WebSocket. CSV gotowe do analizy.",
       "descEn": "Candle data download from TradingView via WebSocket. CSV ready for analysis."
