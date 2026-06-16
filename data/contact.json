@@ -26,7 +26,7 @@
       "id": "linkedin",
       "label": "LinkedIn",
       "icon": "linkedin",
-      "url": "www.linkedin.com/in/tmk-suite",
+      "url": "https://www.linkedin.com/in/tmk-suite",
       "descPl": "Profil zawodowy — napisz i poznajmy się",
       "descEn": "Professional profile — connect and say hi",
       "targetBlank": true
