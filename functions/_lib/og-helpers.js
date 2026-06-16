@@ -2,7 +2,7 @@
  * Cloudflare Pages Function — shared OG helpers for article crawler rendering.
  */
 
-const CRAWLER_UA = /facebookexternalhit|LinkedInBot|Twitterbot|twitterbot|Facebot|facebookcatalog|Slackbot|LinkedInBot|WhatsApp|TelegramBot|Pinterest|Discordbot|SkypeUriPreview|Iframely|w3c_validator/i;
+const CRAWLER_UA = /facebookexternalhit|LinkedInBot|Twitterbot|twitterbot|Facebot|facebookcatalog|Slackbot|WhatsApp|TelegramBot|Pinterest|Discordbot|SkypeUriPreview|Iframely|w3c_validator|Googlebot/i;
 const ARTICLES_URL = 'https://tmk-tunnel.pl/data/articles.json';
 const BASE_URL = 'https://tmk-tunnel.pl';
 const OG_IMAGE = '/assets/images/og-image.webp';
