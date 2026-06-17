@@ -4522,10 +4522,6 @@
             if (!bodyHtml) {
               bodyHtml = '<p>' + excerpt + '</p><p style="margin-top:1.5rem;color:rgba(230,237,243,0.25);font-style:italic">Pełna treść artykułu pojawi się tutaj.</p>';
             }
-            // Auto-wrap plain text in <p> tags if no HTML detected
-            if (bodyHtml.indexOf('<') === -1) {
-              bodyHtml = '<p>' + bodyHtml.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
-            }
             document.getElementById('ovBody').innerHTML = formatArticleBody(bodyHtml) + buildVoteButtonsHtml(articleId);
             document.getElementById('ovMeta').innerHTML = getArticleMetaHtml(date);
             document.getElementById('ovTags').innerHTML = getArticleTagsHtml();
