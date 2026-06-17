@@ -4577,15 +4577,17 @@
         if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(bodyHtml)) {
           return bodyHtml;
         }
-        var text = bodyHtml.replace(/\n{3,}/g, '\n\n');
+        // Wymuś pustą linię przed każdym ## (nawet gdy jest tylko pojedyńczy enter)
+        var text = bodyHtml.replace(/(^|\n)(##[^\n]*)/g, '\n\n$2');
+        text = text.replace(/\n{3,}/g, '\n\n');
         var blocks = text.split('\n\n');
         var html = '';
         for (var i = 0; i < blocks.length; i++) {
           var block = blocks[i].trim();
           if (!block) continue;
-          // ## na początku → złoty nagłówek <h3>
-          if (/^##\s/.test(block)) {
-            html += '<h3>' + block.replace(/^##\s+/, '').replace(/\n/g, '<br>') + '</h3>';
+          // ## na początku (ze spacją lub bez) → złoty nagłówek <h3>
+          if (/^##/.test(block)) {
+            html += '<h3>' + block.replace(/^##\s*/, '').replace(/\n/g, '<br>') + '</h3>';
           } else {
             html += '<p>' + block.replace(/\n/g, '<br>') + '</p>';
           }
@@ -5156,14 +5158,17 @@
           function fmtAboutStory(text) {
             if (!text) return '';
             if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(text)) return text; // już HTML
-            var clean = text.replace(/\n{3,}/g, '\n\n');
+            // Wymuś pustą linię przed każdym ## (nawet gdy jest tylko pojedyńczy enter)
+            var clean = text.replace(/(^|\n)(##[^\n]*)/g, '\n\n$2');
+            clean = clean.replace(/\n{3,}/g, '\n\n');
             var blocks = clean.split('\n\n');
             var html = '';
             for (var i = 0; i < blocks.length; i++) {
               var block = blocks[i].trim();
               if (!block) continue;
-              if (/^##\s/.test(block)) {
-                html += '<h3>' + block.replace(/^##\s+/, '').replace(/\n/g, '<br>') + '</h3>';
+              // ## na początku (ze spacją lub bez) → złoty nagłówek
+              if (/^##/.test(block)) {
+                html += '<h3>' + block.replace(/^##\s*/, '').replace(/\n/g, '<br>') + '</h3>';
               } else {
                 html += '<p>' + block.replace(/\n/g, '<br>') + '</p>';
               }
