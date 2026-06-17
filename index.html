@@ -4622,6 +4622,10 @@
               if (subheadingEl && I18N[currentLang] && I18N[currentLang]['articles.subheading']) subheadingEl.innerHTML = I18N[currentLang]['articles.subheading'];
               // Odśwież kafelki
               if (window._renderArticleCards) window._renderArticleCards();
+              // Po załadowaniu JSON-a spróbuj otworzyć artykuł z URL (np. /artykul/algotrading-...)
+              if (window._openArticleFromUrl && !window._articleFromUrlOpened) {
+                window._articleFromUrlOpened = window._openArticleFromUrl();
+              }
             } catch(e) { console.warn('Articles JSON parse error, using hardcoded'); }
           }
         };
@@ -4983,7 +4987,7 @@
     });
 
     // Przy starcie sprawdź URL — jeśli /artykul/... lub /projekt/... to otwórz od razu
-    if (window._openArticleFromUrl) window._openArticleFromUrl();
+    if (window._openArticleFromUrl) window._articleFromUrlOpened = window._openArticleFromUrl();
     if (window._openProjectFromUrl) window._openProjectFromUrl();
 
     // ── Tech stack: cykliczne podświetlanie ──
