@@ -1488,12 +1488,28 @@ function togglePreview() {
         }
       }
       if (!body) body = '<p>' + escHtml(clean).replace(/\n/g, '<br>') + '</p>';
+    } else {
+      // Tresc z tagami HTML - akapity
+      var htmlBlocks = body.split(/\n\n+/);
+      if (htmlBlocks.length > 1) {
+        body = '';
+        for (var j = 0; j < htmlBlocks.length; j++) {
+          var hb = htmlBlocks[j].trim();
+          if (!hb) continue;
+          if (/^<(p|h[1-6]|ul|ol|blockquote|hr)/.test(hb)) {
+            body += hb;
+          } else {
+            body += '<p>' + hb + '</p>';
+          }
+        }
+      }
     }
     var title = getVal('edTitlePl') || '(bez tytułu)';
     box.innerHTML = '<h2 style="font-family:Space Grotesk,sans-serif;color:var(--accent);margin-bottom:1rem">' + escHtml(title) + '</h2>' + body;
     box.style.display = 'block';
   } else {
     box.style.display = 'none';
+    box.innerHTML = '';
   }
 }
 
