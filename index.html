@@ -4570,8 +4570,8 @@
 
       function formatArticleBody(bodyHtml) {
         if (!bodyHtml) return '';
-        if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote)[ >]/.test(bodyHtml)) {
-          return bodyHtml;
+        if (/<(p|h[1-6]|hr|ul|ol|li|br|strong|em|blockquote|a|img)[ >]/.test(bodyHtml)) {
+          return autoLink(bodyHtml);
         }
         // Wymuś pustą linię przed każdym ## (nawet gdy jest tylko pojedyńczy enter)
         var text = bodyHtml.replace(/(^|\n)(##[^\n]*)/g, '\n\n$2');
@@ -4588,7 +4588,15 @@
             html += '<p>' + block.replace(/\n/g, '<br>') + '</p>';
           }
         }
-        return html || '<p>' + bodyHtml.replace(/\n/g, '<br>') + '</p>';
+        return autoLink(html || '<p>' + bodyHtml.replace(/\n/g, '<br>') + '</p>');
+      }
+
+      function autoLink(text) {
+        // Gole URL-e -> klikalne linki (pomija juz opakowane w <a>)
+        return text.replace(
+          /(^|[^"'>])(https?:\/\/[^\s<>"')\]]+)/gi,
+          '$1<a href="$2" target="_blank" rel="noopener">$2</a>'
+        );
       }
 
       // ═══ Load external content (JSON), fallback to hardcoded ═══
