@@ -1497,7 +1497,10 @@ function togglePreview() {
         for (var j = 0; j < htmlBlocks.length; j++) {
           var hb = htmlBlocks[j].trim();
           if (!hb) continue;
-          if (/^<(p|h[1-6]|ul|ol|blockquote|hr)/.test(hb)) {
+          // ## na początku → złoty nagłówek
+          if (/^##/.test(hb)) {
+            body += '<h3>' + escHtml(hb.replace(/^##\s*/, '')) + '</h3>';
+          } else if (/^<(p|h[1-6]|ul|ol|blockquote|hr)/.test(hb)) {
             body += hb;
           } else {
             body += '<p>' + hb + '</p>';
