@@ -1509,6 +1509,7 @@ function togglePreview() {
       }
     }
     var title = getVal('edTitlePl') || '(bez tytułu)';
+    body = autoLink(body);
     box.innerHTML = '<h2 style="font-family:Space Grotesk,sans-serif;color:var(--accent);margin-bottom:1rem">' + escHtml(title) + '</h2>' + body;
     box.style.display = 'block';
   } else {
@@ -1517,6 +1518,14 @@ function togglePreview() {
   }
 }
 
+
+function autoLink(text) {
+  // Gole URL-e -> klikalne linki (pomija juz opakowane w <a>)
+  return text.replace(
+    /(^|[^"'>])(https?:\/\/[^\s<>"')\]]+)/gi,
+    '$1<a href="$2" target="_blank" rel="noopener">$2</a>'
+  );
+}
 // ══════════ IMAGE UPLOAD ══════════
 var pendingImageBase64 = null;
 var pendingImageExt = 'png';
