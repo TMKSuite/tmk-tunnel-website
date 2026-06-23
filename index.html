@@ -5047,6 +5047,14 @@
         requestAnimationFrame(tick);
       }
 
+      // Eksponuj globalnie — używane po podmianie HTML z admin API
+      window._animateStatsCounters = function(container) {
+        var counters = container.querySelectorAll('.stat-value[data-count]');
+        counters.forEach(function(el, i) {
+          setTimeout(function(){ animateCounter(el); }, i * 600 + 300);
+        });
+      };
+
       function startAnimation() {
         if (animated) return;
         animated = true;
@@ -5409,6 +5417,10 @@
                 statsHtml += '<div class="stat-item"><div class="stat-value" data-count="'+s.value+'" data-suffix="'+(s.suffix||'')+'">0</div><div class="stat-label">' + escHtml(currentLang==='en'?s.labelEn:s.labelPl) + '</div></div>';
               });
               statsBlock.innerHTML = statsHtml;
+              // Re-animate counters (InnerHTML zastąpił DOM — IntersectionObserver już nie pomoże)
+              if (window._animateStatsCounters) {
+                setTimeout(function(){ window._animateStatsCounters(statsBlock); }, 150);
+              }
             }
           }
 
